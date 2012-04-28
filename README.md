@@ -6,6 +6,14 @@ Ces conventions mentionnent parfois l'identifiant des issues ; il s'agit du dern
 
 Je les ai écrites d'après mon expérience : il s'agit pour la plupart de conventions utilisée à mon travail, et je pense que ça aide beaucoup.
 
+### Conventions de codage
+
+Les conventions de codage doivent être calqués sur les documents suivants :
+
+- [Nommage](http://symfony.com/doc/current/contributing/code/conventions.html)
+- [PHP](http://symfony.com/doc/current/contributing/code/standards.html)
+- [HTML/CSS](google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml)
+
 ### Généralité sur les commits
 
 - Les messages de commits doivent être en français, et dire ce que fait le commit en question. Ceci signifie que le verbe est conjugé à la troisième personne (`Removes the README.md` plutôt que `Remove the README.md`).
