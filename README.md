@@ -16,15 +16,15 @@ Les conventions de codage doivent être calqués sur les documents suivants :
 
 ### Généralité sur les commits
 
-- Les messages de commits doivent être en français, et dire ce que fait le commit en question. Ceci signifie que le verbe est conjugé à la troisième personne (`Removes the README.md` plutôt que `Remove the README.md`).
+- Les messages de commits doivent être en français, et dire ce que fait le commit en question. Ceci signifie que le verbe est conjugé à la troisième personne (`Retire le README.md` plutôt que `Retrait du README.md`).
 
-- Chaque message de commit lié à une issue (feature ou bug) doit obligatoirement être préfixé par `#<id de l'issue> - `. Par exemple, `#7 - Adds localization controller`.
+- Chaque message de commit lié à une issue (feature ou bug) doit obligatoirement être préfixé par `#<id de l'issue> - `. Par exemple, `#7 - Ajout du controlleur de l'administration de la localisation`.
 
   Cela permet de voir la liste des commits reliés à une issue directement en lisant l'issue concernée.
 
 ### Process de développement des features
 
-- Chaque feature doit être développée sur une branche à part. Le nom des branches est standardisé ainsi : `<numéro de l'issue>-<nom de la feature>`. Par exemple, `5-admin-user-list`.
+- Chaque feature doit être développée sur une branche à part. Le nom des branches est *EN ANGLAIS* et doit être standardisé ainsi : `<numéro de l'issue>-<nom de la feature>`. Par exemple, `5-admin-user-list`.
 
   Cela permet de sélectionner plus précisement les features que l'on souhaite intégrer dans le trunk, de ne pas dépendre de l'état du travail des autres (si la branche de X ne fonctionne pas, celle de Y reste utilisable), de pouvoir travailler sur plusieurs features simultanément, et de pouvoir voir rapidement l'état d'avancement des diverses features en cours.
 
