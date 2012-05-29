@@ -1,0 +1,4 @@
+userbundle.security.login: 'Connexion'
+userbundle.security.rememberme: 'Se souvenir'
+userbundle.security.email: 'Adresse email'
+userbundle.security.password: 'Mot de passe'

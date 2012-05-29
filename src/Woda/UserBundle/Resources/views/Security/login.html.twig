@@ -1,0 +1,33 @@
+{% extends "WodaUIBundle::layout.html.twig" %}
+
+{% block content %}
+
+    {% if error %}
+        <div>
+			{{ error }}
+		</div>
+    {% endif %}
+
+	<form action="{{ path('WodaUserBundle.Security.check') }}" method="post">
+
+		<div>
+			<input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'userbundle.security.email' | trans({}, 'woda') }}" />
+		</div>
+
+		<div>
+			<input type="password" id="password" name="_password" placeholder="{{ 'userbundle.security.password' | trans({}, 'woda') }}" />
+		</div>
+
+        <div>
+		    <input id="_checkbox" type="checkbox" style="display:none"/> {{ 'userbundle.security.rememberme' | trans({}, 'woda') }}
+        </div>
+
+		<button type="submit" id="_submit" name="_submit">
+			{{ 'userbundle.security.login' | trans({}, 'woda') }}
+		</button>
+
+    </form>
+	
+</div>
+
+{% endblock %}

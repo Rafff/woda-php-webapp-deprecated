@@ -4,40 +4,37 @@ jms_security_extra:
 
 security:
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Woda\UserBundle\Entity\User:
+           algorithm: plaintext
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        wodauserbundle:
+            entity:
+                class: WodaUserBundle:User
+                property: email
 
     firewalls:
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        login:
-            pattern:  ^/demo/secured/login$
-            security: false
-
-        secured_area:
-            pattern:    ^/demo/secured/
+        main:
+            pattern: ^/
+            anonymous: true
+            logout: true
             form_login:
-                check_path: /demo/secured/login_check
-                login_path: /demo/secured/login
+                provider: wodauserbundle
+                login_path: WodaUserBundle.Security.login
+                check_path: WodaUserBundle.Security.check
             logout:
-                path:   /demo/secured/logout
-                target: /demo/
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+                path: WodaUserBundle.Security.logout
 
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
+
+        # debug requirements
+        - { path: ^/_profiler, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/_wdt,      role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # application
+        - { path: ^/login,   access: 'isAnonymous()' }
+        - { path: ^/profile, access: 'isAuthenticated()' }

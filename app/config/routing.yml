@@ -1,3 +1,13 @@
+WodaUIBundle:
+    resource: "@WodaUIBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+WodaUserBundle:
+    resource: "@WodaUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 # Internal routing configuration to handle ESI
 #_internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
