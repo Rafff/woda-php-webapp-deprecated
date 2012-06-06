@@ -1,0 +1,15 @@
+{% extends 'WodaUIBundle::layout.html.twig' %}
+
+{% block content %}
+
+    before
+    {% for item in list_cms %}
+        <p>
+            <pre>
+                {{ item.getContent() }}
+            </pre>
+        </p>
+    {% endfor %}
+    after
+
+{% endblock %}

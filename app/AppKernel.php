@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Woda\UserBundle\WodaUserBundle(),
             new Woda\UIBundle\WodaUIBundle(),
+            new Woda\AdministrationCmsBundle\WodaAdministrationCmsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
