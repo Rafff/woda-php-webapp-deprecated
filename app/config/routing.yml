@@ -1,7 +1,17 @@
+#WodaUIBundle:
+#    resource: "@WodaUIBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
+
 WodaUserBundle:
     resource: "@WodaUserBundle/Controller/"
     type:     annotation
     prefix:   /
+
+WodaAdministrationCmsBundle:
+    resource: "@WodaAdministrationCmsBundle/Controller/"
+    type:     annotation
+    prefix:   /administration
 
 # Internal routing configuration to handle ESI
 #_internal:
