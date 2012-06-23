@@ -1,3 +1,7 @@
+WodaAdministrationUserBundle:
+    resource: "@WodaAdministrationUserBundle/Resources/config/routing.xml"
+    prefix:   /
+
 #WodaUIBundle:
 #    resource: "@WodaUIBundle/Controller/"
 #    type:     annotation

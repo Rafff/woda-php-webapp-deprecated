@@ -1,11 +1,41 @@
-{% extends 'WodaUIBundle::layout.html.twig' %}
+<h1>Cms list</h1>
 
-{% block content %}
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Uri</th>
+            <th>Content</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('cms_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.title }}</td>
+            <td>{{ entity.uri }}</td>
+            <td>{{ entity.content }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('cms_show', { 'id': entity.id }) }}">Afficher</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('cms_edit', { 'id': entity.id }) }}">editer</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
-    <p>
-        <pre>
-            {{ foo }}
-        </pre>
-    </p>
-
-{% endblock %}
+<ul>
+    <li>
+        <a href="{{ path('cms_new') }}">
+            {{ 'administrationcmsbundle.index.new' | trans({}, 'woda') }}
+        </a>
+    </li>
+</ul>

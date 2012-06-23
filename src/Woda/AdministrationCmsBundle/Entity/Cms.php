@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraint as Assert;
 
 /**
  * @ORM\Entity 
+ * @ORM\Table(name="AdministrationCms_Cms")
  */
 class Cms
 {
@@ -19,6 +20,16 @@ class Cms
 
     /**
      * @ORM\Column(type="string")
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $uri;
+
+    /**
+     * @ORM\Column(type="text")
      */
     private $content;
 
@@ -33,9 +44,53 @@ class Cms
     }
 
     /**
+     * Set title
+     *
+     * @param string $title
+     * @return Cms
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set uri
+     *
+     * @param string $uri
+     * @return Cms
+     */
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+        return $this;
+    }
+
+    /**
+     * Get uri
+     *
+     * @return string 
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+    /**
      * Set content
      *
-     * @param string $content
+     * @param text $content
      * @return Cms
      */
     public function setContent($content)
@@ -47,7 +102,7 @@ class Cms
     /**
      * Get content
      *
-     * @return string 
+     * @return text 
      */
     public function getContent()
     {
