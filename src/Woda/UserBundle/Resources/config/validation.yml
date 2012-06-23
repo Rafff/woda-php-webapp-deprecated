@@ -1,0 +1,4 @@
+Woda\UserBundle\Entity\User:
+    properties:
+        password:
+            - NotBlank: ~

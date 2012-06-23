@@ -365,7 +365,7 @@ class RequirementCollection implements IteratorAggregate
  */
 class SymfonyRequirements extends RequirementCollection
 {
-    const REQUIRED_PHP_VERSION = '5.3.2';
+    const REQUIRED_PHP_VERSION = '5.3.3';
 
     /**
      * Constructor that initializes the requirements.
@@ -392,16 +392,17 @@ class SymfonyRequirements extends RequirementCollection
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
+        $baseDir = basename(__DIR__);
         $this->addRequirement(
-            is_writable(__DIR__.'/../app/cache'),
-            'app/cache/ directory must be writable',
-            'Change the permissions of the "<strong>app/cache/</strong>" directory so that the web server can write into it.'
+            is_writable(__DIR__.'/cache'),
+            "$baseDir/cache/ directory must be writable",
+            "Change the permissions of the \"<strong>$baseDir/cache/</strong>\" directory so that the web server can write into it."
         );
 
         $this->addRequirement(
-            is_writable(__DIR__.'/../app/logs'),
-            'app/logs/ directory must be writable',
-            'Change the permissions of the "<strong>app/logs/</strong>" directory so that the web server can write into it.'
+            is_writable(__DIR__.'/logs'),
+            "$baseDir/logs/ directory must be writable",
+            "Change the permissions of the \"<strong>$baseDir/logs/</strong>\" directory so that the web server can write into it."
         );
 
         $this->addPhpIniRequirement(
@@ -465,6 +466,12 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         /* optional recommendations follow */
+
+        $this->addRecommendation(
+            version_compare($installedPhpVersion, '5.3.8', '>='),
+            sprintf('Annotations might not work properly due to the PHP bug #55156 before PHP 5.3.8 (%s installed)', $installedPhpVersion),
+            'Install PHP 5.3.8 or newer if your project uses annotations'
+        );
 
         $this->addRecommendation(
             class_exists('DomDocument'),
