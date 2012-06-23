@@ -1,0 +1,35 @@
+<?php
+
+namespace Woda\AdministrationCmsBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraint as Assert;
+
+/**
+ * @ORM\Entity 
+ * @ORM\Table(name="cms")
+ */
+class Cms
+{
+    /**
+     * @ORM\GeneratedValue
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $uri;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $content;
+}
