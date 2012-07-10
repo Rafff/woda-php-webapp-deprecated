@@ -1,0 +1,13 @@
+<ul class="nav nav-list">
+    {% if menu.options.label %}
+        <li class="nav-header">
+            {{ menu.options.label | trans({}, menu.options.translation_domain | default) }}
+        </li>
+    {% endif %}
+
+    {% for element in menu %}
+        <li>
+            {% render 'WodaAdminBundle:Menu:element' with { 'element' : element } %}
+        </li>
+    {% endfor %}
+</ul>

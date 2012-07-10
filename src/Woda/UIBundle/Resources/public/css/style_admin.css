@@ -1,0 +1,16 @@
+body {
+    background: url(../img/background.png);
+    padding-top: 40px;
+}
+
+#menu {
+    padding-top: 20px;
+}
+
+#main {
+    padding: 10px;
+    background: white;
+    height: 100%;
+    border-top: 0;
+    border-radius: 0 0 5px 5px;
+}

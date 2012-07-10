@@ -5,13 +5,12 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="woda_user.admin_menu.class">Woda\UserBundle\Service\Menu</parameter>
+        <parameter key="woda_admin.admin_menu.class">Woda\AdminBundle\Service\Menu</parameter>
     </parameters>
 
     <services>
-        <service id="woda_user.admin_menu" class="%woda_user.admin_menu.class%">
-            <argument type="service" id="router" />
-            <tag name="woda_admin.menu_provider" container="woda_admin.admin_menu" />
+        <service id="woda_admin.admin_menu" class="%woda_admin.admin_menu.class%">
+            <tag name="woda_admin.menu_provider" />
         </service>
     </services>
 

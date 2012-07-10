@@ -1,0 +1,9 @@
+<a href="{{ link.target }}">
+
+    {% if link.options.icon %}
+        <i class="{{ link.options.icon }}"></i>
+    {% endif %}
+
+    {{ link.label | trans({}, link.options.translation_domain | default) }}
+
+</a>

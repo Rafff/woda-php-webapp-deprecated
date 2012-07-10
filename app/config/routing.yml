@@ -1,3 +1,8 @@
+WodaAdminBundle:
+    resource: "@WodaAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 WodaUserBundle:
     resource: "@WodaUserBundle/Controller/"
     type:     annotation
