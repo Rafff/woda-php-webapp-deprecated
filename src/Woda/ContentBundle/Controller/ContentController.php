@@ -12,7 +12,7 @@ class ContentController extends Controller
      * @Route("/", name="WodaContentBundle.Content.index")
      * @Template()
      */
-    public function indexAction(xo)
+    public function indexAction()
     {
         return array();
     }
