@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Woda\UserBundle\WodaUserBundle(),
             new Woda\UIBundle\WodaUIBundle(),
             new Woda\AdminBundle\WodaAdminBundle(),
+            new Woda\ContentBundle\WodaContentBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
