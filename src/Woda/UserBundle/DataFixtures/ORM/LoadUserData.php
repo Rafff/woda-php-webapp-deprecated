@@ -13,20 +13,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LoadUserData implements ContainerAwareInterface, FixtureInterface
 {
     private $container;
-    
+
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
-    
+
     public function load(ObjectManager $objectManager)
     {
         $user = new User();
-        $user->setEmail('admin@localhost');
-        
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+
+        $user->setEmail('admin@localhost');
         $user->setPassword($encoder->encodePassword('test', $user->getSalt()));
-        
+        $user->setRoles(array('ROLE_USER', 'ROLE_ADMIN'));
+
         $objectManager->persist($user);
         $objectManager->flush();
     }

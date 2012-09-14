@@ -10,6 +10,6 @@ class Menu extends AbstractMenu
     {
         $this->options['label'] = 'wodauserbundle.menu.title';
 
-        $this->addLink('wodauserbundle.menu.list', $router->generate('woda_user_admin_list'), array('icon' => 'icon-user'));
+        $this->addLink('wodauserbundle.menu.list', $router->generate('WodaUserBundle.Admin.list'), array('icon' => 'icon-user'));
     }
 }

@@ -39,10 +39,14 @@ class ProfileController extends Controller
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+
                 $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
+                $user->setRoles(array('ROLE_USER'));
+
                 $entityManager = $this->container->get('doctrine')->getEntityManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('WodaUserBundle.Security.login'));
             }
         }

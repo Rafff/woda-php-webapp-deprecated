@@ -1,26 +1,26 @@
 <?php
 
-namespace Woda\UserBundle\Controller;
+namespace Woda\ContentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * @Route("/admin/users")
+ * @Route("/admin/contents")
  */
 class AdminController extends Controller
 {
     /**
-     * @Route("/list", name="WodaUserBundle.Admin.list")
+     * @Route("/list", name="WodaContentBundle.Admin.list")
      * @Template()
      */
     public function listAction()
     {
-        $users = $this->get('doctrine')->getRepository('WodaUserBundle:User')->findAll();
+        $contents = $this->get('doctrine')->getRepository('WodaContentBundle:Content')->findAll();
 
         return array(
-            'users' => $users,
+            'contents' => $contents,
         );
     }
 }
