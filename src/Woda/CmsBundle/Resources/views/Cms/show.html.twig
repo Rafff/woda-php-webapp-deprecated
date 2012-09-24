@@ -1,0 +1,27 @@
+{% extends 'WodaUIBundle::layout_admin.html.twig' %}
+
+{% block content %}
+    <h2> {{ entity.title }} </h2>
+    <div>
+        Id: {{ entity.id }}
+    </div>
+    <div>
+        Titre: {{ entity.title }}
+    </div>
+    <div>
+        Uri: {{ entity.uri }}
+    </div>
+    <div>
+        Activate: {{ entity.activated }}
+    </div>
+    <div>
+        <a href="{{ path('woda_cms_cms_edit', { 'id': entity.id }) }}">Editer</a>
+    </div>
+    <div>
+        <form action="{{ path('woda_cms_cms_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Supprimer</button>
+        </form>
+    </div>
+{% endblock %}
+

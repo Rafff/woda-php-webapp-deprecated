@@ -1,0 +1,29 @@
+{% extends 'WodaUIBundle::layout_admin.html.twig' %}
+
+{% block content %}
+    <table class="table table-striped">
+        <colgroup>
+            <col width="100" />
+            <col width="*" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Uri</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td><a href="{{ path('woda_cms_cms_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                    <td><a href="{{ path('woda_cms_cms_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
+                    <td><a href="{{ path('woda_cms_cms_show', { 'id': entity.id }) }}">{{ entity.uri }}</a></td>
+                    <td><a href="{{ path('woda_cms_cms_show', { 'id': entity.id }) }}">{{ entity.activated }}</a></td>
+                    <td><a href="{{ path('woda_cms_cms_delete', { 'id': entity.id }) }}">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

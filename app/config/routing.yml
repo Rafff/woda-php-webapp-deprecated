@@ -1,3 +1,13 @@
+woda_server:
+    resource: "@WodaServerBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+wodaCmsBundle:
+    resource: "@WodaCmsBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 WodaContentBundle:
     resource: "@WodaContentBundle/Controller/"
     type:     annotation
