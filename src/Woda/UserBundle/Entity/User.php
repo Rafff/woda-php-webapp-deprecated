@@ -20,44 +20,50 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string", length=100, unique=true)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $email;
-    
+
     /**
      * @ORM\Column(type="string", length=23)
      */
     protected $salt;
-    
+
     /**
      * @ORM\Column(type="string", length=40)
      */
     protected $password;
-    
+
     /**
      * @ORM\Column(type="boolean")
      */
     protected $active;
-    
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    protected $roles;
+
     public function __construct()
     {
+        $this->roles = array();
         $this->active = false;
         $this->salt = uniqid(null, true);
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
      * Get username
      *
@@ -67,7 +73,7 @@ class User implements UserInterface
     {
         return $this->getEmail();
     }
-    
+
     /**
      * Get email
      *
@@ -77,7 +83,7 @@ class User implements UserInterface
     {
         return $this->email;
     }
-    
+
     /**
      * Set email
      *
@@ -88,18 +94,18 @@ class User implements UserInterface
         $this->email = $email;
         return $this;
     }
-    
+
     /**
      * Get salt
      *
      * @return string
      */
-    
+
     public function getSalt()
     {
         return $this->salt;
     }
-    
+
     /**
      * Set salt
      *
@@ -110,7 +116,7 @@ class User implements UserInterface
         $this->salt = $salt;
         return $this;
     }
-    
+
     /**
      * Get password
      *
@@ -120,7 +126,7 @@ class User implements UserInterface
     {
         return $this->password;
     }
-    
+
     /**
      * Set password
      *
@@ -131,7 +137,7 @@ class User implements UserInterface
         $this->password = $password;
         return $this;
     }
-    
+
     /**
      * Set active
      *
@@ -143,17 +149,29 @@ class User implements UserInterface
         $this->active = $active;
         return $this;
     }
-    
+
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
         return $this->active;
     }
-    
+
+    /**
+     * Set roles
+     *
+     * @param array $roles
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
     /**
      * Get roles
      *
@@ -161,16 +179,16 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles ? $this->roles : array();
     }
-    
+
     /**
      * Erase credentials
      */
     public function eraseCredentials()
     {
     }
-    
+
     /**
      * Compare two users
      *

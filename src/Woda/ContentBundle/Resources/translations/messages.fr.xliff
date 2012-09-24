@@ -3,12 +3,12 @@
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1">
-                <source>wodauserbundle.menu.title</source>
-                <target>Utilisateurs</target>
+                <source>wodacontentbundle.menu.title</source>
+                <target>Contenus</target>
             </trans-unit>
             <trans-unit id="2">
-                <source>wodauserbundle.menu.list</source>
-                <target>Liste des utilisateurs</target>
+                <source>wodacontentbundle.menu.list</source>
+                <target>Liste des contenus</target>
             </trans-unit>
         </body>
     </file>

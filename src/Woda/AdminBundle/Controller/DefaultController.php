@@ -9,11 +9,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/admin/")
-     * @Template()
+     * @Route("/admin/", name="WodaAdminBundle.Default.index")
+     * @Template("WodaAdminBundle::index.html.twig")
      */
     public function indexAction()
     {
-        return array();
+        return array(
+        );
     }
 }

@@ -1,0 +1,21 @@
+{% extends"WodaUIBundle::layout.html.twig" %}
+
+{% block content %}
+
+    <style>html, body { padding: 0; margin: 0; } body { background: url(http://www.travelhomeindia.com/images/blinking%20star2.gif); }</style>
+
+    <div style="background: white">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a> | <a href="{{ path('WodaUserBundle.Profile.register') }}">Inscription</a>
+        {% endif %}
+    </div>
+
+    <div style="position: absolute; top: 50%; left: 50%; margin-top: -150px; margin-left: -200px;">
+        <img src="http://2.bp.blogspot.com/_qyhZ9_eXCHM/Sfu0_ZITquI/AAAAAAAAAkA/h_mzeX14Czs/s400/lolcat.jpg" />
+    </div>
+
+{% endblock %}
