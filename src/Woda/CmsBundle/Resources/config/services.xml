@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="woda_cms.admin_menu.class">Woda\CmsBundle\Service\Menu</parameter>
+    </parameters>
+
+    <services>
+        <service id="woda_cms.admin_menu" class="%woda_cms.admin_menu.class%">
+            <argument type="service" id="router" />
+            <tag name="woda_admin.menu_provider" container="woda_admin.admin_menu" />
+        </service>
+    </services>
+    <!--
+    <parameters>
+        <parameter key="woda_cms.example.class">Woda\CmsBundle\Example</parameter>
+    </parameters>
+
+    <services>
+        <service id="woda_cms.example" class="%woda_cms.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+</container>

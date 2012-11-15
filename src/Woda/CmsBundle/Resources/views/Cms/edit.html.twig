@@ -1,0 +1,12 @@
+{% extends 'WodaUIBundle::layout_admin.html.twig' %}
+
+{% block content %}
+<h2>Edition de la page</h2>
+
+<form action="{{ path('woda_cms_cms_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
+    <p>
+        <button type="submit">Editer</button>
+    </p>
+</form>
+{% endblock %}
