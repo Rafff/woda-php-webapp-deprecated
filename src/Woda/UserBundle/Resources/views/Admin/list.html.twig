@@ -5,11 +5,13 @@
         <colgroup>
             <col width="100" />
             <col width="*" />
+            <col width="200" />
         </colgroup>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Adresse email</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -17,6 +19,9 @@
                 <tr>
                     <td>#{{ user.id }}</td>
                     <td>{{ user.email }}</td>
+                    <td>
+                        <a href="{{ path('WodaUserBundle.Admin.remove', { id: user.id }) }}">Supprimer</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

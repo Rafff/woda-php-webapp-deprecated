@@ -5,7 +5,7 @@ namespace Woda\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -22,6 +22,7 @@ class User implements UserInterface
     protected $id;
 
     /**
+     * @Assert\Email
      * @ORM\Column(type="string", length=100, unique=true)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,11 +34,14 @@ class User implements UserInterface
     protected $salt;
 
     /**
+     * @Assert\NotBlank(groups={"registration"})
      * @ORM\Column(type="string", length=40)
      */
     protected $password;
 
     /**
+     * @Assert\MinLength(limit=0)
+     * @Assert\MaxLength(limit=1)
      * @ORM\Column(type="boolean")
      */
     protected $active;

@@ -1,0 +1,8 @@
+{% extends 'WodaUIBundle::layout_admin.html.twig' %}
+
+{% block content %}
+    <form action="{{ path('WodaUserBundle.Admin.edit', { id: user.id }) }}" method="post" {{ form_enctype(editionForm) }}>
+        {{ form_widget(editionForm) }}
+        <button type="submit">Valider</button>
+    </form>
+{% endblock %}

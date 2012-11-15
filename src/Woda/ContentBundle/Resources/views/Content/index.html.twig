@@ -1,15 +1,25 @@
 {% extends"WodaUIBundle::layout.html.twig" %}
 
 {% block content %}
-
-    <style>html, body { padding: 0; margin: 0; } body { background: url(http://www.travelhomeindia.com/images/blinking%20star2.gif); }</style>
-
-    <div style="background: white">
-        <a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a> | <a href="{{ path('WodaUserBundle.Profile.register') }}">Inscription</a>
+    <div class="hero-unit" style="background: url({{ asset('bundles/wodaui/img/hero.png') }}); color: white; text-shadow: 0 0 3px #000;">
+        <h1>Woda</h1>
+        <p>Le service de cloud au service des utilisateurs</p>
+        <p>
+            <a class="btn btn-primary btn-large">
+                Apprenez-en plus !
+            </a>
+        </p>
     </div>
-
-    <div style="position: absolute; top: 50%; left: 50%; margin-top: -150px; margin-left: -200px;">
-        <img src="http://2.bp.blogspot.com/_qyhZ9_eXCHM/Sfu0_ZITquI/AAAAAAAAAkA/h_mzeX14Czs/s400/lolcat.jpg" />
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="well">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pulvinar molestie turpis nec dapibus. Proin tempor, risus at dapibus feugiat, tellus est euismod felis, vitae pellentesque nisi nibh at nisi. Cras eu est vitae massa molestie consectetur. Vestibulum commodo bibendum dolor non bibendum. Nulla sit amet augue nisl. Morbi elementum auctor leo ut sagittis. Mauris a enim sem, porta rhoncus urna. Donec erat sem, tristique volutpat dignissim sed, pharetra sit amet lectus.
+            </div>
+        </div>
+        <div class="span6">
+            <div class="well">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pulvinar molestie turpis nec dapibus. Proin tempor, risus at dapibus feugiat, tellus est euismod felis, vitae pellentesque nisi nibh at nisi. Cras eu est vitae massa molestie consectetur. Vestibulum commodo bibendum dolor non bibendum. Nulla sit amet augue nisl. Morbi elementum auctor leo ut sagittis. Mauris a enim sem, porta rhoncus urna. Donec erat sem, tristique volutpat dignissim sed, pharetra sit amet lectus.
+            </div>
+        </div>
     </div>
-
 {% endblock %}

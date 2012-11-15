@@ -3,9 +3,55 @@
     <head>
         <meta charset="utf-8" />
         <title>Woda</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                background: url(http://subtlepatterns.subtlepatterns.netdna-cdn.com/patterns/debut_dark.png);
+            }
+
+            #content {
+                background: #ffffff;
+                border-left: 1px solid #000000;
+                border-right: 1px solid #000000;
+                min-height: 100%;
+            }
+
+            #content .inner {
+                padding: 30px;
+                padding-top: 75px;
+            }
+        </style>
     </head>
     <body>
-        {% block content %}
-        {% endblock %}
+        <div cla class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                <a class="brand" href="#">Woda</a>
+                    <ul class="nav">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
+                            {% endif %}
+                            <li><a href="#" onclick="alert('Les pages de profil sont en maintenance en vue d\'améliorer leur ergonomie.\n\nMerci de votre soutien.'); return false;">Profil</a></li>
+                            <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
+                        {% else %}
+                            <li><a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a></li>
+                            <li><a href="{{ path('WodaUserBundle.Profile.register') }}">Inscription</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="content" class="container">
+            <div class="inner">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
     </body>
 </html>
