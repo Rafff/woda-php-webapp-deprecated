@@ -16,4 +16,22 @@ class ContentController extends Controller
     {
         return array();
     }
+
+    /**
+     * @Route("/team", name="WodaContentBundle.Content.team")
+     * @Template()
+     */
+    public function teamAction()
+    {
+        return array();
+    }
+
+    /**
+     * @Route("/contact", name="WodaContentBundle.Content.contact")
+     * @Template()
+     */
+    public function contactAction()
+    {
+        return array();
+    }
 }

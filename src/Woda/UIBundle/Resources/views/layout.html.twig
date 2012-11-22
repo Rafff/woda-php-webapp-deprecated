@@ -25,13 +25,22 @@
                 padding-top: 75px;
             }
         </style>
+        <style>
+            {% block style %}
+            {% endblock %}
+        </style>
     </head>
     <body>
         <div cla class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                <a class="brand" href="#">Woda</a>
-                    <ul class="nav">
+                <a class="brand" href="{{ path('WodaContentBundle.Content.index') }}">Woda</a>
+                    <ul class="nav pull-left">
+                        <li><a href="{{ path('WodaContentBundle.Content.index') }}">Page d'accueil</a></li>
+                        <li><a href="{{ path('WodaContentBundle.Content.team') }}">L'équipe</a></li>
+                        <li><a href="{{ path('WodaContentBundle.Content.contact') }}">Nous contacter</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
