@@ -16,9 +16,14 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
-        $formBuilder->add('email', 'email');
-        $formBuilder->add('password', 'password', array('required' => ! $this->edit));
-        $formBuilder->add('active', 'checkbox', array('required' => false));
+        $formBuilder
+          ->add('username', 'text', array('label' => 'userbundle.profile.username', 'translation_domain' => 'woda'))
+          ->add('email', 'email', array('label' => 'userbundle.profile.email', 'translation_domain' => 'woda'))
+          //->add('password', 'password', array('label' => 'userbundle.profile.password', 'translation_domain' => 'woda', 'required' => !$this->edit))
+          ->add('firstname', 'text', array('label' => 'userbundle.profile.firstname', 'translation_domain' => 'woda'))
+          ->add('lastname', 'text', array('label' => 'userbundle.profile.lastname', 'translation_domain' => 'woda'))
+          ->add('active', 'checkbox', array('required' => false))
+        ;
     }
 
     public function getName()

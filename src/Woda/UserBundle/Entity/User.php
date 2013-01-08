@@ -22,6 +22,21 @@ class User implements UserInterface
     protected $id;
 
     /**
+     * @ORM\Column(type="string", length=25, nullable=false)
+     */
+    protected $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=false)
+     */
+    protected $lastname;
+
+    /**
+     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
+     */
+    protected $username;
+
+    /**
      * @Assert\Email
      * @ORM\Column(type="string", length=100, unique=true)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -66,16 +81,6 @@ class User implements UserInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->getEmail();
     }
 
     /**
@@ -187,6 +192,71 @@ class User implements UserInterface
     }
 
     /**
+     * Set username
+     *
+     * @return string
+     */
+    public function setUserName($username)
+    {
+      $this->username = $username;
+      return ($this);
+    }
+
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUserName()
+    {
+      return ($this->username);
+    }
+
+    /**
+     * Set first name
+     *
+     * @return User
+     */
+    public function setFirstName($firstname)
+    {
+      $this->firstname = $firstname;
+      return ($this);
+    }
+
+    /**
+     * Get first name
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+      return ($this->firstname);
+    }
+
+    /**
+     * Set last name
+     *
+     * @return User
+     */
+    public function setLastName($lastname)
+    {
+      $this->lastname = $lastname;
+      return ($this);
+    }
+
+    /**
+     * Get last name
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+      return ($this->lastname);
+    }
+
+
+    /**
      * Erase credentials
      */
     public function eraseCredentials()
@@ -200,6 +270,6 @@ class User implements UserInterface
      */
     public function equals(UserInterface $user)
     {
-        return $this->getUsername() === $user->getUsername();
+        return $this->getEmail() === $user->getEmail();
     }
 }

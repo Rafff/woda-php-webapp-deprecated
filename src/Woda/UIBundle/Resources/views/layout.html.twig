@@ -45,7 +45,7 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
                             {% endif %}
-                            <li><a href="#" onclick="alert('Les pages de profil sont en maintenance en vue d\'améliorer leur ergonomie.\n\nMerci de votre soutien.'); return false;">Profil</a></li>
+                            <li><a href="{{ path('WodaUserBundle.Profile.index') }}">Profil</a></li>
                             <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
                         {% else %}
                             <li><a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a></li>

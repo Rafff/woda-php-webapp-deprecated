@@ -14,17 +14,4 @@
             <tag name="woda_admin.menu_provider" container="woda_admin.admin_menu" />
         </service>
     </services>
-    <!--
-    <parameters>
-        <parameter key="woda_cms.example.class">Woda\CmsBundle\Example</parameter>
-    </parameters>
-
-    <services>
-        <service id="woda_cms.example" class="%woda_cms.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
-        </service>
-    </services>
-    -->
 </container>

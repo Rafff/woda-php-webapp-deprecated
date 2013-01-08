@@ -10,7 +10,7 @@ class Menu extends AbstractMenu
     {
         $this->options['label'] = 'wodacmsbundle.menu.title';
 
-        $this->addLink('wodacmsbundle.menu.new', $router->generate('woda_cms_cms_new'), array('icon' => 'icon-ok'));
-        $this->addLink('wodacmsbundle.menu.list', $router->generate('woda_cms_cms_list'), array('icon' => 'icon-file'));
+        $this->addLink('wodacmsbundle.menu.new', $router->generate('woda_cms_admin_new'), array('icon' => 'icon-ok'));
+        $this->addLink('wodacmsbundle.menu.list', $router->generate('woda_cms_admin_list'), array('icon' => 'icon-file'));
     }
 }

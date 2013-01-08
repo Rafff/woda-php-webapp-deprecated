@@ -10,7 +10,7 @@ class CmsType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title', 'text', array('required' => false))
             ->add('uri')
             ->add('activated', 'checkbox', array('required' => false))
             ->add('content', 'textarea', array('required' => false));

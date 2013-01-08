@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraint as Assert;
 
 /**
- * @ORM\Entity 
+ * @ORM\Entity
  * @ORM\Table(name="Cms_Cms")
  */
 class Cms
@@ -30,7 +30,7 @@ class Cms
 
     /**
      *
-     * @ORM\Column(type="boolean") 
+     * @ORM\Column(type="boolean")
      */
     private $activated;
 
@@ -42,7 +42,7 @@ class Cms
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,7 +64,7 @@ class Cms
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -86,7 +86,7 @@ class Cms
     /**
      * Get uri
      *
-     * @return string 
+     * @return string
      */
     public function getUri()
     {
@@ -108,7 +108,7 @@ class Cms
     /**
      * Get content
      *
-     * @return text 
+     * @return text
      */
     public function getContent()
     {
@@ -130,7 +130,7 @@ class Cms
     /**
      * Get activated
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActivated()
     {

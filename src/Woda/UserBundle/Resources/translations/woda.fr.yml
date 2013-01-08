@@ -4,3 +4,9 @@ userbundle.security.email: 'Adresse email'
 userbundle.security.password: 'Mot de passe'
 
 userbundle.security.email: 'Adresse email'
+
+userbundle.profile.email: 'Adresse mail'
+userbundle.profile.username: "Nom d'utilisateur"
+userbundle.profile.firstname: 'Prénom'
+userbundle.profile.lastname: 'Nom'
+userbundle.profile.password: 'Mot de passe'

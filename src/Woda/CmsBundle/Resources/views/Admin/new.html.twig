@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Creer une nouvelle page</h2>
 
-    <form action="{{ path('woda_cms_cms_create') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('woda_cms_admin_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>
             <button type="submit">Creer</button>

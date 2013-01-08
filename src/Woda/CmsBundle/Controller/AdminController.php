@@ -14,12 +14,12 @@ use Woda\CmsBundle\Form\CmsType;
  *
  * @Route("/admin/cms")
  */
-class CmsController extends Controller
+class AdminController extends Controller
 {
     /**
      * Lists all Cms entities.
      *
-     * @Route("/list", name="woda_cms_cms_list")
+     * @Route("/list", name="woda_cms_admin_list")
      * @Template()
      */
     public function listAction()
@@ -32,33 +32,9 @@ class CmsController extends Controller
     }
 
     /**
-     * Finds and display a Cms entity.
-     *
-     * @Route("/{id}/show", name="woda_cms_cms_show")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('WodaCmsBundle:Cms')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cms entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
      * Displays a form to create a new Cms entity.
      *
-     * @Route("/new", name="woda_cms_cms_new")
+     * @Route("/new", name="woda_cms_admin_new")
      * @Template()
      */
     public function newAction()
@@ -75,7 +51,7 @@ class CmsController extends Controller
     /**
      * Creates a new Cms entity.
      *
-     * @Route("/create", name="woda_cms_cms_create")
+     * @Route("/create", name="woda_cms_admin_create")
      * @Method("post")
      * @Template("WodaCmsBundle:Cms:new.html.twig")
      */
@@ -91,7 +67,7 @@ class CmsController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('woda_cms_cms_list'));
+            return $this->redirect($this->generateUrl('woda_cms_admin_list'));
         } else {
             exit();
         }
@@ -105,7 +81,7 @@ class CmsController extends Controller
     /**
      * Displays a form to edit an existing Cms entity.
      *
-     * @Route("/{id}/edit", name="woda_cms_cms_edit")
+     * @Route("/{id}/edit", name="woda_cms_admin_edit")
      * @Template()
      */
     public function editAction($id)
@@ -129,7 +105,7 @@ class CmsController extends Controller
     /**
      * Edits an existing Cms entity.
      *
-     * @Route("/{id}/update", name="woda_cms_cms_update")
+     * @Route("/{id}/update", name="woda_cms_admin_update")
      * @Method("post")
      * @Template("WodaCmsBundle:Cms:edit.html.twig")
      */
@@ -153,7 +129,7 @@ class CmsController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('woda_cms_cms_list', array('id' => $id)));
+            return $this->redirect($this->generateUrl('woda_cms_admin_list', array('id' => $id)));
         }
 
         return array(
@@ -165,7 +141,7 @@ class CmsController extends Controller
     /**
      * Deletes a Cms entity.
      *
-     * @Route("/{id}/delete", name="woda_cms_cms_delete")
+     * @Route("/{id}/delete", name="woda_cms_admin_delete")
      * @Method("post")
      */
     public function deleteAction($id)
@@ -187,7 +163,7 @@ class CmsController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('woda_cms_cms_list'));
+        return $this->redirect($this->generateUrl('woda_cms_admin_list'));
     }
 
     private function createDeleteForm($id)
