@@ -22,19 +22,19 @@ class User implements UserInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=25, nullable=false)
+     * @ORM\Column(name="login", type="string", length=15, nullable=false, unique=true)
      */
-    protected $firstname;
+    protected $login;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=false)
+     * @ORM\Column(name="first_name", type="string", length=25, nullable=false)
      */
-    protected $lastname;
+    protected $firstName;
 
     /**
-     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
+     * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
      */
-    protected $username;
+    protected $lastName;
 
     /**
      * @Assert\Email
@@ -44,13 +44,12 @@ class User implements UserInterface
     protected $email;
 
     /**
-     * @ORM\Column(type="string", length=23)
+     * @ORM\Column(name="pass_salt", type="string", length=23)
      */
     protected $salt;
 
     /**
-     * @Assert\NotBlank(groups={"registration"})
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(name="pass_hash", type="string", length=32)
      */
     protected $password;
 
@@ -81,6 +80,69 @@ class User implements UserInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @return User
+     */
+    public function setLogin($login)
+    {
+        $this->login = $login;
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    /**
+     * Set first name
+     *
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    /**
+     * Get first name
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set last name
+     *
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    /**
+     * Get last name
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
     }
 
     /**
@@ -192,71 +254,6 @@ class User implements UserInterface
     }
 
     /**
-     * Set username
-     *
-     * @return string
-     */
-    public function setUserName($username)
-    {
-      $this->username = $username;
-      return ($this);
-    }
-
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUserName()
-    {
-      return ($this->username);
-    }
-
-    /**
-     * Set first name
-     *
-     * @return User
-     */
-    public function setFirstName($firstname)
-    {
-      $this->firstname = $firstname;
-      return ($this);
-    }
-
-    /**
-     * Get first name
-     *
-     * @return string
-     */
-    public function getFirstName()
-    {
-      return ($this->firstname);
-    }
-
-    /**
-     * Set last name
-     *
-     * @return User
-     */
-    public function setLastName($lastname)
-    {
-      $this->lastname = $lastname;
-      return ($this);
-    }
-
-    /**
-     * Get last name
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-      return ($this->lastname);
-    }
-
-
-    /**
      * Erase credentials
      */
     public function eraseCredentials()
@@ -270,6 +267,16 @@ class User implements UserInterface
      */
     public function equals(UserInterface $user)
     {
-        return $this->getEmail() === $user->getEmail();
+        return $this->getId() === $user->getId();
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->getLogin();
     }
 }
