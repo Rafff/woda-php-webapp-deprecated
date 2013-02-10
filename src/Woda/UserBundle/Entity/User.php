@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="UserBundle_Users")
+ * @ORM\Table(name="User")
  */
 
 class User implements UserInterface
@@ -22,23 +22,23 @@ class User implements UserInterface
     protected $id;
 
     /**
-     * @ORM\Column(name="login", type="string", length=15, nullable=false, unique=true)
+     * @ORM\Column(name="login", type="string", length=15, unique=true)
      */
     protected $login;
 
     /**
-     * @ORM\Column(name="first_name", type="string", length=25, nullable=false)
+     * @ORM\Column(name="first_name", type="string", length=25)
      */
     protected $firstName;
 
     /**
-     * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
+     * @ORM\Column(name="last_name", type="string", length=100)
      */
     protected $lastName;
 
     /**
      * @Assert\Email
-     * @ORM\Column(type="string", length=100, unique=true)
+     * @ORM\Column(name="email", type="string", length=100, unique=true)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $email;

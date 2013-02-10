@@ -1,3 +1,8 @@
+woda_fs:
+    resource: "@WodaFSBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 woda_server:
     resource: "@WodaServerBundle/Controller/"
     type:     annotation
