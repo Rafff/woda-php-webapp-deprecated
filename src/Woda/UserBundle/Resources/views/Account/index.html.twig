@@ -1,0 +1,14 @@
+{% extends 'WodaUIBundle::layout.html.twig' %}
+
+{% block content %}
+
+    <div>
+        Hello, {{ user.login }} : )
+    </div>
+    <ul>
+      <li><a href="{{ path('WodaUserBundle.Account.editInformation') }}">Modifier les informations de mon profil</a></li>
+      <li><a href="{{ path('WodaUserBundle.Account.editEmail') }}">Modifier mon email</a></li>
+      <li><a href="{{ path('WodaUserBundle.Account.editPassword') }}">Modifier mon mot de passe</a></li>
+    </ul>
+
+{% endblock %}

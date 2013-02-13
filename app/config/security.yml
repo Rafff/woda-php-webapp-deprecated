@@ -5,7 +5,7 @@ jms_security_extra:
 security:
     encoders:
         Woda\UserBundle\Entity\User:
-           algorithm: plaintext
+           algorithm: sha256
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
@@ -15,7 +15,7 @@ security:
         wodauserbundle:
             entity:
                 class: WodaUserBundle:User
-                property: email
+                property: login
 
     firewalls:
         main:
@@ -37,4 +37,4 @@ security:
 
         # application
         - { path: ^/login,   access: 'isAnonymous()' }
-        - { path: ^/profile, access: 'isAuthenticated()' }
+        - { path: ^/account, access: 'isAuthenticated()' }

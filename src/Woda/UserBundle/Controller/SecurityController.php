@@ -7,6 +7,11 @@ use Symfony\Component\Security\Core\Authentification\Token\UsernamePasswordToken
 use Symfony\Component\Security\Core\SecurityContext;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Woda\UserBundle\Form\SecurityForgotPasswordType;
+use Woda\UserBundle\Form\SecurityRecoveryPasswordType;
+use Woda\UserBundle\Entity\UserPassword;
 
 class SecurityController extends Controller
 {
@@ -43,5 +48,113 @@ class SecurityController extends Controller
      */
     public function checkAction()
     {
+    }
+
+    
+    /**
+     * @Route("/forgot/password", name="WodaUserBundle.Security.forgotpassword")
+     * @Template("WodaUserBundle:Security:forgotpassword.html.twig")
+     */
+    public function forgotPasswordAction()
+    {
+        $form = $this->createForm(new SecurityForgotPasswordType());
+
+        $request = $this->getRequest();
+        if ($request->getMethod() === 'POST') {
+              $form->bindRequest($request);
+              if ($form->isValid()) {
+                  $data = $form->getData();
+                  $email = $data['email'];
+                  $em = $this->getDoctrine()->getManager();
+                  $user = $em->getRepository('WodaUserBundle:User')->findOneByEmail($email);
+                  if (is_null($user)) {
+                      throw $this->createNotFoundException('Aucun compte activé lié avec cette adresse email n\'a été trouvé !');
+                  }
+
+                  $userPassword = $em->getRepository('WodaUserBundle:UserPassword')->findOneByUser($user);
+                  if (is_null($userPassword)) {
+                    $userPassword = new UserPassword();
+                    $userPassword->setUser($user);
+                  } else {
+                      $userPassword->generateNewToken();
+                  }
+
+                  $em->persist($userPassword);
+                  $em->flush();
+
+                  // send email
+
+                  return ($this->render('WodaUserBundle:Security/Message:default.html.twig', array(
+                        'message' => 'Un email de redefinition de mot de passe a été envoyé à l\'adresse suivante: ' . $email . '['.base64_encode($user->getLogin()).']['.$userPassword->getToken().']'
+                        //base64_encode($user->getLogin()) . ']xxx[' . $userValidation->getToken()
+                    )
+                  ));
+              }
+          }
+
+        return (
+          array (
+              'form' => $form->createView(),
+          )
+        );
+    }
+
+    /**
+     * @Route("/recovery/password/{login64}--{token}", name="WodaUserBundle.Security.recoverypassword", requirements={"login64"="[a-zA-Z0-9\/\+\=]*", "token"="[a-zA-Z0-9\.]*"})
+     * @Template("WodaUserBundle:Security:recoverypassword.html.twig")
+     */
+    public function recoveryPasswordAction($login64, $token)
+    {
+        $login = base64_decode($login64);
+        $em = $this->getDoctrine()->getManager();
+
+        if (preg_match("/^[A-Za-z0-9-_]+$/", $login) !== 1) {
+            throw $this->createNotFoundException('Aucun compte trouvé !');
+        }
+
+        $user = $em->getRepository('WodaUserBundle:User')->findOneByLogin($login);
+        if (!$user) {
+            throw $this->createNotFoundException('Aucun compte trouvé !');
+        }
+
+        $userPassword = $em->getRepository('WodaUserBundle:UserPassword')->findOneByUser($user);
+        if (!is_null($userPassword) && $userPassword->getToken() === $token) {
+            $form = $this->createForm(new SecurityRecoveryPasswordType());
+
+            $request = $this->getRequest();
+            if ($request->getMethod() === 'POST') {
+                  $form->bindRequest($request);
+                  if ($form->isValid()) {
+                      $data = $form->getData();
+                      $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+                      $user->setPassword($encoder->encodePassword($data['password'], $user->getSalt()));
+
+                      $em->persist($user);
+                      $em->remove($userPassword);
+                      $em->flush();
+
+                      return ($this->redirect($this->generateUrl('WodaUserBundle.Security.login')));
+                  }
+            }
+
+            return (array(
+                'form' => $form->createView(),
+                'login64' => $login64,
+                'token' => $token
+                )
+            );
+        }
+
+        return ($this->redirect($this->generateUrl('WodaContentBundle.Content.index')));
+    }
+
+    /**
+     * @Route("/forgot/account", name="WodaUserBundle.Security.forgotaccount")
+     * @Template("WodaUserBundle:Security:forgotpassword.html.twig")
+     */
+    public function forgotAccountAction()
+    {
+        // non implementé
+        return;
     }
 }

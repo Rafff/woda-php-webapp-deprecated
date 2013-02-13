@@ -1,11 +1,11 @@
 <?php
 
-namespace Woda\UserBundle\Type;
+namespace Woda\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class UserType extends AbstractType
+class AdminUserType extends AbstractType
 {
     private $edit;
 
@@ -28,6 +28,6 @@ class UserType extends AbstractType
 
     public function getName()
     {
-        return 'WodaUserBundle_UserType';
+        return 'woda_userbundle_adminusertype';
     }
 }

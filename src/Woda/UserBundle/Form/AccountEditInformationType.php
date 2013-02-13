@@ -5,7 +5,7 @@ namespace Woda\UserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class UserUpdateType extends AbstractType
+class AccountEditInformationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -17,6 +17,6 @@ class UserUpdateType extends AbstractType
 
     public function getName()
     {
-        return 'woda_userbundle_userupdatetype';
+        return 'woda_userbundle_accounteditinformationtype';
     }
 }

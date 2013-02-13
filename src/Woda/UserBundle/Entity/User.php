@@ -4,15 +4,15 @@ namespace Woda\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="User")
+ * @ORM\Table(name="UserBundle_Users")
  */
 
-class User implements UserInterface
+class User implements AdvancedUserInterface
 {
     /**
      * @ORM\Id
@@ -27,14 +27,14 @@ class User implements UserInterface
     protected $login;
 
     /**
-     * @ORM\Column(name="first_name", type="string", length=25)
+     * @ORM\Column(type="string", length=25)
      */
-    protected $firstName;
+    protected $firstname;
 
     /**
-     * @ORM\Column(name="last_name", type="string", length=100)
+     * @ORM\Column(type="string", length=100)
      */
-    protected $lastName;
+    protected $lastname;
 
     /**
      * @Assert\Email
@@ -49,7 +49,7 @@ class User implements UserInterface
     protected $salt;
 
     /**
-     * @ORM\Column(name="pass_hash", type="string", length=32)
+     * @ORM\Column(name="pass_hash", type="string", length=44)
      */
     protected $password;
 
@@ -61,6 +61,13 @@ class User implements UserInterface
     protected $active;
 
     /**
+     * @Assert\MinLength(limit=0)
+     * @Assert\MaxLength(limit=1)
+     * @ORM\Column(type="boolean")
+     */
+    protected $locked;
+
+    /**
      * @ORM\Column(type="array")
      */
     protected $roles;
@@ -69,6 +76,7 @@ class User implements UserInterface
     {
         $this->roles = array();
         $this->active = false;
+        $this->locked = false;
         $this->salt = uniqid(null, true);
     }
 
@@ -108,9 +116,9 @@ class User implements UserInterface
      *
      * @return User
      */
-    public function setFirstName($firstName)
+    public function setFirstname($firstname)
     {
-        $this->firstName = $firstName;
+        $this->firstname = $firstname;
         return $this;
     }
 
@@ -119,9 +127,9 @@ class User implements UserInterface
      *
      * @return string
      */
-    public function getFirstName()
+    public function getFirstname()
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
     /**
@@ -129,9 +137,9 @@ class User implements UserInterface
      *
      * @return User
      */
-    public function setLastName($lastName)
+    public function setLastname($lastname)
     {
-        $this->lastName = $lastName;
+        $this->lastname = $lastname;
         return $this;
     }
 
@@ -140,9 +148,9 @@ class User implements UserInterface
      *
      * @return string
      */
-    public function getLastName()
+    public function getLastname()
     {
-        return $this->lastName;
+        return $this->lastname;
     }
 
     /**
@@ -232,6 +240,28 @@ class User implements UserInterface
     }
 
     /**
+     * Set locked
+     *
+     * @param boolean $active
+     * @return User
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
+        return $this;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return boolean
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
      * Set roles
      *
      * @param array $roles
@@ -277,6 +307,26 @@ class User implements UserInterface
      */
     public function getUsername()
     {
-        return $this->getLogin();
+        return $this->login;
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return !$this->locked;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->active;
     }
 }

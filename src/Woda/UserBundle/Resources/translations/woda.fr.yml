@@ -1,12 +1,12 @@
 userbundle.security.login: 'Connexion'
-userbundle.security.rememberme: 'Se souvenir'
-userbundle.security.email: 'Adresse email'
+userbundle.security.accountname: 'Nom du compte'
 userbundle.security.password: 'Mot de passe'
+userbundle.security.rememberme: 'Se souvenir'
 
-userbundle.security.email: 'Adresse email'
-
-userbundle.profile.email: 'Adresse mail'
-userbundle.profile.username: "Nom d'utilisateur"
+userbundle.profile.email: 'Adresse email'
+userbundle.profile.email_validation: 'Adresse mail (validation)'
+userbundle.profile.login: "Nom d'utilisateur"
 userbundle.profile.firstname: 'Prénom'
 userbundle.profile.lastname: 'Nom'
 userbundle.profile.password: 'Mot de passe'
+userbundle.profile.password_validation: 'Mot de passe (validation)'
