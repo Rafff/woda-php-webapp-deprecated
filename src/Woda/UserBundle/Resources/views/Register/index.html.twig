@@ -1,0 +1,12 @@
+{% extends 'WodaUIBundle::layout.html.twig' %}
+
+{% block content %}
+
+    <div>
+        <form action="{{ path('WodaUserBundle.Register.index') }}" method="post">
+            {{ form_widget(form) }}
+            <input type="submit" />
+        </form>
+    </div>
+
+{% endblock %}

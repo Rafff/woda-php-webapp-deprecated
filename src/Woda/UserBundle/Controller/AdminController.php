@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Woda\UserBundle\Entity\User;
-use Woda\UserBundle\Type\UserType;
+use Woda\UserBundle\Form\AdminUserType as UserType; // peut etre enlever le as xxx
 
 /**
  * @Route("/admin/users")

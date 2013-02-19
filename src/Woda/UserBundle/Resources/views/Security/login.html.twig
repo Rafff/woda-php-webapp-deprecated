@@ -13,7 +13,7 @@
             <legend>Connexion</legend>
 
             <div>
-	        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'userbundle.security.email' | trans({}, 'woda') }}" />
+	        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'userbundle.security.accountname' | trans({}, 'woda') }}" />
             </div>
 
             <div>
@@ -25,6 +25,9 @@
 	        <input id="_checkbox" type="checkbox" style="display:none"/> {{ 'userbundle.security.rememberme' | trans({}, 'woda') }}
 -->
             </div>
+            
+            <div><a href="{{ path('WodaUserBundle.Security.forgotpassword') }}">mot de passe oublié ?</a></div>
+            <div><a href="{{ path('WodaUserBundle.Security.forgotaccount') }}">nom de compte oublié ?</a></div>
 
             <button type="submit" id="_submit" name="_submit">
 	        {{ 'userbundle.security.login' | trans({}, 'woda') }}

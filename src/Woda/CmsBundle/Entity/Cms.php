@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="Cms_Cms")
+ * @ORM\Table(name="CmsBundle_Cms")
  */
 class Cms
 {
