@@ -19,6 +19,12 @@ class Folder
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Folder", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected $parent;
+
+    /**
      * @ORM\Column(name="name", type="string", length=20)
      */
     protected $name;
@@ -33,4 +39,14 @@ class Folder
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Folder", mappedBy="parent")
+     */
+    protected $folders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="XFile", mappedBy="parent")
+     */
+    protected $files;
 }

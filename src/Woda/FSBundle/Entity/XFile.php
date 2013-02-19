@@ -17,6 +17,12 @@ class XFile
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Folder", mappedBy="files")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected $parent;
+
+    /**
      * @ORM\Column(name="name", type="string", length="15")
      */
     protected $name;
@@ -31,10 +37,4 @@ class XFile
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Folder", mappedBy="files")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
-    protected $folder;
 }
