@@ -1,0 +1,28 @@
+{% extends 'WodaUIBundle::layout.html.twig' %}
+
+{% block content %}
+
+    Résultat de votre recherche:
+
+    <table class="table table-striped">
+        <colgroup>
+            <col width="100" />
+            <col width="*" />
+            <col width="200" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Login</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.login }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

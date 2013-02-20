@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Woda\SearchBundle\Entity\UserRepository")
  * @ORM\Table(name="UserBundle_Users")
  */
 

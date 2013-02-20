@@ -10,7 +10,7 @@ class AccountEditPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('actual_password', 'password', array('label' => 'userbundle.profile.password_actual', 'translation_domain' => 'woda'))
+            ->add('current_password', 'password', array('label' => 'userbundle.profile.password_current', 'translation_domain' => 'woda'))
             ->add('password', 'repeated', array(
                     'type' => 'password',
                     'invalid_message' => 'Les mots de passe doivent correspondre',
