@@ -1,0 +1,38 @@
+{% extends"WodaUIBundle::layout.html.twig" %}
+
+{% block content %}
+
+  <h1>My Woda folder</h1>
+
+  <p><button type="button" class="btn btn-primary"><i class="icon-plus icon-white"></i> Upload file</button></p>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th colspan="2">Filename</th>
+        <th>Type</th>
+        <th>Last motified</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for folder in folders %}
+          <tr>
+            <td colspan="2"><i class="icon-folder-open"></i> <a href="{{ folder.name }}">{{ folder.name }}</a></td>
+            <td>Folder</td>
+            <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
+          </tr>
+      {% endfor %}
+
+      {% for file in files %}
+        <tr>
+        <td colspan="2"><i class="icon-file"></i> {{ file.name }}</td>
+        <td>File</td>
+        <td>{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
+      </tr>
+        
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock %}

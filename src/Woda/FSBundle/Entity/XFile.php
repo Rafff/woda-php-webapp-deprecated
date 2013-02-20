@@ -19,13 +19,13 @@ class XFile
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Folder", mappedBy="files")
+     * @ORM\ManyToOne(targetEntity="Folder", inversedBy="files")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected $parent;
 
     /**
-     * @ORM\Column(name="name", type="string", length="15")
+     * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
 
@@ -35,8 +35,71 @@ class XFile
     protected $lastModificationTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", mappedBy="folders")
+     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getLastModificationTime()
+    {
+        return $this->lastModificationTime;
+    }
+
+    public function setLastModificationTime($mod)
+    {
+        $this->lastModificationTime = $mod;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Woda\UserBundle\Entity\User $user
+     * @return XFile
+     */
+    public function setUser(\Woda\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return Woda\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

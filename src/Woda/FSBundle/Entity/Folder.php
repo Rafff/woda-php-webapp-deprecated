@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Folder")
+ * @ORM\Entity(repositoryClass="Woda\FSBundle\Entity\FolderRepository")
  */
 
 class Folder
@@ -25,7 +26,7 @@ class Folder
     protected $parent;
 
     /**
-     * @ORM\Column(name="name", type="string", length=20)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
 
@@ -35,7 +36,7 @@ class Folder
     protected $lastModificationTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", mappedBy="folders")
+     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -49,4 +50,113 @@ class Folder
      * @ORM\OneToMany(targetEntity="XFile", mappedBy="parent")
      */
     protected $files;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getLastModificationTime()
+    {
+        return $this->lastModificationTime;
+    }
+
+    public function setLastModificationTime($mod)
+    {
+        $this->lastModificationTime = $mod;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    public function getFolders()
+    {
+        return $this->folders;
+    }
+
+    public function getFiles()
+    {
+        return $this->files;
+    }
+    public function __construct()
+    {
+        $this->folders = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add folders
+     *
+     * @param Woda\FSBundle\Entity\Folder $folders
+     * @return Folder
+     */
+    public function addFolder(\Woda\FSBundle\Entity\Folder $folders)
+    {
+        $this->folders[] = $folders;
+        return $this;
+    }
+
+    /**
+     * Remove folders
+     *
+     * @param Woda\FSBundle\Entity\Folder $folders
+     */
+    public function removeFolder(\Woda\FSBundle\Entity\Folder $folders)
+    {
+        $this->folders->removeElement($folders);
+    }
+
+    /**
+     * Add files
+     *
+     * @param Woda\FSBundle\Entity\XFile $files
+     * @return Folder
+     */
+    public function addFile(\Woda\FSBundle\Entity\XFile $files)
+    {
+        $this->files[] = $files;
+        return $this;
+    }
+
+    /**
+     * Remove files
+     *
+     * @param Woda\FSBundle\Entity\XFile $files
+     */
+    public function removeFile(\Woda\FSBundle\Entity\XFile $files)
+    {
+        $this->files->removeElement($files);
+    }
 }
