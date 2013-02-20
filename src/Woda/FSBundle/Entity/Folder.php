@@ -36,7 +36,7 @@ class Folder
     protected $lastModificationTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders")
+     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -47,7 +47,7 @@ class Folder
     protected $folders;
 
     /**
-     * @ORM\OneToMany(targetEntity="XFile", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="XFile", mappedBy="parent", cascade={"delete"})
      */
     protected $files;
 

@@ -30,6 +30,7 @@ class LoadUserData implements ContainerAwareInterface, FixtureInterface
         $user->setEmail('admin@localhost');
         $user->setPassword($encoder->encodePassword('test', $user->getSalt()));
         $user->setRoles(array('ROLE_USER', 'ROLE_ADMIN'));
+        $user->setActive(true);
 
         $objectManager->persist($user);
         $objectManager->flush();
