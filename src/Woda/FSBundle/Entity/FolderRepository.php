@@ -20,6 +20,8 @@ class FolderRepository extends EntityRepository
      */
     public function findByPath($path, $user)
     {
+        if ($user === null)
+            return null;
         $path = explode('/', $path);
         $folder = $this->findOneBy(array('user' => $user, 'parent' => null));
 

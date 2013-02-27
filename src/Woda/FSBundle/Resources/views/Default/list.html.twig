@@ -2,9 +2,80 @@
 
 {% block content %}
 
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+      /*var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+          $(this).width($(this).width());
+        });
+        return ui;
+      };
+
+      $('tbody').sortable   ({
+        connectWith: '.fsdraggable',
+        containment: 'tbody',
+        forceHelperSize: true,
+        forcePlaceholderSize: true
+      }).disableSelection();*/
+      
+      $('#post-newfolder').click(function(){
+        var foldername = $('#newfoldername-input').val();
+        if (foldername != '')
+        {
+          var url = '{{ path('WodaFSBundle.Default.addFolder') }}';
+          $.post(url,{fname:foldername,path:'{{ path }}'},
+            function(data){
+              if (data.responseCode == 200)
+              {
+                var folder = $('.foldertr').last();
+                var newfolder = folder.clone();
+                newfolder.find('.folderlink').attr('href', foldername).html(foldername);
+                $('#modal-newfolder').modal('hide');
+                folder.after(newfolder);
+              } else if (data.responseCode == 401) {
+                $('#newfolder-errorexists').show();
+              }
+          });
+        } else {
+          $('#newfolder-errorempty').show();
+        }
+      });
+
+      $('#modal-newfolder').on('hidden', function(){
+        $('#newfoldername-input').val('');
+        $('.newfolder-error').hide();
+      });
+    });
+  </script>
+
   <h1>My Woda folder</h1>
 
-  <p><button type="button" class="btn btn-primary"><i class="icon-plus icon-white"></i> Upload file</button></p>
+  {% set curpath = '' %}
+  <ul class="breadcrumb">
+    <li><a href="{{ path('WodaFSBundle.Default.list') }}">Home</a>
+    {% for folder in path|split('/') %}
+
+       {% if folder != '' %}
+        {% if loop.first == false %}
+          {% set curpath = curpath ~ '/' %}
+        {% endif %}
+        {% set curpath = curpath ~ folder %}
+         <span class="divider">/</span></li>
+         {% if loop.index == (loop.length - 1) %}
+          <li class="active">{{ folder }}
+         {% else %}
+          <li><a href="{{ path('WodaFSBundle.Default.list.param', { "path": curpath }) }}">{{ folder }}</a>
+         {% endif %}
+      {% endif %}
+
+
+
+    {% endfor %}
+    </li>
+  </ul>
+
+  <p><a href="#modal-newfolder" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-plus icon-white"></i> New folder</a> <button type="button" class="btn btn-primary"><i class="icon-upload icon-white"></i> Upload file</button></p>
   
   <table class="table table-hover">
     <thead>
@@ -12,27 +83,51 @@
         <th colspan="2">Filename</th>
         <th>Type</th>
         <th>Last motified</th>
+        <th></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="fscontainer">
 
       {% for folder in folders %}
-          <tr>
-            <td colspan="2"><i class="icon-folder-open"></i> <a href="{{ folder.name }}">{{ folder.name }}</a></td>
+          <tr class="foldertr fsdraggable">
+            <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
             <td>Folder</td>
             <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
+            <td></td>
           </tr>
       {% endfor %}
 
       {% for file in files %}
-        <tr>
+        <tr class="filetr fsdraggable">
         <td colspan="2"><i class="icon-file"></i> {{ file.name }}</td>
         <td>File</td>
         <td>{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
+        <td class="file-icons"><i class="icon-download" ></i> <i class="icon-share" ></i> <i class="icon-remove" ></i></td>
       </tr>
-        
       {% endfor %}
 
     </tbody>
   </table>
+
+  <div id="modal-newfolder" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Create new folder :</h3>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error newfolder-error hide" id="newfolder-errorexists">
+        Cannot create this folder : Folder already exists.
+      </div>
+      <div class="alert alert-error newfolder-error hide" id="newfolder-errorempty">
+        You must enter a folder name.
+      </div>
+      <p>Please enter a name for the new folder :</p>
+      <input type="text" name="foldername" id="newfoldername-input" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button id="post-newfolder" class="btn btn-primary">Create</button>
+    </div>
+  </div>
+
 {% endblock %}
