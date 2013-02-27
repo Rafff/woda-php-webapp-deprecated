@@ -29,6 +29,22 @@
                 padding: 30px;
                 padding-top: 75px;
             }
+
+            #search {
+                float: left;
+                margin: 5px 0px;
+            }
+
+            #footer .container div {
+                padding: 0 5px; 
+            }
+
+            #footer .container div a {
+               font-size: 12px; 
+               color: #AAA;
+               background-color: transparent;
+               text-decoration: none;
+            }
         </style>
         <style>
             {% block style %}
@@ -41,16 +57,20 @@
                 <div class="container">
                 <a class="brand" href="{{ path('WodaContentBundle.Content.index') }}">Woda</a>
                     <ul class="nav pull-left">
-                        <li><a href="{{ path('WodaContentBundle.Content.index') }}">Page d'accueil</a></li>
                         <li><a href="{{ path('WodaContentBundle.Content.team') }}">L'équipe</a></li>
-                        <li><a href="{{ path('WodaContentBundle.Content.contact') }}">Nous contacter</a></li>
                     </ul>
+                    <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result') }}" method="post">
+                        <div class="input-append">
+                            <input type="text" name="query" class="span2 search-query" placeholder="Fichiers, Utilisateurs, ...">
+                            <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+                        </div>
+                    </form>
                     <ul class="nav pull-right">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
                             {% endif %}
-                            <li><a href="{{ path('WodaFSBundle.Default.list') }}">My Folder</a></li>
+                            <li><a href="{{ path('WodaFSBundle.Default.list') }}">Mon dossier</a></li>
                             <li><a href="{{ path('WodaUserBundle.Account.index') }}">Profil</a></li>
                             <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
                         {% else %}
@@ -66,6 +86,16 @@
             <div class="inner">
                 {% block content %}
                 {% endblock %}
+            </div>
+        </div>
+        <div id="footer">
+            <div class="container">
+                <div class="pull-left">
+                    <a href="{{ path('WodaContentBundle.Content.team') }}">L'équipe</a>
+                </div>
+                <div class="pull-right">
+                    <a href="{{ path('WodaContentBundle.Content.contact') }}">Nous contacter</a>
+                </div>
             </div>
         </div>
     </body>
