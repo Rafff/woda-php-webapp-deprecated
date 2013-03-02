@@ -37,31 +37,32 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        var userScrollbar = new InfiniteScrollbar($('div#results div.tab-pane#user'), {
-            autoload: true,
-            progress: 90,
-            url: 'user/{length}/{offset}',
-            length:{{ length }},
-            offset: {{ userOffset }},
-            extraParams: {
-                query: $('#query')[0].innerHTML
-            },
-            counter: $('ul#typeofquery li.users span.counter'),
-            template: '<div>Utilisateur: <a href="#">{name}</a></div>'
-        });
-
-        var fileScrollbar = new InfiniteScrollbar($('div#results div.tab-pane#file'), {
-            autoload: true,
-            progress: 90,
-            url: 'file/{length}/{offset}',
-            length:{{ length }},
-            offset: {{ userOffset }},
-            extraParams: {
-                query: $('#query')[0].innerHTML
-            },
-            counter: $('ul#typeofquery li.files span.counter'),
-            template: '<div>Fichiers: <a href="#">{name}</a></div>'
-        });
+        var baseUrl = '{{ app.request.baseUrl }}',
+            userScrollbar = new InfiniteScrollbar($('div#results div.tab-pane#user'), {
+                autoload: true,
+                progress: 90,
+                url: baseUrl + '/search/result/user/{length}/{offset}',
+                length:{{ length }},
+                offset: {{ userOffset }},
+                extraParams: {
+                    query: $('#query')[0].innerHTML
+                },
+                counter: $('ul#typeofquery li.users span.counter'),
+                template: '<div>Utilisateur: <a href="#">{name}</a></div>'
+            }),
+            fileScrollbar = new InfiniteScrollbar($('div#results div.tab-pane#file'), {
+                autoload: true,
+                progress: 90,
+                url: baseUrl + '/search/result/file/{length}/{offset}',
+                length:{{ length }},
+                offset: {{ userOffset }},
+                extraParams: {
+                    query: $('#query')[0].innerHTML
+                },
+                counter: $('ul#typeofquery li.files span.counter'),
+                template: '<div>Fichiers: <a href="#">{name}</a></div>'
+            })
+        ;
 
         if (!$('div#results div.tab-pane#file div').length) {
             fileScrollbar.begin();

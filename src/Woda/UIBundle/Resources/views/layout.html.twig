@@ -59,7 +59,7 @@
                     <ul class="nav pull-left">
                         <li><a href="{{ path('WodaContentBundle.Content.team') }}">L'équipe</a></li>
                     </ul>
-                    <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'user' }) }}" method="post">
+                    <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
                         <div class="input-append">
                             <input type="text" name="query" class="span2 search-query" placeholder="Fichiers, Utilisateurs, ...">
                             <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>

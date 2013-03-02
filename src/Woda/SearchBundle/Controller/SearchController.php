@@ -19,7 +19,7 @@ use Woda\SearchBundle\Form\SearchType;
 class SearchController extends Controller
 {
     /**
-     * @Route("/result/{type}/{length}/{offset}", name="WodaSearchBundle.Search.result", defaults={ "length" : 50, "offset" : 0 }, requirements={ "type" : "file|user"})
+     * @Route("/result/{type}/{length}/{offset}", name="WodaSearchBundle.Search.result", defaults={ "length" : 50, "offset" : 0, "type" : "file" }, requirements={ "type" : "file|user"})
      * @Template("WodaSearchBundle:Search:result.html.twig")
      */
     public function resultAction($type, $length, $offset)
