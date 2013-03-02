@@ -1,0 +1,26 @@
+body {
+   overflow: hidden;
+}
+
+.counter {
+    margin: 0 0 0 5px;
+    padding: 2px 5px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #999;
+    background: #eee;
+    border-radius: 2px;
+}
+
+ul#typeofquery li a {
+    color: #000;
+}
+#content {
+    min-height: 90%;
+}
+
+div#results div.tab-pane {
+    height: 600px;
+    overflow-y: scroll;
+    overflow: hidden;
+}

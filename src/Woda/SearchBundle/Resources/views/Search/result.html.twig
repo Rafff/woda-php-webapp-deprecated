@@ -1,28 +1,82 @@
 {% extends 'WodaUIBundle::layout.html.twig' %}
 
 {% block content %}
+{% stylesheets '@WodaSearchBundle/Resources/public/css/search.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% javascripts '@WodaSearchBundle/Resources/public/js/InfiniteScrollbar.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<h2>Résultat de votre recherche: "<span id="query">{{ query }}</span>"</h2>
 
-    Résultat de votre recherche:
+<div class="tabbable tabs-left">
+    <ul id="typeofquery" class="nav nav-tabs">
+        <li class="files{% if (type == 'file') %} active {% endif %}" >
+            <a href="#file" data-toggle="tab">Fichiers: <span class="counter">{% if (type == 'file') %}{{ count }}{% else %}0{% endif %}</span></a>
+        </li>
+        <li class="users{% if (type == 'user') %} active {% endif %}" >
+            <a href="#user" data-toggle="tab">Utilisateurs: <span class="counter">{% if (type == 'user') %}{{ count }}{% else %}0{% endif %}</span></a>
+        </li>
+    </ul>
+    <div id="results" class="tab-content">
+        <div class="tab-pane{% if (type == 'file') %} active {% endif %}" id="file">
+            {% if (type == 'file') %}
+                {% for file in data %}
+                    <div>Fichier: <a href="#">{{ file.name }}</a></div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="tab-pane{% if (type == 'user') %} active {% endif %}" id="user">
+            {% if (type == 'user') %}
+                {% for user in data %}
+                    <div>Utilisateur: <a href="#">{{ user.name }}</a></div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var userScrollbar = new InfiniteScrollbar($('div#results div.tab-pane#user'), {
+            autoload: true,
+            progress: 90,
+            url: 'user/{length}/{offset}',
+            length:{{ length }},
+            offset: {{ userOffset }},
+            extraParams: {
+                query: $('#query')[0].innerHTML
+            },
+            counter: $('ul#typeofquery li.users span.counter'),
+            template: '<div>Utilisateur: <a href="#">{name}</a></div>'
+        });
 
-    <table class="table table-striped">
-        <colgroup>
-            <col width="100" />
-            <col width="*" />
-            <col width="200" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Login</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for result in results %}
-                <tr>
-                    <td>{{ result.login }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        var fileScrollbar = new InfiniteScrollbar($('div#results div.tab-pane#file'), {
+            autoload: true,
+            progress: 90,
+            url: 'file/{length}/{offset}',
+            length:{{ length }},
+            offset: {{ userOffset }},
+            extraParams: {
+                query: $('#query')[0].innerHTML
+            },
+            counter: $('ul#typeofquery li.files span.counter'),
+            template: '<div>Fichiers: <a href="#">{name}</a></div>'
+        });
 
+        if (!$('div#results div.tab-pane#file div').length) {
+            fileScrollbar.begin();
+        } else {
+            userScrollbar.begin();
+        }
+
+        $('body').bind('mousewheel', function(e) {
+            if (userScrollbar.content.hasClass('active')) {
+                userScrollbar.scroll(0, e.originalEvent.wheelDeltaY);
+            } else if (fileScrollbar.content.hasClass('active')) {
+                fileScrollbar.scroll(0, e.originalEvent.wheelDeltaY);
+            }
+        });
+    });
+</script>
 
 {% endblock %}
