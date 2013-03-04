@@ -9,7 +9,7 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="UserBundle_UsersEmail")
+ * @ORM\Table(name="UserEmail")
  */
 class UserEmail
 {

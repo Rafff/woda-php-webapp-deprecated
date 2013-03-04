@@ -9,7 +9,7 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="UserBundle_UsersPassword")
+ * @ORM\Table(name="UserPassword")
  */
 class UserPassword
 {
@@ -89,7 +89,7 @@ class UserPassword
 
     /**
      * generate a new token
-     * 
+     *
      * @return string
      */
     public function generateNewToken()
