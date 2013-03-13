@@ -4,7 +4,7 @@ parameters:
     database_port:     ~
     database_name:     woda
     database_user:     root
-    database_password: root
+    database_password: 
 
     mailer_transport:  smtp
     mailer_host:       localhost
@@ -13,3 +13,11 @@ parameters:
 
     locale:            fr
     secret:            ThisTokenIsNotSoSecretChangeIt
+    aws_key:                  AKIAIGXEIP24RN5TWCXQ
+    aws_secret:               W9AWHwL4ZzF/9UBEfqI3M2+Cbujrn6L/XIFerD91
+    aws_account_id:           aws@woda-server.com
+    aws_canonical_id:         YOUR_CONONICAL_ID
+    aws_canonical_name:       YOUR_CONONICAL_NAME
+    aws_mfa_serial:           YOUR_MFA_SERIAL
+    aws_cloudfront_keypair:   YOUR_CLOUDFRONT_KEYPAIR_ID
+    aws_cloudfront_pem:       YOUR_CLOUDFRONT_PRIVATE_KEY_PEM

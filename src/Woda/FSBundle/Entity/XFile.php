@@ -30,6 +30,17 @@ class XFile
     protected $name;
 
     /**
+     * @ORM\Column(name="file_hash", type="string", length=256)
+     */
+    protected $fileHash;
+
+    /**
+     * @ORM\Column(name="file_type", type="string", length=255)
+     */
+
+    protected $fileType;
+
+    /**
      * @ORM\Column(name="last_modification_time", type="datetime")
      */
     protected $lastModificationTime;
@@ -69,6 +80,26 @@ class XFile
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getFileHash()
+    {
+        return $this->fileHash;
+    }
+
+    public function setFileHash($fileHash)
+    {
+        $this->fileHash = $fileHash;
+    }
+
+    public function getFileType()
+    {
+        return $this->fileType;
+    }
+
+    public function setFileType($fileType)
+    {
+        $this->fileType = $fileType;
     }
 
     public function getLastModificationTime()

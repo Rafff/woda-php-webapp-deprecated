@@ -57,3 +57,18 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     { type: memory }
+
+# Amazon Web Services Configuration
+cybernox_amazon_web_services:
+    key:                        %aws_key%
+    secret:                     %aws_secret%
+    account_id:                 %aws_account_id%
+    canonical_id:               %aws_canonical_id%
+    canonical_name:             %aws_canonical_name%
+    mfa_serial:                 %aws_mfa_serial%
+    cloudfront_keypair:         %aws_cloudfront_keypair%
+    cloudfront_pem:             %aws_cloudfront_pem%
+    default_cache_config:       apc
+    enable_extensions:          []
+    certificate_authority:      false
+    disable_auto_config:        false

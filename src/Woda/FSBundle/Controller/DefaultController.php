@@ -27,7 +27,7 @@ class DefaultController extends Controller
      * @Template()
      */
     public function listAction($path)
-    {   
+    {
         $user = $this->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()
                            ->getManager()
@@ -38,7 +38,74 @@ class DefaultController extends Controller
         if ($folder === null)
             return ($this->redirect($this->generateUrl('WodaFSBundle.Default.list', array('path' => ''))));
 
+        print_r($path);
+
         return (array('folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path));
+    }
+
+       /**
+     * Ajax call actions that upload files
+     *
+     * @Route("fs-upload/", requirements={"_method" = "POST"}, name="WodaFSBundle.Default.upload")
+     */
+    public function uploadAction()
+    {
+        $request = $this->getRequest();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $path = $request->request->get('path');
+        var_dump($path);
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:Folder');
+
+        $folder = $repository->findByPath($path, $user);
+
+        if ($folder === null)
+            return new Response('<html><body>null folder</body></html>');
+
+
+        $s3 = $this->container->get('aws_s3');
+        $uploadedFile = $request->files->get('upfile');
+
+        var_dump($request->files->keys());
+
+        foreach ($request->files->keys() as $key)
+        {
+            echo 'YAY >> ';
+            var_dump($request->files->get($key));
+        }
+        
+        if (null === $uploadedFile)
+            return new Response('<html><body>null up</body></html>');
+
+        $filepath = $uploadedFile->getPathname();
+
+        var_dump($uploadedFile->getMimeType());
+
+        $filename = hash_file('sha256', $filepath);
+        var_dump($filename);
+
+        $file = new XFile();
+        $file->setParent($folder);
+        $file->setUser($user);
+        $file->setName($uploadedFile->getClientOriginalName());
+        $file->setFileHash($filename);
+        $file->setFileType($uploadedFile->getMimeType());
+        $file->setLastModificationTime(new \Datetime());
+        $objectManager = $this->getDoctrine()->getManager();
+        $objectManager->persist($file);
+
+        //$upstatus = $s3->create_object('woda-files', $filename, array('fileUpload' => $filepath));
+
+        if ($upstatus->isOK())
+        {
+            $objectManager->flush();
+            echo 'YEP';
+        }
+        else
+            echo 'NOPE';
+
+        return false;
     }
 
     /**

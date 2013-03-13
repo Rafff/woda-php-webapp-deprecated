@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Woda\ServerBundle\WodaServerBundle(),
             new Woda\FSBundle\WodaFSBundle(),
             new Woda\SearchBundle\WodaSearchBundle(),
+            new Cybernox\AmazonWebServicesBundle\CybernoxAmazonWebServicesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

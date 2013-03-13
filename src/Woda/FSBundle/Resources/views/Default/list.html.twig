@@ -51,6 +51,15 @@
 
   <h1>My Woda folder</h1>
 
+  <div class="well">
+    <form method="POST" enctype="multipart/form-data" action="{{ path('WodaFSBundle.Default.upload') }}">
+      File to upload: <input type="file" name="upfile"><br>
+      <input type="text" name="path" value="{{ path }}" style="display:none;"><br>
+      <br>
+      <input type="submit" value="Press"> to upload the file!
+    </form>
+  </div>
+
   {% set curpath = '' %}
   <ul class="breadcrumb">
     <li><a href="{{ path('WodaFSBundle.Default.list') }}">Home</a>
@@ -87,7 +96,7 @@
       </tr>
     </thead>
     <tbody id="fscontainer">
-
+ 
       {% for folder in folders %}
           <tr class="foldertr fsdraggable">
             <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
