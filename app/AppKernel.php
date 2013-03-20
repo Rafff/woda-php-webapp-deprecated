@@ -22,7 +22,6 @@ class AppKernel extends Kernel
             new Woda\UserBundle\WodaUserBundle(),
             new Woda\UIBundle\WodaUIBundle(),
             new Woda\AdminBundle\WodaAdminBundle(),
-            new Woda\ContentBundle\WodaContentBundle(),
             new Woda\CmsBundle\WodaCmsBundle(),
             new Woda\ServerBundle\WodaServerBundle(),
             new Woda\FSBundle\WodaFSBundle(),
