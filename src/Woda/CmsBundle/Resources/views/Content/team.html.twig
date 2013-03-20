@@ -1,0 +1,66 @@
+{% extends "WodaUIBundle::layout.html.twig" %}
+
+{% block style %}
+    .team-layout td
+    {
+        height: 100px;
+    }
+
+    .team-layout .well
+    {
+        height: 100%;
+        text-align: center;
+    }
+{% endblock %}
+
+{% block content %}
+    <h1>L'équipe Woda</h1>
+    <p style="padding: 30px 0;">Woda, c'est avant tout treize personnes qui travaillent pour vous offrir le meilleur de la technologie.</p>
+    <table class="team-layout">
+        <tr>
+            <td colspan="8">
+                <div class="well" style="background-color: #F0F0F0;">Kevin Delord</div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div class="well" style="background-color: #005DFC;">Adrien Ecoffet</div>
+            </td>
+            <td colspan="1">
+                <div class="well" style="background-color: #45FF5B;">Yann Guibert</div>
+            </td>
+            <td colspan="1">
+                <div class="well" style="background-color: #FFDA33;">Maël Nison</div>
+            </td>
+            <td colspan="2">
+                <div class="well" style="background-color: #FF3341;">Philippe Drevet</div>
+            </td>
+            <td colspan="1" rowspan="2">
+                <div class="well" style="background-color: #7DF2FA;">Théo Lubert</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="well" style="background-color: #CADCFC;">Etienne Link</div>
+            </td>
+            <td>
+                <div class="well" style="background-color: #CADCFC;">Kevin Guillouard</div>
+            </td>
+            <td>
+                <div class="well" style="background-color: #CADCFC;">Roman Beylin</div>
+            </td>
+            <td>
+                <div class="well" style="background-color: #D9FFDD;">Raphaël Estrach</div>
+            </td>
+            <td>
+                <div class="well" style="background-color: #FFF6CC;">Louis De Courcel</div>
+            </td>
+            <td>
+                <div class="well" style="background-color: #FFE6E7;">Jérémy Citone</div>
+            </td>
+            <td>
+                <div class="well" style="background-color: #FFE6E7;">Guillaume Pastorino</div>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
