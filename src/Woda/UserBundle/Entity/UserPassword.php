@@ -3,7 +3,7 @@
 namespace Woda\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraint as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Woda\UserBundle\Entity\User as User;
 
@@ -21,7 +21,8 @@ class UserPassword
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user", referencedColumnName="id")
      */
     protected $user;
 
@@ -30,9 +31,28 @@ class UserPassword
      */
     protected $token;
 
+    /**
+     * @ORM\Column(type="string", length=44, nullable=false)
+     */
+    protected $password;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    protected $date;
+
+    /**
+     * @Assert\MinLength(limit=0)
+     * @Assert\MaxLength(limit=1)
+     * @ORM\Column(type="boolean")
+     */
+    protected $available;
+
     public function __construct()
     {
         $this->generateNewToken();
+        $this->date = new \DateTime('now');
+        $this->available = true;
     }
 
     /**
@@ -96,5 +116,68 @@ class UserPassword
     {
         $this->token = uniqid(null, true);
         return ($this->token);
+    }
+
+    /**
+     * Set password
+     *
+     * @return UserPassword
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set date
+     *
+     * @return UserPassword
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set available
+     *
+     * @return UserPassword
+     */
+    public function setAvailable($available)
+    {
+        $this->available = $available;
+        return $this;
+    }
+
+    /**
+     * Get available
+     *
+     * @return \DateTime
+     */
+    public function getAvailable()
+    {
+        return $this->available;
     }
 }

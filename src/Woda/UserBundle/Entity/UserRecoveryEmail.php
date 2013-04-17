@@ -9,9 +9,9 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="UserEmail")
+ * @ORM\Table(name="UserRecoveryEmail")
  */
-class UserEmail
+class UserRecoveryEmail
 {
     /**
      * @ORM\Id
@@ -32,7 +32,6 @@ class UserEmail
     protected $token;
 
     /**
-     * @Assert\Email
      * @ORM\Column(type="string", length=100, nullable=false)
      */
     protected $email;

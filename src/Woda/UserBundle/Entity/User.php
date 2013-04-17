@@ -11,7 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Woda\SearchBundle\Entity\UserRepository")
  * @ORM\Table(name="User")
  */
-
 class User implements AdvancedUserInterface
 {
     /**

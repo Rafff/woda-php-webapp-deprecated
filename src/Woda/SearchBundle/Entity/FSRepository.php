@@ -4,23 +4,23 @@ namespace Woda\SearchBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
-use Woda\UserBundle\Entity\User;
+use Woda\FSBundle\Entity\XFile;
 
-class UserRepository extends EntityRepository
+class FSRepository extends EntityRepository
 {
-    public function findAllLikeLogin($login)
+    public function findAllLikeName($name)
     {
         return ($this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaUserBundle:User p where p.login like :login')
-            ->setParameter('login', '%'.$login.'%')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where p.name like :name')
+            ->setParameter('name', '%'.$name.'%')
             ->getResult());
     }
 
-    public function findUserLikeLogin($login, $order = array(), $limit = null)
+    public function findFileLikeName($name, $order = array(), $limit = null)
     {
         $query = $this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaUserBundle:User p where p.login like :login')
-            ->setParameter('login', '%'.$login.'%')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where p.name like :name')
+            ->setParameter('name', '%'.$name.'%')
         ;
 
         if (!empty($limit)) {

@@ -4,6 +4,7 @@ userbundle.security.password: 'Mot de passe'
 userbundle.security.rememberme: 'Se souvenir'
 
 userbundle.profile.email: 'Adresse email'
+userbundle.profile.email_new: 'Nouvelle adresse mail'
 userbundle.profile.email_validation: 'Adresse mail (validation)'
 userbundle.profile.login: "Nom d'utilisateur"
 userbundle.profile.firstname: 'Prénom'

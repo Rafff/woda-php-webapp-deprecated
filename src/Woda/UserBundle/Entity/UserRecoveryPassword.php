@@ -9,9 +9,9 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="UserEmail")
+ * @ORM\Table(name="UserRecoveryPassword")
  */
-class UserEmail
+class UserRecoveryPassword
 {
     /**
      * @ORM\Id
@@ -32,12 +32,6 @@ class UserEmail
     protected $token;
 
     /**
-     * @Assert\Email
-     * @ORM\Column(type="string", length=100, nullable=false)
-     */
-    protected $email;
-
-    /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $date;
@@ -51,10 +45,11 @@ class UserEmail
 
     public function __construct()
     {
-        $this->token = uniqid(null, true);
+        $this->generateNewToken();
         $this->date = new \DateTime('now');
         $this->available = true;
     }
+
     /**
      * Get id
      *
@@ -68,7 +63,7 @@ class UserEmail
     /**
      * Set user
      *
-     * @return UserEmail
+     * @return UserPassword
      */
     public function setUser($user)
     {
@@ -89,7 +84,7 @@ class UserEmail
     /**
      * Set token
      *
-     * @return UserEmail
+     * @return UserPassword
      */
     public function setToken($token)
     {
@@ -108,27 +103,17 @@ class UserEmail
     }
 
     /**
-     * Set email
-     *
-     * @return UserEmail
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * Get email
+     * generate a new token
      *
      * @return string
      */
-    public function getEmail()
+    public function generateNewToken()
     {
-        return $this->email;
+        $this->token = uniqid(null, true);
+        return ($this->token);
     }
 
-        /**
+    /**
      * Set date
      *
      * @return UserPassword

@@ -26,10 +26,8 @@
                     <td>
                         <a href="{{ path('WodaUserBundle.Admin.edit', { id: user.id }) }}">{{ user.firstname }} {{ user.lastname }}</a>
                     </td>
-                    <td><a href="{{ path('WodaUserBundle.Admin.edit', { id : user.id }) }}">{{ user.email }}</a></td>
+                    <td>{{ user.email }}</td>
                     <td>
-					    <a href="{{ path('WodaFSBundle.Admin.tree', { user : user.id }) }}">Liste des fichiers</a>
-						|
                         <a href="{{ path('WodaUserBundle.Admin.remove', { id: user.id }) }}">Supprimer</a>
                     </td>
                 </tr>
