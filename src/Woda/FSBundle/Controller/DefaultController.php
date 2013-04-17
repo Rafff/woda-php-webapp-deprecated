@@ -43,7 +43,127 @@ class DefaultController extends Controller
         return (array('folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path));
     }
 
-       /**
+    //////////////////////////////////////////////////////////////////////////////
+
+
+    private function getFileInfo($bucket, $fileName) {
+        $s3 = $this->container->get('aws_s3');
+        $fileArray = "";
+        $size = $s3->get_object_filesize($bucket, $fileName);
+        $furl = "http://" . $bucket . ".s3.amazonaws.com/" . $fileName;
+        $fileArray['name'] = $fileName;
+        $fileArray['size'] = $size;
+        $fileArray['url'] = $furl;
+        $fileArray['thumbnail'] = $furl;
+        $fileArray['delete_url'] = "server/php/index.php?file=" . $fileName;
+        $fileArray['delete_type'] = "DELETE";
+        return $fileArray;
+    }
+
+    private function getListOfContents($bucket, $prefix="") {
+        $s3 = $this->container->get('aws_s3');
+        if ($prefix=="") {
+          $contents = $s3->get_object_list($bucket);
+        } else {
+            $contents = $s3->get_object_list($bucket, array("prefix" => $prefix));
+        }
+        $resultArray = "";
+        for ($i = 0;$i < count($contents);$i++) {
+            $resultArray[] = getFileInfo($bucket, $contents[$i]);
+        }
+        return $resultArray;
+    }
+
+    private function uploadSingleFile($bucket, $uploadedFile, $user, $folder, $repository, $s3)
+    {
+        if (null === $uploadedFile)
+                return false;
+        if ($uploadedFile->isValid())
+        {
+            $filepath = $uploadedFile->getPathname();
+            $filename = hash_file('sha256', $filepath); 
+
+            $file = new XFile();
+            $file->setParent($folder);
+            $file->setUser($user);
+            $file->setName($uploadedFile->getClientOriginalName());
+            $file->setFileHash($filename);
+            $file->setFileType($uploadedFile->getMimeType());
+            $time = new \Datetime();
+            $file->setLastModificationTime($time);
+            $objectManager = $this->getDoctrine()->getManager();
+            $objectManager->persist($file);
+
+            $upstatus = $s3->create_object('woda-files', $filename, array('fileUpload' => $filepath));
+
+            if ($upstatus->isOK())
+            {
+                $objectManager->flush();
+                $response = array();
+                $response['name'] = $uploadedFile->getClientOriginalName();
+                $response['time'] = $time->format('d/m/Y H:i');
+            }
+            else
+                $response['error'] = 's3 upload error';// upload error
+        } else
+            $response['error'] = 'file submit error';// ERROR HERE
+        return $response;
+    }
+
+    private function uploadFiles($bucket, $prefix="") {
+        if (isset($_REQUEST['_method']) && $_REQUEST['_method'] === 'DELETE') {
+            return array('error' => 'DELETE isnt allowed');
+        }
+        $info = array();
+        $request = $this->getRequest();
+        $user = $this->get('security.context')->getToken()->getUser();
+        //$path = $request->request->get('path');
+        $path = null;
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:Folder');
+        $folder = $repository->findByPath($path, $user);
+        if ($folder === null)
+            return array('error' => 'Folder does not exists');
+        $s3 = $this->container->get('aws_s3');
+        $upload = $request->files->get('files');
+
+        if ($upload && is_array($upload)) {
+            foreach($upload as $index => $value) {
+                $info[] = $this->uploadSingleFile($bucket, $value, $user, $folder, $repository, $s3);
+            }
+        }   
+        else if ($upload)
+            $info[] = $this->uploadSingleFile($bucket, $upload, $user, $folder, $repository, $s3);
+        header('Vary: Accept');
+        $json = json_encode($info);
+        if (isset($_SERVER['HTTP_ACCEPT']) && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+            header('Content-type: application/json');
+        } else {
+            header('Content-type: text/plain');
+        }
+        $tmp = Array();
+        $tmp['files'] = $info;
+        return $tmp;
+    }
+
+    private function deleteFiles($bucket) {
+        $s3 = $this->container->get('aws_s3');
+        $file_name = isset($_REQUEST['file']) ? basename(stripslashes($_REQUEST['file'])) : null;
+        $s3->delete_object($bucket, $file_name);
+        $success = "";
+        
+        header('Content-type: application/json');
+        return $success;
+    }
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+    /**
      * Ajax call actions that upload files
      *
      * @Route("fs-upload/", requirements={"_method" = "POST"}, name="WodaFSBundle.Default.upload")
@@ -51,62 +171,103 @@ class DefaultController extends Controller
     public function uploadAction()
     {
         $request = $this->getRequest();
-        $user = $this->get('security.context')->getToken()->getUser();
-        $path = $request->request->get('path');
-        var_dump($path);
-        $repository = $this->getDoctrine()
-                           ->getManager()
-                           ->getRepository('WodaFSBundle:Folder');
 
-        $folder = $repository->findByPath($path, $user);
+        $bucket = "woda-files";
+        $subFolder = "";  // leave blank for upload into the bucket directly
 
-        if ($folder === null)
-            return new Response('<html><body>null folder</body></html>');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate');
+        header('Content-Disposition: inline; filename="files.json"');
+        header('X-Content-Type-Options: nosniff');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: OPTIONS, HEAD, GET, POST, PUT, DELETE');
+        header('Access-Control-Allow-Headers: X-File-Name, X-File-Type, X-File-Size');
 
-
-        $s3 = $this->container->get('aws_s3');
-        $uploadedFile = $request->files->get('upfile');
-
-        var_dump($request->files->keys());
-
-        foreach ($request->files->keys() as $key)
-        {
-            echo 'YAY >> ';
-            var_dump($request->files->get($key));
+        $return = "";
+        switch ($request->server->get('REQUEST_METHOD')) {
+            case 'OPTIONS':
+                break;
+            case 'HEAD':
+            case 'GET':
+                $return = $this->getListOfContents($bucket, $subFolder);
+                break;
+            case 'POST':
+                if (isset($_REQUEST['_method']) && $_REQUEST['_method'] === 'DELETE') {
+                    $return = $this->deleteObject($bucket, $subFolder);
+                } else {
+                    $return = $this->uploadFiles($bucket, $subFolder);
+                }
+                break;
+            case 'DELETE':
+                 $return = $this->deleteFiles($bucket, $subFolder);
+                break;
+            default:
+                header('HTTP/1.1 405 Method Not Allowed');
         }
-        
-        if (null === $uploadedFile)
-            return new Response('<html><body>null up</body></html>');
-
-        $filepath = $uploadedFile->getPathname();
-
-        var_dump($uploadedFile->getMimeType());
-
-        $filename = hash_file('sha256', $filepath);
-        var_dump($filename);
-
-        $file = new XFile();
-        $file->setParent($folder);
-        $file->setUser($user);
-        $file->setName($uploadedFile->getClientOriginalName());
-        $file->setFileHash($filename);
-        $file->setFileType($uploadedFile->getMimeType());
-        $file->setLastModificationTime(new \Datetime());
-        $objectManager = $this->getDoctrine()->getManager();
-        $objectManager->persist($file);
-
-        //$upstatus = $s3->create_object('woda-files', $filename, array('fileUpload' => $filepath));
-
-        if ($upstatus->isOK())
-        {
-            $objectManager->flush();
-            echo 'YEP';
-        }
-        else
-            echo 'NOPE';
-
-        return false;
+        return new Response(json_encode($return));
     }
+
+
+    // /**
+    //  * Ajax call actions that upload files
+    //  *
+    //  * @Route("fs-upload/", requirements={"_method" = "POST"}, name="WodaFSBundle.Default.upload")
+    //  */
+    // public function uploadAction()
+    // {
+    //     $request = $this->getRequest(); 
+    //     $user = $this->get('security.context')->getToken()->getUser();
+    //     $path = $request->request->get('path');
+    //     $repository = $this->getDoctrine()
+    //                        ->getManager()
+    //                        ->getRepository('WodaFSBundle:Folder');
+
+    //     $folder = $repository->findByPath(null, $user);
+
+    //     if ($folder === null)
+    //         return false;
+    //     else
+    //         echo 'YUP';
+
+    //     $s3 = $this->container->get('aws_s3');
+    //     $uploadedFile = $request->files->get('files');
+
+    //     var_dump($uploadedFile);
+
+    //     if (null === $uploadedFile)
+    //         return false;
+    //     else
+    //         echo 'nope';
+
+    //     $filepath = $uploadedFile->getPathname();
+    //     $filename = hash_file('sha256', $filepath); 
+
+    //     $file = new XFile();
+    //     $file->setParent($folder);
+    //     $file->setUser($user);
+    //     $file->setName($uploadedFile->getClientOriginalName());
+    //     $file->setFileHash($filename);
+    //     $file->setFileType($uploadedFile->getMimeType());
+    //     $time = new \Datetime();
+    //     $file->setLastModificationTime($time);
+    //     $objectManager = $this->getDoctrine()->getManager();
+    //     $objectManager->persist($file);
+
+    //     //$upstatus = $s3->create_object('woda-files', $filename, array('fileUpload' => $filepath));
+
+    //     if ($upstatus->isOK())
+    //     {
+    //         $objectManager->flush();
+    //         $response = array();
+    //         $response['name'] = $uploadedFile->getClientOriginalName();
+    //         $response['time'] = $time->format('d/m/Y H:i');
+    //         return new Response(json_encode($response));
+    //     }
+    //     else
+    //         echo 'NOPE';
+
+    //     return new Response(json_encode(false));
+    // }
 
     /**
      * Ajax call actions that adds a folder
