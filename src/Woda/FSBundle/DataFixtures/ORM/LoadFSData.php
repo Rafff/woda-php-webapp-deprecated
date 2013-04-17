@@ -36,37 +36,37 @@ class LoadFSData implements ContainerAwareInterface, FixtureInterface
         $root->setLastModificationTime(new \Datetime());
         $objectManager->persist($root);
 
-        $folder = new Folder();
-        $folder->setParent($root);
-        $file->setUser($user);
-        $folder->setName('Super Dossier');
-        $folder->setUser($user);
-        $folder->setLastModificationTime(new \Datetime());
-        $objectManager->persist($folder);
+  //       $folder = new Folder();
+  //       $folder->setParent($root);
+  //       $file->setUser($user);
+  //       $folder->setName('Super Dossier');
+  //       $folder->setUser($user);
+  //       $folder->setLastModificationTime(new \Datetime());
+  //       $objectManager->persist($folder);
 
-        $file = new XFile();
-        $file->setParent($root);
-        $file->setUser($user);
-        $file->setName('Prime.c');
-        $file->setFileHash('c1fcd97ad07525a76cb43324339d0f3fa4908cedf45fae3f5287ca6507e7fe5a');
-        $file->setFileType('text/x-c++');
-        $file->setLastModificationTime(new \Datetime());
-		$file->setUser($user);
-        $objectManager->persist($file);
+  //       $file = new XFile();
+  //       $file->setParent($root);
+  //       $file->setUser($user);
+  //       $file->setName('Prime.c');
+  //       $file->setFileHash('c1fcd97ad07525a76cb43324339d0f3fa4908cedf45fae3f5287ca6507e7fe5a');
+  //       $file->setFileType('text/x-c++');
+  //       $file->setLastModificationTime(new \Datetime());
+		// $file->setUser($user);
+  //       $objectManager->persist($file);
 
-        $file = new XFile();
-        $file->setParent($folder);
-        $file->setName('Super Fichier 1');
-        $file->setLastModificationTime(new \Datetime());
-		$file->setUser($user);
-        $objectManager->persist($file);
+  //       $file = new XFile();
+  //       $file->setParent($folder);
+  //       $file->setName('Super Fichier 1');
+  //       $file->setLastModificationTime(new \Datetime());
+		// $file->setUser($user);
+  //       $objectManager->persist($file);
 
-        $file = new XFile();
-        $file->setParent($folder);
-        $file->setName('Super Fichier 2');
-        $file->setLastModificationTime(new \Datetime());
-		$file->setUser($user);
-        $objectManager->persist($file);
+  //       $file = new XFile();
+  //       $file->setParent($folder);
+  //       $file->setName('Super Fichier 2');
+  //       $file->setLastModificationTime(new \Datetime());
+		// $file->setUser($user);
+  //       $objectManager->persist($file);
 
         $objectManager->flush();
     }
