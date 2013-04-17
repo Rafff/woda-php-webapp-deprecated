@@ -10,7 +10,7 @@ class AccountEditEmailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email', array('label' => 'userbundle.profile.email', 'translation_domain' => 'woda'))
+            ->add('new_email', 'email', array('label' => 'userbundle.profile.email_new', 'translation_domain' => 'woda'))
         ;
     }
 

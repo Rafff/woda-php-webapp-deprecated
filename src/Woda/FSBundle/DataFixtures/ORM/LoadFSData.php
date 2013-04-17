@@ -31,8 +31,7 @@ class LoadFSData implements ContainerAwareInterface, FixtureInterface
 
         $root = new Folder();
         $root->setParent(null);
-        $file->setUser($user);
-        $root->setName('');
+        $root->setName('Test');
         $root->setUser($user);
         $root->setLastModificationTime(new \Datetime());
         $objectManager->persist($root);
@@ -52,15 +51,21 @@ class LoadFSData implements ContainerAwareInterface, FixtureInterface
         $file->setFileHash('c1fcd97ad07525a76cb43324339d0f3fa4908cedf45fae3f5287ca6507e7fe5a');
         $file->setFileType('text/x-c++');
         $file->setLastModificationTime(new \Datetime());
+		$file->setUser($user);
         $objectManager->persist($file);
 
         $file = new XFile();
         $file->setParent($folder);
-        $file->setUser($user);
-        $file->setName('random.c');
-        $file->setFileHash('1758f829e0bfe05f2bc9ca198248f31c104fcfd95d34141a20ecf55652677611');
-        $file->setFileType('text/x-c++');
+        $file->setName('Super Fichier 1');
         $file->setLastModificationTime(new \Datetime());
+		$file->setUser($user);
+        $objectManager->persist($file);
+
+        $file = new XFile();
+        $file->setParent($folder);
+        $file->setName('Super Fichier 2');
+        $file->setLastModificationTime(new \Datetime());
+		$file->setUser($user);
         $objectManager->persist($file);
 
         $objectManager->flush();

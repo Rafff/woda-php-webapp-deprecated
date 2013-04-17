@@ -29,31 +29,37 @@ class SearchController extends Controller
             throw new \Exception('TODO');
         }
 
-        $data = array();
-        for ($idx = 0 ; $idx < 1000 ; ++$idx) {
-            $data[]['name'] = $idx;
-        }
-
         $result = new \stdClass();
+        $result->data = array();
         $query = trim($request->get('query'));
 
-        // $this->get('doctrine')->getRepository('WodaUserBundle:User')->findAllLikeLogin($request->get('query'));
+        if ($type == "file") {
+            $results = $this->get('doctrine')->getRepository('WodaFSBundle:XFile')->findFileLikeName($query, array(), array($offset, $length));
 
-        $result->count = 3000;
-        $result->length = intval($length);
-        $result->offset = intval($offset) + intval($length);//$result->length;
+            if (!empty($results)) {
+                foreach ($results as $r) {
+                    $result->data[] = array(
+                        'name' => $r->getName()
+                    );
+                }
+            }
+            
+        } else {
+            $results = $this->get('doctrine')->getRepository('WodaUserBundle:User')->findUserLikeLogin($query, array(), array($offset, $length));
 
-        //$result->error = 'Une erreur est survenue';
-
-        /**/
-        $result->data = array_slice($data, $offset, $length);
-        if ($type == 'file') {
-            $result->count = 6;
-            shuffle($result->data);
+            if (!empty($results)) {
+                foreach ($results as $r) {
+                    $result->data[] = array(
+                        'name' => $r->getLogin()
+                    );
+                }
+            }
         }
 
-        /**/
- 
+        $result->count = ($type == 'file') ? 6 : 3000;
+        $result->length = intval($length);
+        $result->offset = intval($offset) + intval($length);
+
         if ($request->isXmlHttpRequest()) {
             return (new Response(json_encode($result), 200, array('Content-Type'=>'application/json')));
         } else {

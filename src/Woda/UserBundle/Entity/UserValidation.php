@@ -30,9 +30,15 @@ class UserValidation
      */
     protected $token;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    protected $date;
+
     public function __construct()
     {
         $this->generateNewToken();
+        $this->date = new \DateTime('now');
     }
 
     /**
@@ -96,5 +102,26 @@ class UserValidation
     {
         $this->token = uniqid(null, true);
         return ($this->token);
+    }
+
+    /**
+     * Set date
+     *
+     * @return UserPassword
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

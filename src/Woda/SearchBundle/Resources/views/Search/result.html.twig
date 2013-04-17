@@ -22,14 +22,14 @@
         <div class="tab-pane{% if (type == 'file') %} active {% endif %}" id="file">
             {% if (type == 'file') %}
                 {% for file in data %}
-                    <div>Fichier: <a href="#">{{ file.name }}</a></div>
+                    <div><a href="#">{{ file.name }}</a></div>
                 {% endfor %}
             {% endif %}
         </div>
         <div class="tab-pane{% if (type == 'user') %} active {% endif %}" id="user">
             {% if (type == 'user') %}
                 {% for user in data %}
-                    <div>Utilisateur: <a href="#">{{ user.name }}</a></div>
+                    <div><a href="#">{{ user.name }}</a></div>
                 {% endfor %}
             {% endif %}
         </div>

@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Woda\UserBundle\Form\SecurityForgotPasswordType;
 use Woda\UserBundle\Form\SecurityRecoveryPasswordType;
-use Woda\UserBundle\Entity\UserPassword;
+use Woda\UserBundle\Entity\UserRecoveryPassword;
 
 class SecurityController extends Controller
 {
@@ -71,22 +71,16 @@ class SecurityController extends Controller
                       throw $this->createNotFoundException('Aucun compte activé lié avec cette adresse email n\'a été trouvé !');
                   }
 
-                  $userPassword = $em->getRepository('WodaUserBundle:UserPassword')->findOneByUser($user);
-                  if (is_null($userPassword)) {
-                    $userPassword = new UserPassword();
-                    $userPassword->setUser($user);
-                  } else {
-                      $userPassword->generateNewToken();
-                  }
+                  $userRecoveryPassword = new UserRecoveryPassword();
+                  $userRecoveryPassword->setUser($user);
 
-                  $em->persist($userPassword);
+                  $em->persist($userRecoveryPassword);
                   $em->flush();
 
                   // send email
 
                   return ($this->render('WodaUserBundle:Security/Message:default.html.twig', array(
-                        'message' => 'Un email de redefinition de mot de passe a été envoyé à l\'adresse suivante: ' . $email . '['.base64_encode($user->getLogin()).']['.$userPassword->getToken().']'
-                        //base64_encode($user->getLogin()) . ']xxx[' . $userValidation->getToken()
+                        'message' => 'Un email de redefinition de mot de passe a été envoyé à l\'adresse suivante: ' . $email . '['.base64_encode($user->getLogin()).']['.$userRecoveryPassword->getToken().']'
                     )
                   ));
               }
@@ -117,8 +111,13 @@ class SecurityController extends Controller
             throw $this->createNotFoundException('Aucun compte trouvé !');
         }
 
-        $userPassword = $em->getRepository('WodaUserBundle:UserPassword')->findOneByUser($user);
-        if (!is_null($userPassword) && $userPassword->getToken() === $token) {
+        $userRecoveryPasswords = $em->getRepository('WodaUserBundle:UserRecoveryPassword')->findBy(array('user' => $user), array('date' => 'desc'), array(0, 1));
+
+        //$userRecoveryPassword = $em->getRepository('WodaUserBundle:UserRecoveryPassword')->findOneByUser($user);
+
+        if (isset($userRecoveryPasswords[0]) &&
+            ($userRecoveryPasswords[0]->getToken() === $token) &&
+            ($userRecoveryPasswords[0]->getAvailable() == true)) {
             $form = $this->createForm(new SecurityRecoveryPasswordType());
 
             $request = $this->getRequest();
@@ -128,9 +127,10 @@ class SecurityController extends Controller
                       $data = $form->getData();
                       $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
                       $user->setPassword($encoder->encodePassword($data['password'], $user->getSalt()));
+                      $userRecoveryPasswords[0]->setAvailable(false);
 
                       $em->persist($user);
-                      $em->remove($userPassword);
+                      $em->persist($userRecoveryPasswords[0]);
                       $em->flush();
 
                       return ($this->redirect($this->generateUrl('WodaUserBundle.Security.login')));
@@ -155,6 +155,6 @@ class SecurityController extends Controller
     public function forgotAccountAction()
     {
         // non implementé
-        return;
+        return ;
     }
 }

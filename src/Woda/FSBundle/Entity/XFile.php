@@ -5,7 +5,7 @@ namespace Woda\FSBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Woda\SearchBundle\Entity\FSRepository")
  * @ORM\Table(name="XFile")
  */
 

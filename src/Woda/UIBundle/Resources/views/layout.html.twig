@@ -55,9 +55,8 @@
         <div cla class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                <a class="brand" href="{{ path('WodaContentBundle.Content.index') }}">Woda</a>
+                <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">Woda</a>
                     <ul class="nav pull-left">
-                        <li><a href="{{ path('WodaContentBundle.Content.team') }}">L'équipe</a></li>
                     </ul>
                     <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
                         <div class="input-append">
@@ -91,10 +90,10 @@
         <div id="footer">
             <div class="container">
                 <div class="pull-left">
-                    <a href="{{ path('WodaContentBundle.Content.team') }}">L'équipe</a>
+                    <a href="{{ path('WodaCmsBundle.Content.team') }}">L'équipe</a>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ path('WodaContentBundle.Content.contact') }}">Nous contacter</a>
+                    <a href="{{ path('WodaCmsBundle.Content.contact') }}">Nous contacter</a>
                 </div>
             </div>
         </div>
