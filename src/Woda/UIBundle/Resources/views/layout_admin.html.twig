@@ -15,9 +15,16 @@
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="{{ path('WodaAdminBundle.Default.index') }}">
-                        Woda admin panel
+                    <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">
+                        Woda
                     </a>
+                    <ul class="nav">
+                        <li class="active">
+                            <a href="{{ path('WodaAdminBundle.Default.index') }}">
+                                Admin panel
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
