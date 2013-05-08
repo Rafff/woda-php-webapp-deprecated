@@ -40,7 +40,8 @@ class AdminController extends Controller
         if ($req->getMethod() === 'POST') {
             $editionForm->bind($req);
             if ($editionForm->isValid()) {
-                die($user->getPassword());
+                $this->getDoctrine()->getEntityManager()->persist($user);
+                $this->getDoctrine()->getEntityManager()->flush();
                 return $this->redirect($this->generateUrl('WodaUserBundle.Admin.list'));
             }
         }
@@ -84,6 +85,8 @@ class AdminController extends Controller
 
         $confirmationForm->bind($req);
         if ($confirmationForm->isValid()) {
+            $this->getDoctrine()->getEntityManager()->remove($user);
+            $this->getDoctrine()->getEntityManager()->flush();
             return $this->redirect($this->generateUrl('WodaUserBundle.Admin.list'));
         } else {
             return $this->redirect($this->generateUrl('WodaUserBundle.Admin.remove', array('id' => $user->getId())));

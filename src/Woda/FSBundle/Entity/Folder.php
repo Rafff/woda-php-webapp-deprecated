@@ -36,8 +36,8 @@ class Folder
     protected $lastModificationTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;
 
@@ -115,7 +115,7 @@ class Folder
         $this->folders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add folders
      *

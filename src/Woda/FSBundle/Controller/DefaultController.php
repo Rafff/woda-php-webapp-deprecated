@@ -38,8 +38,6 @@ class DefaultController extends Controller
         if ($folder === null)
             return ($this->redirect($this->generateUrl('WodaFSBundle.Default.list', array('path' => ''))));
 
-        print_r($path);
-
         return (array('folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path));
     }
 
@@ -81,7 +79,7 @@ class DefaultController extends Controller
         if ($uploadedFile->isValid())
         {
             $filepath = $uploadedFile->getPathname();
-            $filename = hash_file('sha256', $filepath); 
+            $filename = hash_file('sha256', $filepath);
 
             $file = new XFile();
             $file->setParent($folder);
@@ -132,7 +130,7 @@ class DefaultController extends Controller
             foreach($upload as $index => $value) {
                 $info[] = $this->uploadSingleFile($bucket, $value, $user, $folder, $repository, $s3);
             }
-        }   
+        }
         else if ($upload)
             $info[] = $this->uploadSingleFile($bucket, $upload, $user, $folder, $repository, $s3);
         header('Vary: Accept');
@@ -152,7 +150,7 @@ class DefaultController extends Controller
         $file_name = isset($_REQUEST['file']) ? basename(stripslashes($_REQUEST['file'])) : null;
         $s3->delete_object($bucket, $file_name);
         $success = "";
-        
+
         header('Content-type: application/json');
         return $success;
     }
@@ -215,7 +213,7 @@ class DefaultController extends Controller
     //  */
     // public function uploadAction()
     // {
-    //     $request = $this->getRequest(); 
+    //     $request = $this->getRequest();
     //     $user = $this->get('security.context')->getToken()->getUser();
     //     $path = $request->request->get('path');
     //     $repository = $this->getDoctrine()
@@ -240,7 +238,7 @@ class DefaultController extends Controller
     //         echo 'nope';
 
     //     $filepath = $uploadedFile->getPathname();
-    //     $filename = hash_file('sha256', $filepath); 
+    //     $filename = hash_file('sha256', $filepath);
 
     //     $file = new XFile();
     //     $file->setParent($folder);
@@ -281,7 +279,7 @@ class DefaultController extends Controller
             $request = $this->get('request');
             $fname = $request->request->get('fname');
             $path = $request->request->get('path');
-           
+
             if ($fname != "")
             {
                 $user = $this->get('security.context')->getToken()->getUser();
@@ -310,17 +308,17 @@ class DefaultController extends Controller
                         $return = array("responseCode" => 200,  "message" => "OK");
                     }
                     else
-                        $return = array("responseCode" => 401, "message"=>"Folder exists");  
+                        $return = array("responseCode" => 401, "message"=>"Folder exists");
                 }
                 else
                     $return = array("responseCode" => 403, "message"=>"Forbidden");
             }
             else
-                $return = array("responseCode" => 400, "message"=>"You must enter a folder name.");   
+                $return = array("responseCode" => 400, "message"=>"You must enter a folder name.");
         }
         else
             $return = array("responseCode" => 403, "message"=>"Forbidden");
-        
+
         $return = json_encode($return);
         $return = new Response($return);
         $return->headers->set('Content-Type', 'application/json');

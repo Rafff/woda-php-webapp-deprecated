@@ -43,7 +43,7 @@ class SearchController extends Controller
                     );
                 }
             }
-            
+
         } else {
             $results = $this->get('doctrine')->getRepository('WodaUserBundle:User')->findUserLikeLogin($query, array(), array($offset, $length));
 
@@ -72,7 +72,7 @@ class SearchController extends Controller
                     'length' => $length,
                     'data' => $result->data,
                     'count' => $result->count
-                    
+
                 )
             );
         }

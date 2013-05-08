@@ -20,7 +20,7 @@ class XFile
 
     /**
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="files")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $parent;
 
@@ -127,7 +127,7 @@ class XFile
     /**
      * Get user
      *
-     * @return Woda\UserBundle\Entity\User 
+     * @return Woda\UserBundle\Entity\User
      */
     public function getUser()
     {

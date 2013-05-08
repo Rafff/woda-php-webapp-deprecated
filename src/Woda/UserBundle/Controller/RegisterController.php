@@ -53,10 +53,8 @@ class RegisterController extends Controller
                 );
 
                 return ($this->render('WodaUserBundle:Register/Message:default.html.twig', array(
-                        'message' => 'Un email de confirmation a été envoyé à l\'adresse suivante: ' . $user->getEmail() . '||' .base64_encode($user->getLogin()).'||'.$userValidation->getToken()
-                        //base64_encode($user->getLogin()) . ']xxx[' . $userValidation->getToken()
-                    )
-                ));
+                    'message' => 'Un email de confirmation a été envoyé à l\'adresse suivante: ' . $user->getEmail()
+                )));
             }
         }
 
