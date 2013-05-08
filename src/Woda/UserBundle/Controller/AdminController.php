@@ -84,6 +84,8 @@ class AdminController extends Controller
 
         $confirmationForm->bind($req);
         if ($confirmationForm->isValid()) {
+            $this->getDoctrine()->getEntityManager()->remove($user);
+            $this->getDoctrine()->getEntityManager()->flush();
             return $this->redirect($this->generateUrl('WodaUserBundle.Admin.list'));
         } else {
             return $this->redirect($this->generateUrl('WodaUserBundle.Admin.remove', array('id' => $user->getId())));

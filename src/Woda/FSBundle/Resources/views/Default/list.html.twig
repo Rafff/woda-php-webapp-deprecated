@@ -10,7 +10,7 @@
   <style type="text/css">
     #modal-upload {
       width: 80%;
-      left: 25%; 
+      left: 25%;
     }
     .progress{
       width: 200px;
@@ -144,7 +144,7 @@
   </ul>
 
   <p><a href="#modal-newfolder" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-plus icon-white"></i> New folder</a> <a href="#modal-upload" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload file</a></p>
-  
+
   <table class="table table-hover">
     <thead>
       <tr>
@@ -155,7 +155,7 @@
       </tr>
     </thead>
     <tbody id="fscontainer">
- 
+
       {% for folder in folders %}
           <tr class="foldertr fsdraggable">
             <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
@@ -234,7 +234,7 @@
           <tr class="template-upload fade in hidden">
             <td class="name"><span></span></td>
             <td class="size"><span></span></td>
-            
+
             <td>
              <div class="progress progress-primary progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar progress-status" style="width:0%;"></div></div>
             </td>
