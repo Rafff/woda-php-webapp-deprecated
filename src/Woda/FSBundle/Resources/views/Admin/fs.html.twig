@@ -1,52 +1,52 @@
 {% extends 'WodaUIBundle::layout_admin.html.twig' %}
 
 {% block content %}
-	{% if current %}
-		<h1>{{ current.name }}</h1>
-	{% else %}
-		<h1>Index of {{ user.login }}</h1>
-	{% endif %}
+{% if current %}
+        <h1>{{ current.name }}</h1>
+    {% else %}
+        <h1>Index of <a href="{{ path('WodaUserBundle.Admin.edit', { id: user.id }) }}">{{ user.login }}</a></h1>
+    {% endif %}
     <table class="table table-striped">
         <colgroup>
             <col width="400" />
             <col width="*" />
         </colgroup>
-		<thead>
-		    <tr>
-			    <th>Folder</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-			    <td>
-					<i class="icon-folder-open"></i>
-					{% if current %}
-					    {% if current.parent %}
-							<a href="{{ path('WodaFSBundle.Admin.folder', { folder : current.parent.id }) }}">../</a>
-						{% else %}
-							<a href="{{ path('WodaFSBundle.Admin.tree', { user : current.user.id }) }}">../</a>
-						{% endif %}
-					{% else %}
-						/
-					{% endif %}
-				</td>
-				<td>
-				</td>
-			</tr>
-		    {% for folder in folders %}
-				<tr>
-				    <td>
-					    <i class="icon-folder-close"></i>
+        <thead>
+            <tr>
+                <th>Folder</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <i class="icon-folder-open"></i>
+                    {% if current %}
+                        {% if current.parent %}
+                            <a href="{{ path('WodaFSBundle.Admin.folder', { folder : current.parent.id }) }}">../</a>
+                        {% else %}
+                            <a href="{{ path('WodaFSBundle.Admin.tree', { user : current.user.id }) }}">../</a>
+                        {% endif %}
+                    {% else %}
+                        /
+                    {% endif %}
+                </td>
+                <td>
+                </td>
+            </tr>
+            {% for folder in folders %}
+                <tr>
+                    <td>
+                        <i class="icon-folder-close"></i>
                         <a href="{{ path('WodaFSBundle.Admin.folder', { folder : folder.id }) }}">{{ folder.name }}/</a>
-				    </td>
-					<td>
+                    </td>
+                    <td>
                         <a href="{{ path('WodaFSBundle.Admin.deleteFolder', { folder : folder.id }) }}">Delete all</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <table class="table table-striped">
         <colgroup>
@@ -63,12 +63,12 @@
             {% for file in files %}
                 <tr>
                     <td>
-					    <i class="icon-file"></i>
+                        <i class="icon-file"></i>
                         <a href="{{ path('WodaFSBundle.Admin.file', { file : file.id }) }}">{{ file.name }}</a>
                     </td>
-					<td>
+                    <td>
                         <a href="{{ path('WodaFSBundle.Admin.deleteFile', { file : file.id }) }}">Delete</a>
-					</td>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
