@@ -9,7 +9,7 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="UserRecoveryEmail")
+ * @ORM\Table(name="`UserRecoveryEmail`")
  */
 class UserRecoveryEmail
 {
@@ -21,6 +21,7 @@ class UserRecoveryEmail
     protected $id;
 
     /**
+     * @ORM\Column(name="youser")
      * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user", referencedColumnName="id")
      */
