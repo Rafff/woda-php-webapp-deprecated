@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Woda\SearchBundle\Entity\UserRepository")
- * @ORM\Table(name="`User`")
+ * @ORM\Table(name="`user`")
  */
 class User implements AdvancedUserInterface
 {

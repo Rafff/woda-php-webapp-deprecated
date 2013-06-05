@@ -9,7 +9,6 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="`UserValidation`")
  */
 class UserValidation
 {
@@ -21,7 +20,6 @@ class UserValidation
     protected $id;
 
     /**
-     * @ORM\Column(name="`youser`")
      * @ORM\OneToOne(targetEntity="User")
      */
     protected $user;
