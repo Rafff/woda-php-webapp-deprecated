@@ -27,16 +27,25 @@
                 <div id="header" class="span9 col">
                     <div class="row">
                         <div id="searchbar" class="span4">
-                            <form class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
+                            <form class="form-search" action="#" method="post">
                                 <div class="input-append">
                                     <input type="text" name="query" class="search-query" placeholder="Fichiers, Utilisateurs, ...">
                                     <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
                                 </div>
                             </form>
                         </div>
-                        <div id="user" class="span2 offset2">
-                            <a href="#"><b>Kevin Delord</b></a>
-                            <a href="#"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/>&nbsp;</a>
+                        <div id="user" class="span3 offset2">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/>&nbsp;</a>
+                                {% endif %}
+                                <a href="{{ path('WodaUserBundle.Account.index') }}"><b>mon profil</b></a>
+                                <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/>&nbsp;</a>
+                                <a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a>
+                            {% else %}
+                                <a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a>
+                                <a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -62,25 +71,26 @@
                                 <span>Recent</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="recent" width="16px" height="16px" />
-                                <span>Shared</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="sharing" width="16px" height="16px" />
-                                <span>Sharing</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="sharing" width="16px" height="16px" />
-                                <span>Friends</span>
-                            </a>
-                        </li>
-
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <li>
+                                <a href="#">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="recent" width="16px" height="16px" />
+                                    <span>Shared</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="sharing" width="16px" height="16px" />
+                                    <span>Sharing</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="sharing" width="16px" height="16px" />
+                                    <span>Friends</span>
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
                 <div id="content" class="span9">
