@@ -8,83 +8,145 @@
         <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
         <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                background: url(http://subtlepatterns.subtlepatterns.netdna-cdn.com/patterns/debut_dark.png);
-            }
-
-            #content {
-                background: #ffffff;
-                border-left: 1px solid #000000;
-                border-right: 1px solid #000000;
-                min-height: 100%;
-            }
-
-            #content .inner {
-                padding: 30px;
-                padding-top: 75px;
-            }
-
-            #search {
-                float: left;
-                margin: 5px 0px;
-            }
-
-            #footer .container div {
-                padding: 0 5px; 
-            }
-
-            #footer .container div a {
-               font-size: 12px; 
-               color: #AAA;
-               background-color: transparent;
-               text-decoration: none;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/wodaui/css/style.css') }}" />
         <style>
             {% block style %}
             {% endblock %}
         </style>
     </head>
     <body>
-        <div cla class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">Woda</a>
-                    <ul class="nav pull-left">
-                    </ul>
-                    <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
-                        <div class="input-append">
-                            <input type="text" name="query" class="span2 search-query" placeholder="Fichiers, Utilisateurs, ...">
-                            <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+        <div id="left"></div>
+        <div id="right"></div>
+        <div id="page" class="container">
+            <div class="row col-wrap">
+                <div class="span3 col">
+                    <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">
+                        <img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="200px" height="200px" />
+                    </a>
+                </div>
+                <div id="header" class="span9 col">
+                    <div class="row">
+                        <div id="searchbar" class="span4">
+                            <form class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
+                                <div class="input-append">
+                                    <input type="text" name="query" class="search-query" placeholder="Fichiers, Utilisateurs, ...">
+                                    <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                    <ul class="nav pull-right">
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
-                            {% endif %}
-                            <li><a href="{{ path('WodaFSBundle.Default.list') }}">Mon dossier</a></li>
-                            <li><a href="{{ path('WodaUserBundle.Account.index') }}">Profil</a></li>
-                            <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
-                        {% else %}
-                            <li><a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a></li>
-                            <li><a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a></li>
-                        {% endif %}
+                        <div id="user" class="span2 offset2">
+                            <a href="#"><b>Kevin Delord</b></a>
+                            <a href="#"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/>&nbsp;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="menu" class="span2 offset1">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('bundles/wodaui/img/icons/home-32.png') }}" alt="home" width="16px" height="16px" />
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('bundles/wodaui/img/icons/starred-32.png') }}" alt="starred" width="16px" height="16px" />
+                                <span>Starred</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('bundles/wodaui/img/icons/recent-32.png') }}" alt="recent" width="16px" height="16px" />
+                                <span>Recent</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="recent" width="16px" height="16px" />
+                                <span>Shared</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="sharing" width="16px" height="16px" />
+                                <span>Sharing</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="sharing" width="16px" height="16px" />
+                                <span>Friends</span>
+                            </a>
+                        </li>
+
                     </ul>
+                </div>
+                <div id="content" class="span9">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+            
+        </div>
+        <div id="footer" class="container">
+            <div class="row">
+                <div class="span3">&nbsp;</div>
+                <div id="footer_content" class="span9">
+                    <div class="row">
+                        <div class="span2 offset1">left content</div>
+                        <div class="span2 offset3">right content</div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div id="content" class="container">
+    </body>
+</html>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <!--
+        <div class="container">
+        <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">Woda</a>
+            <ul class="nav pull-left">
+            </ul>
+            <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
+                <div class="input-append">
+                    <input type="text" name="query" class="span2 search-query" placeholder="Fichiers, Utilisateurs, ...">
+                    <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+                </div>
+            </form>
+            <ul class="nav pull-right">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('WodaFSBundle.Default.list') }}">Mon dossier</a></li>
+                    <li><a href="{{ path('WodaUserBundle.Account.index') }}">Profil</a></li>
+                    <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a></li>
+                    <li><a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a></li>
+                {% endif %}
+            </ul>
+        </div>
+-->
+        <!--<div id="content" class="container">
             <div class="inner">
-                {% block content %}
-                {% endblock %}
+          
             </div>
         </div>
         <div id="footer">
@@ -96,6 +158,5 @@
                     <a href="{{ path('WodaCmsBundle.Content.contact') }}">Nous contacter</a>
                 </div>
             </div>
-        </div>
-    </body>
-</html>
+        </div>-->
+
