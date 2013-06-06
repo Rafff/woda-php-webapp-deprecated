@@ -9,7 +9,6 @@ use Woda\UserBundle\Entity\User as User;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="`UserPassword`")
  */
 class UserPassword
 {
@@ -21,9 +20,8 @@ class UserPassword
     protected $id;
 
     /**
-     * @ORM\Column(name="youser")
      * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id")
+     * @ORM\JoinColumn(referencedColumnName="id")
      */
     protected $user;
 
