@@ -33,7 +33,7 @@ class FolderRepository extends EntityRepository
                 return null;
             $folder = $tmp;
         }
-
+        
         return $folder;
     }
 }

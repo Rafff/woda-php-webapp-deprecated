@@ -30,15 +30,10 @@ class XFile
     protected $name;
 
     /**
-     * @ORM\Column(name="file_hash", type="string", length=256)
+     * @ORM\ManyToOne(targetEntity="Content", inversedBy="content_hash")
+     * @ORM\Column(name="content_hash", type="string", length=256)
      */
-    protected $fileHash;
-
-    /**
-     * @ORM\Column(name="file_type", type="string", length=255)
-     */
-
-    protected $fileType;
+    protected $content_hash;
 
     /**
      * @ORM\Column(name="last_modification_time", type="datetime")
@@ -82,14 +77,35 @@ class XFile
         $this->name = $name;
     }
 
-    public function getFileHash()
+    // /**
+    //  * Set content hash
+    //  *
+    //  * @param Woda\FSBundle\Entity\Content $contentHash
+    //  * @return XFile
+    // */
+    // public function setContentHash(\Woda\FSBundle\Entity\Content $contentHash = null)
+    // {
+    //     $this->content_hash = $contentHash;
+    // }
+
+    // /**
+    //  * Get ContentHash
+    //  *
+    //  * @return Woda\FSBundle\Entity\Content
+    //  */
+    // public function getContentHash()
+    // {
+    //     return $this->content_hash;
+    // }
+
+    public function getContentHash()
     {
-        return $this->fileHash;
+        return $this->content_hash;
     }
 
-    public function setFileHash($fileHash)
+    public function setContentHash($contentHash)
     {
-        $this->fileHash = $fileHash;
+        $this->content_hash = $contentHash;
     }
 
     public function getFileType()

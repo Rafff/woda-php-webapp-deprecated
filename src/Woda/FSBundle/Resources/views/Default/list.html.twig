@@ -51,7 +51,6 @@
         dataType: 'json',
         sequentialUploads: true
       }).bind('fileuploadadd', function (e, data) {
-        console.log(data.files);
         $('#upload-startinfo').hide();
         $.each(data.files, function(index, file){
           var tpl = $('.template-upload').first().clone();
@@ -59,7 +58,7 @@
           tpl.find('.size').html(bytesToSize(file.size));
           tpl.appendTo('#uploadlist');
           tpl.removeClass('hidden');
-          data.formData = {id: tpl.index()};
+          data.formData = {id: tpl.index(), path:'{{path}}'};
         });
       }).bind('fileuploadprogress', function (e, data) {
         if (data.lengthComputable)
@@ -69,19 +68,35 @@
           elem.find('.progress-status').css('width', (data.loaded * 100 / data.total) + '%');
         }
       }).bind('fileuploaddone', function (e, data) {
-        var elem = $($('.template-upload').get(data.formData.id));
-        elem.find('.cancel')
+        var elem = $($('.template-upload').get(data.formData.id));  
+        if (data.result.files[0]['error'] != undefined)
+          elem.find('.cancel')
+            .addClass('disabled')
+            .html('Upload failed');
+        else {
+          elem.find('.cancel')
             .removeClass('btn-danger')
             .addClass('btn-primary')
             .addClass('disabled')
             .html('Done');
+          filetr = $('.filetr');
+          data = data.result.files[0];
+          var newfile = filetr.first().clone();
+          newfile.find('.filename').html(data.name)
+          newfile.find('.filedate').html(data.time);
+          linkelem = newfile.find('.dllink');
+          linkelem.attr('href', linkelem.attr('href').replace('0', data.id));
+          filetr.last().after(newfile);
+          newfile.show();
+        }
       }).bind('fileuploadprogressall', function (e, data) {
         $('#progressall-status').css('width', (data.loaded * 100 / data.total) + '%');
       }).bind('fileuploadfail', function(e, data) {
-        //fail
+        var elem = $($('.template-upload').get(data.formData.id));
+        elem.find('.cancel')
+            .addClass('disabled')
+            .html('Upload failed');
       });
-
-
 
       $('#post-newfolder').click(function(){
         var foldername = $('#newfoldername-input').val();
@@ -97,8 +112,11 @@
                 newfolder.find('.folderlink').attr('href', foldername).html(foldername);
                 $('#modal-newfolder').modal('hide');
                 folder.after(newfolder);
+                newfolder.show();
               } else if (data.responseCode == 401) {
                 $('#newfolder-errorexists').show();
+              } else if (data.responseCode == 403) {
+                $('#newfolder-forbidden').show();
               }
           });
         } else {
@@ -156,22 +174,35 @@
     </thead>
     <tbody id="fscontainer">
 
+      <tr style="display:none;" class="foldertr fsdraggable">
+          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href=""></a></td>
+          <td>Folder</td>
+          <td></td>
+          <td></td>
+      </tr>
       {% for folder in folders %}
-          <tr class="foldertr fsdraggable">
-            <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
-            <td>Folder</td>
-            <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
-            <td></td>
-          </tr>
+        <tr class="foldertr fsdraggable">
+          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
+          <td>Folder</td>
+          <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
+          <td></td>
+        </tr>
       {% endfor %}
 
+
+      <tr style="display:none;" class="filetr fsdraggable">
+          <td colspan="2"><i class="icon-file"></i> <span class="filename"></span></td>
+          <td>File</td>
+          <td class="filedate"></td>
+          <td class="file-icons"><a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": 0}) }}"><i class="icon-download" ></i></a> <i class="icon-share" ></i> <i class="icon-remove" ></i></td>
+      </tr>
       {% for file in files %}
         <tr class="filetr fsdraggable">
-        <td colspan="2"><i class="icon-file"></i> {{ file.name }}</td>
-        <td>File</td>
-        <td>{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
-        <td class="file-icons"><i class="icon-download" ></i> <i class="icon-share" ></i> <i class="icon-remove" ></i></td>
-      </tr>
+          <td colspan="2"><i class="icon-file"></i> <span class="filename">{{ file.name }}</span></td>
+          <td>File</td>
+          <td class="filedate">{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
+          <td class="file-icons"><a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" ></i></a> <i class="icon-share" ></i> <i class="icon-remove" ></i></td>
+        </tr>
       {% endfor %}
 
     </tbody>
@@ -185,6 +216,9 @@
     <div class="modal-body">
       <div class="alert alert-error newfolder-error hide" id="newfolder-errorexists">
         Cannot create this folder : Folder already exists.
+      </div>
+      <div class="alert alert-error newfolder-error hide" id="newfolder-forbidden">
+        Cannot create this folder : The folder's name contains forbidden characters (/).
       </div>
       <div class="alert alert-error newfolder-error hide" id="newfolder-errorempty">
         You must enter a folder name.
@@ -211,7 +245,7 @@
           <span class="btn btn-primary fileinput-button">
             <i class="icon-plus icon-white"></i>
             <span>Add files...</span>
-            <input id="fileupload" type="file" name="files[]" data-url="{{ path('WodaFSBundle.Default.upload') }}" multiple>
+            <input id="fileupload" name="files" type="file" name="files[]" data-url="{{ path('WodaFSBundle.Default.upload') }}" multiple>
           </span>
         </div>
         <div class="span2">
@@ -257,3 +291,4 @@
   </div>
 
 {% endblock %}
+
