@@ -258,6 +258,7 @@ class DefaultController extends Controller
             $response->headers->set('Content-type', $content->getFileType());
             $response->headers->set('Content-Disposition', 'attachment;filename="' . $file->getName() . '"');
             $response->headers->set('Content-length', $content->getSize());
+            $response->sendHeaders();
             
             $s3 = $this->container->get('aws_s3');
             $fileparts = $s3->get_object_list('woda-files', array('prefix' => $file->getContentHash()));
@@ -279,7 +280,7 @@ class DefaultController extends Controller
         else
             echo 'file iz null';
 
-        return $response;
+        return new Response();
     }
 
     /**
