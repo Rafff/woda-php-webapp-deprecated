@@ -24,5 +24,6 @@ class FriendsController extends Controller
      */
     public function listAction()
     {
+        return (array());
     }
 }
