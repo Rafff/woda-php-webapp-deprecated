@@ -27,24 +27,26 @@
                 <div id="header" class="span9 col">
                     <div class="row">
                         <div id="searchbar" class="span4">
-                            <form class="form-search" action="#" method="post">
+                            <form class="form-search" action="{{ path('WodaSearchBundle.Search.result') }}" method="post">
                                 <div class="input-append">
-                                    <input type="text" name="query" class="search-query" placeholder="Fichiers, Utilisateurs, ...">
-                                    <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+                                    <input type="text" name="query" placeholder="Documents, Musics, Movies, Users, ...">
+                                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i></button>
                                 </div>
                             </form>
                         </div>
                         <div id="user" class="span3 offset2">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/>&nbsp;</a>
+                                    <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/></a>
                                 {% endif %}
                                 <a href="{{ path('WodaUserBundle.Account.index') }}"><b>mon profil</b></a>
-                                <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/>&nbsp;</a>
-                                <a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a>
+                                <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/></a>
+                                <!--<a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a>-->
                             {% else %}
+                                <!--
                                 <a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a>
                                 <a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a>
+                                -->
                             {% endif %}
                         </div>
                     </div>
@@ -54,38 +56,38 @@
                 <div id="menu" class="span2 offset1">
                     <ul class="nav nav-pills nav-stacked">
                         <li>
-                            <a href="#">
+                            <a href="{{ path('WodaCmsBundle.Content.index') }}">
                                 <img src="{{ asset('bundles/wodaui/img/icons/home-32.png') }}" alt="home" width="16px" height="16px" />
                                 <span>Home</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <img src="{{ asset('bundles/wodaui/img/icons/starred-32.png') }}" alt="starred" width="16px" height="16px" />
-                                <span>Starred</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="{{ asset('bundles/wodaui/img/icons/recent-32.png') }}" alt="recent" width="16px" height="16px" />
-                                <span>Recent</span>
-                            </a>
-                        </li>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <li>
-                                <a href="#">
+                                <a href="{{ path('WodaFSBundle.Default.starred') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/starred-32.png') }}" alt="starred" width="16px" height="16px" />
+                                    <span>Starred</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('WodaFSBundle.Default.recent') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/recent-32.png') }}" alt="recent" width="16px" height="16px" />
+                                    <span>Recent</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('WodaFSBundle.Default.shared') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="recent" width="16px" height="16px" />
                                     <span>Shared</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ path('WodaFSBundle.Default.sharing') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="sharing" width="16px" height="16px" />
                                     <span>Sharing</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ path('WodaUserBundle.Friends.list') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="sharing" width="16px" height="16px" />
                                     <span>Friends</span>
                                 </a>

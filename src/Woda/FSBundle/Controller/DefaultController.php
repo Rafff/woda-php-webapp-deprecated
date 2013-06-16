@@ -341,6 +341,41 @@ class DefaultController extends Controller
         return $return;
     }
 
+    /**
+     * @Route("-recent/", name="WodaFSBundle.Default.recent")
+     * @Template("WodaFSBundle:Default:recent.html.twig")
+     */
+    public function recentAction()
+    {
+        return (array());
+    }
+
+    /**
+     * @Route("-starred/", name="WodaFSBundle.Default.starred")
+     * @Template("WodaFSBundle:Default:starred.html.twig")
+     */
+    public function starredAction()
+    {
+        return (array());
+    }
+
+    /**
+     * @Route("-shared/", name="WodaFSBundle.Default.shared")
+     * @Template("WodaFSBundle:Default:shared.html.twig")
+     */
+    public function sharedAction()
+    {
+        return (array());
+    }
+
+    /**
+     * @Route("-sharing/", name="WodaFSBundle.Default.sharing")
+     * @Template("WodaFSBundle:Default:sharing.html.twig")
+     */
+    public function sharingAction()
+    {
+        return (array());
+    }
 }
 
 ?>
