@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Woda\FSBundle\Entity\Folder;
 use Woda\FSBundle\Entity\XFile;
+use Woda\FSBundle\Entity\Content;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -72,6 +73,7 @@ class DefaultController extends Controller
         return $resultArray;
     }
 
+
     private function uploadSingleFile($bucket, $uploadedFile, $user, $folder, $repository, $s3)
     {
         if (null === $uploadedFile)
@@ -79,27 +81,54 @@ class DefaultController extends Controller
         if ($uploadedFile->isValid())
         {
             $filepath = $uploadedFile->getPathname();
-            $filename = hash_file('sha256', $filepath);
+            $filehash = hash_file('sha256', $filepath);
+            $filesize = filesize($filepath);
+            $filepartsize = 5 * 1024 * 1024;
+            $objectManager = $this->getDoctrine()->getManager();
 
             $file = new XFile();
             $file->setParent($folder);
             $file->setUser($user);
             $file->setName($uploadedFile->getClientOriginalName());
-            $file->setFileHash($filename);
+            $file->setContentHash($filehash);
             $file->setFileType($uploadedFile->getMimeType());
             $time = new \Datetime();
             $file->setLastModificationTime($time);
-            $objectManager = $this->getDoctrine()->getManager();
             $objectManager->persist($file);
 
-            $upstatus = $s3->create_object('woda-files', $filename, array('fileUpload' => $filepath));
+            $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:Content');
+            $contentexists = $repository->findOneBy(array('content_hash' => $filehash));
 
-            if ($upstatus->isOK())
+            $upstatus = null;
+            if ($contentexists == null)
+            {
+                $content = new Content();
+                $content->setContentHash($filehash);
+                $content->setCryptKey(substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 32));
+                $content->setSize($filesize);
+                $content->setFileType($uploadedFile->getMimeType());
+                $objectManager->persist($content);
+
+                $filecontent = file_get_contents($filepath);
+                $i = 0;
+                $handle = fopen($filepath, "r");
+                while (($filepart = fread($handle, $filepartsize)) && ($i == 0 || $upstatus->isOK()))
+                {
+                    $upstatus = $s3->create_object('woda-files', $filehash .'/'. $i, array('body' => $filepart, 'encryption'=>'AES256'));
+                    $i++;
+                }
+                fclose($handle);
+            }
+
+            $response = array();
+            $response['name'] = $uploadedFile->getClientOriginalName();
+            if ($contentexists || ($upstatus != null &&$upstatus->isOK()))
             {
                 $objectManager->flush();
-                $response = array();
-                $response['name'] = $uploadedFile->getClientOriginalName();
                 $response['time'] = $time->format('d/m/Y H:i');
+                $response['id'] = $file->getId();
             }
             else
                 $response['error'] = 's3 upload error';// upload error
@@ -115,8 +144,7 @@ class DefaultController extends Controller
         $info = array();
         $request = $this->getRequest();
         $user = $this->get('security.context')->getToken()->getUser();
-        //$path = $request->request->get('path');
-        $path = null;
+        $path = $request->request->get('path');
         $repository = $this->getDoctrine()
                            ->getManager()
                            ->getRepository('WodaFSBundle:Folder');
@@ -128,6 +156,7 @@ class DefaultController extends Controller
 
         if ($upload && is_array($upload)) {
             foreach($upload as $index => $value) {
+
                 $info[] = $this->uploadSingleFile($bucket, $value, $user, $folder, $repository, $s3);
             }
         }
@@ -171,7 +200,7 @@ class DefaultController extends Controller
         $request = $this->getRequest();
 
         $bucket = "woda-files";
-        $subFolder = "";  // leave blank for upload into the bucket directly
+        $subFolder = "";
 
         header('Pragma: no-cache');
         header('Cache-Control: no-store, no-cache, must-revalidate');
@@ -205,67 +234,54 @@ class DefaultController extends Controller
         return new Response(json_encode($return));
     }
 
+    /**
+     * Dowload actions that download file by id
+     *
+     * @Route("download/{id}/", requirements={"_method" = "GET"}, name="WodaFSBundle.Default.download")
+     */
+    public function downloadAction($id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:XFile');
+        $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+        $response = new Response();
+        if ($file != null)
+        {
+            $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:Content');
+            $content = $repository->findOneBy(array('content_hash' => $file->getContentHash()));
 
-    // /**
-    //  * Ajax call actions that upload files
-    //  *
-    //  * @Route("fs-upload/", requirements={"_method" = "POST"}, name="WodaFSBundle.Default.upload")
-    //  */
-    // public function uploadAction()
-    // {
-    //     $request = $this->getRequest();
-    //     $user = $this->get('security.context')->getToken()->getUser();
-    //     $path = $request->request->get('path');
-    //     $repository = $this->getDoctrine()
-    //                        ->getManager()
-    //                        ->getRepository('WodaFSBundle:Folder');
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', $content->getFileType());
+            $response->headers->set('Content-Disposition', 'attachment;filename="' . $file->getName() . '"');
+            $response->headers->set('Content-length', $content->getSize());
+            $response->sendHeaders();
+            
+            $s3 = $this->container->get('aws_s3');
+            $fileparts = $s3->get_object_list('woda-files', array('prefix' => $file->getContentHash()));
+            $tmpfile = tmpfile();
+            foreach ($fileparts as $fpart)
+            {
+                $object = $s3->get_object('woda-files', $fpart);//, array('fileDownload' => $tmpfile)
+                echo $object->body;
+            }
 
-    //     $folder = $repository->findByPath(null, $user);
+            // fseek($tmpfile, 0);
 
-    //     if ($folder === null)
-    //         return false;
-    //     else
-    //         echo 'YUP';
+            // while ($r = fread($tmpfile, 5*1024*1024))
+            // {
+            //     echo $r;
+            // }
+            // fclose($tmpfile);
+        }
+        else
+            echo 'file iz null';
 
-    //     $s3 = $this->container->get('aws_s3');
-    //     $uploadedFile = $request->files->get('files');
-
-    //     var_dump($uploadedFile);
-
-    //     if (null === $uploadedFile)
-    //         return false;
-    //     else
-    //         echo 'nope';
-
-    //     $filepath = $uploadedFile->getPathname();
-    //     $filename = hash_file('sha256', $filepath);
-
-    //     $file = new XFile();
-    //     $file->setParent($folder);
-    //     $file->setUser($user);
-    //     $file->setName($uploadedFile->getClientOriginalName());
-    //     $file->setFileHash($filename);
-    //     $file->setFileType($uploadedFile->getMimeType());
-    //     $time = new \Datetime();
-    //     $file->setLastModificationTime($time);
-    //     $objectManager = $this->getDoctrine()->getManager();
-    //     $objectManager->persist($file);
-
-    //     //$upstatus = $s3->create_object('woda-files', $filename, array('fileUpload' => $filepath));
-
-    //     if ($upstatus->isOK())
-    //     {
-    //         $objectManager->flush();
-    //         $response = array();
-    //         $response['name'] = $uploadedFile->getClientOriginalName();
-    //         $response['time'] = $time->format('d/m/Y H:i');
-    //         return new Response(json_encode($response));
-    //     }
-    //     else
-    //         echo 'NOPE';
-
-    //     return new Response(json_encode(false));
-    // }
+        return new Response();
+    }
 
     /**
      * Ajax call actions that adds a folder
@@ -274,13 +290,13 @@ class DefaultController extends Controller
      */
     public function addFolderAction()
     {
-        $isAjax = true;//$this->get('Request')->isXMLHttpRequest();
+        $isAjax = $this->get('Request')->isXMLHttpRequest();
         if ($isAjax) {
             $request = $this->get('request');
             $fname = $request->request->get('fname');
             $path = $request->request->get('path');
 
-            if ($fname != "")
+            if ($fname != "" && strpos($fname, '/') == false)
             {
                 $user = $this->get('security.context')->getToken()->getUser();
                 if ($user != null)
@@ -314,7 +330,7 @@ class DefaultController extends Controller
                     $return = array("responseCode" => 403, "message"=>"Forbidden");
             }
             else
-                $return = array("responseCode" => 400, "message"=>"You must enter a folder name.");
+                $return = array("responseCode" => 403, "message" => "Filename Forbidden");
         }
         else
             $return = array("responseCode" => 403, "message"=>"Forbidden");
@@ -325,6 +341,41 @@ class DefaultController extends Controller
         return $return;
     }
 
+    /**
+     * @Route("-recent/", name="WodaFSBundle.Default.recent")
+     * @Template("WodaFSBundle:Default:recent.html.twig")
+     */
+    public function recentAction()
+    {
+        return (array());
+    }
+
+    /**
+     * @Route("-starred/", name="WodaFSBundle.Default.starred")
+     * @Template("WodaFSBundle:Default:starred.html.twig")
+     */
+    public function starredAction()
+    {
+        return (array());
+    }
+
+    /**
+     * @Route("-shared/", name="WodaFSBundle.Default.shared")
+     * @Template("WodaFSBundle:Default:shared.html.twig")
+     */
+    public function sharedAction()
+    {
+        return (array());
+    }
+
+    /**
+     * @Route("-sharing/", name="WodaFSBundle.Default.sharing")
+     * @Template("WodaFSBundle:Default:sharing.html.twig")
+     */
+    public function sharingAction()
+    {
+        return (array());
+    }
 }
 
 ?>

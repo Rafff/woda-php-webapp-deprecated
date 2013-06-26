@@ -44,6 +44,27 @@ html, body {
 #searchbar {
     margin-top: 50px;
 }
+#searchbar input {
+    width: 275px;
+}
+
+.form-search .input-append input {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.form-search .input-append .btn.btn-info {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    background-color: #177DFE;
+    background-image: linear-gradient(to bottom, #3EA2FF, #0066FF);
+}
+
+.form-search .input-append .btn.btn-info:hover {
+    background-position: 0px;
+}
 
 #user {
     margin-top: 50px;
