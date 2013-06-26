@@ -85,8 +85,12 @@ html, body {
 }
 
 #menu > ul {
-    padding: 2px;
+    padding: 2px 2px 2px 45px;
     margin-bottom: 0px;
+}
+
+#menu > ul li a span {
+    padding-left: 5px;
 }
 
 #content {
