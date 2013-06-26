@@ -1,7 +1,8 @@
+/*
 body {
    overflow: hidden;
 }
-
+*/
 .counter {
     margin: 0 0 0 5px;
     padding: 2px 5px;
@@ -11,12 +12,9 @@ body {
     background: #eee;
     border-radius: 2px;
 }
-
+/*
 ul#typeofquery li a {
     color: #000;
-}
-#content {
-    min-height: 90%;
 }
 
 div#results div.tab-pane {
@@ -24,3 +22,4 @@ div#results div.tab-pane {
     overflow-y: scroll;
     overflow: hidden;
 }
+*/

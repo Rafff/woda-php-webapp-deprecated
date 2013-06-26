@@ -19,7 +19,8 @@ html, body {
 }
 
 #left {
-    background: #F5F5F5;
+    /*background: #F5F5F5;*/
+    background: #EBEBEB;
     left: 0;
 }
 
@@ -82,18 +83,35 @@ html, body {
 
 #menu {
     background: #FFF;
+    width: 140px;
+    margin-left: 160px;
 }
 
 #menu > ul {
-    padding: 2px 2px 2px 45px;
+    padding: 2px 2px 2px 5px;
     margin-bottom: 0px;
+/*
+    border-left: 1px solid #F0F;
+    border-top: 1px solid #F0F;
+    border-bottom: 1px solid #F0F;
+*/
 }
 
-#menu > ul li a span {
+#menu > ul li span {
     padding-left: 5px;
 }
 
+#menu > ul li.underline {
+    border-bottom: 1px solid #D4D4D4;
+    margin-right: 15px;
+}
+
+.menu-separator {
+    background: #EBEBEB;
+}
+
 #content {
+    /*overflow:scroll;*/
     min-height: 850px;
     background: #FFF;
     margin-left: 0px;

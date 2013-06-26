@@ -13,6 +13,7 @@
 <h2>Résultat de votre recherche: "<span id="query">{{ query }}</span>"</h2>
 
 <div class="tabbable tabs-left">
+<!--
     <ul id="typeofquery" class="nav nav-tabs">
         <li class="files {{ displayed == 'files' ? 'active' : '' }}" >
             <a href="#file" data-toggle="tab">Fichiers: <span class="counter">{{ files | length }}</span></a>
@@ -21,18 +22,79 @@
             <a href="#user" data-toggle="tab">Utilisateurs: <span class="counter">{{ users | length }}</span></a>
         </li>
     </ul>
-    <div id="results" class="tab-content">
-        <div class="tab-pane {{ displayed == 'files' ? 'active' : '' }}" id="file">
-            {% for file in files %}
-                <div><a href="#">{{ file.name }}</a></div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane {{ displayed == 'users' ? 'active' : '' }}" id="user">
-            {% for user in users %}
-                <div><a href="#">{{ user.name }}</a></div>
-            {% endfor %}
-        </div>
-    </div>
+-->
+{% for file in files %}
+    <div><a href="#">{{ file.name }}</a></div>
+{% endfor %}
+{% for user in users %}
+    <div><a href="#">{{ user.name }}</a></div>
+{% endfor %}
 </div>
 
+{% endblock %}
+
+{% block leftpannel %}
+    <div class="menu-separator">&nbsp;</div>
+    <ul class="nav nav-pills nav-stacked">
+        <li class="underline">
+            <img src="{{ asset('bundles/wodaui/img/icons/result-32.png') }}" alt="result" width="16px" height="16px" />
+            <span>Results</span>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/my_file-32.png') }}" alt="my files" width="16px" height="16px" />
+                <span>My files</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="shared" width="16px" height="16px" />
+                <span>Shared</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+        <li class="underline">
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="user" width="16px" height="16px" />
+                <span>Users</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/file-32.png') }}" alt="document" width="16px" height="16px" />
+                <span>Files</span>
+                <span class="counter">10000</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/folder-32.png') }}" alt="folder" width="16px" height="16px" />
+                <span>Folders</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/movie-32.png') }}" alt="movie" width="16px" height="16px" />
+                <span>Movies</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/music-32.png') }}" alt="music" width="16px" height="16px" />
+                <span>Musics</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <img src="{{ asset('bundles/wodaui/img/icons/picture-32.png') }}" alt="picture" width="16px" height="16px" />
+                <span>Pictures</span>
+                <span class="counter">0</span>
+            </a>
+        </li>
+    </ul>
 {% endblock %}
