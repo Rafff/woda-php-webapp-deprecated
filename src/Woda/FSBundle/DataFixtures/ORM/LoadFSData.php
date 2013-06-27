@@ -46,7 +46,7 @@ class LoadFSData extends AbstractFixture implements ContainerAwareInterface, Ord
                     $file->setParent($folder);
                     $file->setUser($user);
                     $file->setName('Superfile #' . $v . '.' . $exts[($v + $u) % count($exts)]);
-                    $file->setFileHash('lolhash');
+                    $file->setContentHash('lolhash');
                     $file->setFileType('text/plain');
                     $file->setLastModificationTime(new \Datetime());
                     $objectManager->persist($file);
