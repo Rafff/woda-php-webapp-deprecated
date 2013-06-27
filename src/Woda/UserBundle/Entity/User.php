@@ -294,7 +294,7 @@ class User implements AdvancedUserInterface
      *
      * @return boolean
      */
-    public function equals(UserInterface $user)
+    public function equals(AdvancedUserInterface $user)
     {
         return $this->getId() === $user->getId();
     }

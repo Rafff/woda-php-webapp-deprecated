@@ -5,14 +5,20 @@ namespace Woda\FSBundle\DataFixtures\ORM;
 use Woda\FSBundle\Entity\Folder;
 use Woda\FSBundle\Entity\XFile;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadFSData implements ContainerAwareInterface, FixtureInterface
+use Woda\UserBundle\DataFixtures\ORM\LoadUserData;
+
+class LoadFSData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
+    const FOLDER_COUNT_PER_USER = 5;
+    const FILE_COUNT_PER_FOLDER = 10;
+
     private $container;
 
     public function setContainer(ContainerInterface $container = null)
@@ -22,52 +28,37 @@ class LoadFSData implements ContainerAwareInterface, FixtureInterface
 
     public function load(ObjectManager $objectManager)
     {
-        $repository = $this->container
-                           ->get('doctrine')
-                           ->getManager()
-                           ->getRepository('WodaUserBundle:User');
+        $exts = array('jpg', 'png', 'mp3', 'css', 'c', 'cpp');
 
-        $user = $repository->find(1);
+        for ($t = 0; $t < LoadUserData::USER_COUNT; ++ $t) {
+            $user = $this->getReference('user-' . $t);
 
-        $root = new Folder();
-        $root->setParent(null);
-        $root->setName('Test');
-        $root->setUser($user);
-        $root->setLastModificationTime(new \Datetime());
-        $objectManager->persist($root);
+            for ($u = 0; $u < self::FOLDER_COUNT_PER_USER; ++ $u) {
+                $folder = new Folder();
+                $folder->setParent(null);
+                $folder->setUser($user);
+                $folder->setName('Superfolder #' . $u);
+                $folder->setLastModificationTime(new \Datetime());
+                $objectManager->persist($folder);
 
-  //       $folder = new Folder();
-  //       $folder->setParent($root);
-  //       $file->setUser($user);
-  //       $folder->setName('Super Dossier');
-  //       $folder->setUser($user);
-  //       $folder->setLastModificationTime(new \Datetime());
-  //       $objectManager->persist($folder);
-
-  //       $file = new XFile();
-  //       $file->setParent($root);
-  //       $file->setUser($user);
-  //       $file->setName('Prime.c');
-  //       $file->setFileHash('c1fcd97ad07525a76cb43324339d0f3fa4908cedf45fae3f5287ca6507e7fe5a');
-  //       $file->setFileType('text/x-c++');
-  //       $file->setLastModificationTime(new \Datetime());
-		// $file->setUser($user);
-  //       $objectManager->persist($file);
-
-  //       $file = new XFile();
-  //       $file->setParent($folder);
-  //       $file->setName('Super Fichier 1');
-  //       $file->setLastModificationTime(new \Datetime());
-		// $file->setUser($user);
-  //       $objectManager->persist($file);
-
-  //       $file = new XFile();
-  //       $file->setParent($folder);
-  //       $file->setName('Super Fichier 2');
-  //       $file->setLastModificationTime(new \Datetime());
-		// $file->setUser($user);
-  //       $objectManager->persist($file);
+                for ( $v = 0; $v < self::FILE_COUNT_PER_FOLDER; ++ $v) {
+                    $file = new XFile();
+                    $file->setParent($folder);
+                    $file->setUser($user);
+                    $file->setName('Superfile #' . $v . '.' . $exts[($v + $u) % count($exts)]);
+                    $file->setFileHash('lolhash');
+                    $file->setFileType('text/plain');
+                    $file->setLastModificationTime(new \Datetime());
+                    $objectManager->persist($file);
+                }
+            }
+        }
 
         $objectManager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }

@@ -29,7 +29,7 @@ class AdminController extends Controller
 	 */
 	 public function treeAction(User $user)
 	 {
-		$folders = $this->getDoctrine()->getRepository('WodaFSBundle:Folder')->findBy(array('user' => $user));
+        $folders = $this->getDoctrine()->getRepository('WodaFSBundle:Folder')->findBy(array('user' => $user, 'parent' => null));
 		$files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array('user' => $user));
 		return array('user' => $user, 'current' => null, 'folders' => $folders, 'files' => $files);
 	 }
