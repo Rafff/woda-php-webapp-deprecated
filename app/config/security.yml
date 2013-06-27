@@ -26,6 +26,7 @@ security:
                 provider: wodauserbundle
                 login_path: WodaUserBundle.Security.login
                 check_path: WodaUserBundle.Security.check
+                default_target_path: WodaFSBundle.Default.list
             logout:
                 path: WodaUserBundle.Security.logout
 

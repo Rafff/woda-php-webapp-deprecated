@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Woda</title>
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/wodaui/css/style_min.css') }}" />
+        <style>
+            {% block style %}
+            {% endblock %}
+        </style>
+    </head>
+    <body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+    	<div class="navbar-inner">
+        	<div class="container">
+		   		<a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">
+           			<img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" height="0px" />
+           		</a> 
+          		<div class="nav pull-right">						
+         	                  	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/>&nbsp;</a>
+                                {% endif %}
+                                <a class="btn" href="{{ path('WodaUserBundle.Account.index') }}"><b>My panel</b></a>
+                                <a class="btn" href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/>&nbsp;</a>
+                                <a class="btn btn-danger" href="{{ path('WodaUserBundle.Security.logout') }}">Sign out</a>
+                            {% else %}
+                                <a class="btn btn-danger" href="{{ path('WodaUserBundle.Register.index') }}">Sign up</a>
+                            {% endif %}
+				</div>
+        	</div>
+      	</div>
+    </div>	
+
+	<div id ="login" class="center">
+                    {% block content %}
+                    {% endblock %}
+    </div>
+	<div id ="download" class="center">
+		<div style="float:left;width:200px">
+		<img src="../mbp.png">
+		</div>
+		<div>
+		<p class="legend">Simple storage</p>
+		<p class="legend">Simple sharing</p>
+		</div>
+		<div>
+			<a class="btn btn-large btn-primary" href="#">Download</a>
+			<p>Mac, Linux and Windows</p>
+		</div
+	</div>            
+    </body>
+</html>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <!--
+        <div class="container">
+        <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">Woda</a>
+            <ul class="nav pull-left">
+            </ul>
+            <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
+                <div class="input-append">
+                    <input type="text" name="query" class="span2 search-query" placeholder="Fichiers, Utilisateurs, ...">
+                    <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+                </div>
+            </form>
+            <ul class="nav pull-right">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('WodaFSBundle.Default.list') }}">Mon dossier</a></li>
+                    <li><a href="{{ path('WodaUserBundle.Account.index') }}">Profil</a></li>
+                    <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a></li>
+                    <li><a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a></li>
+                {% endif %}
+            </ul>
+        </div>
+-->
+        <!--<div id="content" class="container">
+            <div class="inner">
+          
+            </div>
+        </div>
+        <div id="footer">
+            <div class="container">
+                <div class="pull-left">
+                    <a href="{{ path('WodaCmsBundle.Content.team') }}">L'équipe</a>
+                </div>
+                <div class="pull-right">
+                    <a href="{{ path('WodaCmsBundle.Content.contact') }}">Nous contacter</a>
+                </div>
+            </div>
+        </div>-->
+

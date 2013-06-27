@@ -9,15 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class ContentController extends Controller
 {
     /**
-     * @Route("/", name="WodaCmsBundle.Content.index")
-     * @Template()
-     */
-    public function indexAction()
-    {
-        return array();
-    }
-
-    /**
      * @Route("/team", name="WodaCmsBundle.Content.team")
      * @Template()
      */

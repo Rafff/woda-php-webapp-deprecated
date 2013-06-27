@@ -11,14 +11,15 @@ class UserType extends AbstractType
     {
         $builder
             ->add('login', 'text', array('label' => 'userbundle.profile.login', 'translation_domain' => 'woda'))
-            ->add('email', 'repeated', array(
+            ->add('email', 'email', array('label' => 'userbundle.profile.email', 'translation_domain' => 'woda'))
+            /*->add('email', 'repeated', array(
                     'type' => 'email',
                     'invalid_message' => 'Les adresses mails doivent correspondre',
                     'options' => array('required' => true),
                     'first_options'  => array('label' => 'userbundle.profile.email', 'translation_domain' => 'woda'),
                     'second_options' => array('label' => 'userbundle.profile.email_validation', 'translation_domain' => 'woda'),
                 )
-            )
+            )*/
             ->add('password', 'repeated', array(
                     'type' => 'password',
                     'invalid_message' => 'Les mots de passe doivent correspondre',
@@ -27,8 +28,9 @@ class UserType extends AbstractType
                     'second_options' => array('label' => 'userbundle.profile.password_validation', 'translation_domain' => 'woda'),
                 )
             )
-            ->add('firstname', 'text', array('label' => 'userbundle.profile.firstname', 'translation_domain' => 'woda'))
+           /* ->add('firstname', 'text', array('label' => 'userbundle.profile.firstname', 'translation_domain' => 'woda'))
             ->add('lastname', 'text', array('label' => 'userbundle.profile.lastname', 'translation_domain' => 'woda'))
+			*/
         ;
     }
 

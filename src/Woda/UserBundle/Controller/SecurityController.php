@@ -16,7 +16,7 @@ use Woda\UserBundle\Entity\UserRecoveryPassword;
 class SecurityController extends Controller
 {
     /**
-     * @Route("/login", name="WodaUserBundle.Security.login")
+     * @Route("/", name="WodaUserBundle.Security.login")
      */
     public function loginAction()
     {
