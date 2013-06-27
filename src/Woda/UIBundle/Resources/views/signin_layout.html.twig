@@ -18,7 +18,7 @@
 	<div class="navbar navbar-inverse navbar-fixed-top">
     	<div class="navbar-inner">
         	<div class="container">
-		   		<a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">
+		   		<a class="brand" href="#">
            			<img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" height="0px" />
            		</a> 
           		<div class="nav pull-right">						
@@ -58,33 +58,3 @@
 	            
     </body>
 </html>
-        
-
-        <!--
-        <div class="container">
-        <a class="brand" href="{{ path('WodaCmsBundle.Content.index') }}">Woda</a>
-            <ul class="nav pull-left">
-            </ul>
-            <form id="search" class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'type' : 'file' }) }}" method="post">
-                <div class="input-append">
-                    <input type="text" name="query" class="span2 search-query" placeholder="Fichiers, Utilisateurs, ...">
-                    <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
-                </div>
-            </form>
-            <ul class="nav pull-right">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('WodaAdminBundle.Default.index') }}">Administration</a></li>
-                    {% endif %}
-                    <li><a href="{{ path('WodaFSBundle.Default.list') }}">Mon dossier</a></li>
-                    <li><a href="{{ path('WodaUserBundle.Account.index') }}">Profil</a></li>
-                    <li><a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a></li>
-                {% else %}
-                    <li><a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a></li>
-                    <li><a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a></li>
-                {% endif %}
-            </ul>
-        </div>
--->
-
-
