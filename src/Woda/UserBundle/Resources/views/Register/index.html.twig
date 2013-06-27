@@ -1,11 +1,13 @@
-{% extends 'WodaUIBundle::layout.html.twig' %}
+{% extends 'WodaUIBundle::signup_layout.html.twig' %}
 
 {% block content %}
 
     <div>
-        <form action="{{ path('WodaUserBundle.Register.index') }}" method="post">
+        <form action="{{ path('WodaUserBundle.Register.index') }}" method="post" id="form">
+			<legend style="border-bottom-width:0px; margin-bottom:4px">Sign up</legend>
+
             {{ form_widget(form) }}
-            <input type="submit" />
+			<button type="submit" id="_submit" name="_submit" class="btn btn-danger">Sign up</button>
         </form>
     </div>
 
