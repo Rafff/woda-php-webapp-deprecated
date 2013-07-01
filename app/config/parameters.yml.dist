@@ -6,10 +6,9 @@ parameters:
     database_user:     root
     database_password: 
 
-    mailer_transport:  smtp
-    mailer_host:       localhost
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_transport:  gmail
+    mailer_user:       service@woda-server.com
+    mailer_password:   '3<qPWarB'
 
     locale:            fr
     secret:            ThisTokenIsNotSoSecretChangeIt
