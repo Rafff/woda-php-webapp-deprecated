@@ -52,11 +52,13 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
-    spool:     { type: memory }
+    transport:  %mailer_transport%
+#    encryption: %mailer_encryption%
+#    auth_mode:  %mailer_auth_mode%
+#    host:       %mailer_host%
+    username:   %mailer_user%
+    password:   %mailer_password%
+    spool:      { type: memory }
 
 # Amazon Web Services Configuration
 cybernox_amazon_web_services:

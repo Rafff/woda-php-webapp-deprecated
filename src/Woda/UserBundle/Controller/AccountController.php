@@ -38,33 +38,24 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/edit/information", name="WodaUserBundle.Account.editInformation")
-     * @Template("WodaUserBundle:Account:editInformation.html.twig")
+     * @Route("/test", name="WodaUserBundle.Account.test")
+     * @Template("WodaUserBundle:Account:index.html.twig")
      */
-    public function editAction(Request $request)
+    public function testAction(Request $request)
     {
-      // <!--<li><a href="{{ path('WodaUserBundle.Account.editInformation') }}">Modifier les informations de mon profil</a></li>-->
-      /*
-      $user = $this->get('security.context')->getToken()->getUser();
-      $form = $this->createForm(new AccountEditInformationType(), $user);
+        
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Hello Email')
+            ->setFrom('service@woda-server.com')
+            ->setTo('einsenhorn@gmail.com')
+            ->setBody($this->renderView('WodaUserBundle:Account/Message:default.html.twig', array('message' => 'test')))
+        ;
 
-      if ($request->getMethod() === 'POST') {
-            $form->bindRequest($request);
-            if ($form->isValid()) {
-                $entityManager = $this->container->get('doctrine')->getEntityManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+        $this->get('mailer')->send($message);
 
-                return ($this->redirect($this->generateUrl('WodaUserBundle.Account.index')));
-            }
-        }
-
-      return (
-        array (
-            'form' => $form->createView(),
-        )
-      );
-      */
+        return array(
+            'user' => $this->get('security.context')->getToken()->getUser(),
+        );
     }
 
     /**
@@ -87,13 +78,16 @@ class AccountController extends Controller
                   $userEmail->setUser($user);
                   $userEmail->setEmail($data['new_email']);
 
-                  // envoyer un email a $user->getEmail();
+                  $this->sendMail('WodaUserBundle:Account/Mail:confirmationEmail.html.twig', 'Woda -- Modification d\'adresse email', array(
+                        'token' => $userEmail->getToken()
+                    ), $user->getEmail()
+                  );
 
                   $em->persist($userEmail);
                   $em->flush();
 
                   return ($this->render('WodaUserBundle:Account/Message:default.html.twig', array(
-                        'message' => 'Un email de confirmation de redefinition de votre email a été envoyé à l\'adresse mail du compte.'.'['.$userEmail->getToken().']'
+                        'message' => 'Un email de confirmation de redefinition de votre email a été envoyé à l\'adresse mail du compte.'
                     ))
                 );
               }
@@ -157,13 +151,16 @@ class AccountController extends Controller
                 $userPassword->setUser($user);
                 $userPassword->setPassword($encoder->encodePassword($data['password'], $user->getSalt()));
 
-                // envoyer un email
+                $this->sendMail('WodaUserBundle:Account/Mail:confirmationPassword.html.twig', 'Woda -- Modification de mot de passe', array(
+                      'token' => $userPassword->getToken()
+                  ), $user->getEmail()
+                );
 
                 $em->persist($userPassword);
                 $em->flush();
 
                 return ($this->render('WodaUserBundle:Account/Message:default.html.twig', array(
-                        'message' => 'Un email de confirmation de redefinition de mot de passe a été envoyé à l\'adresse mail du compte.'.'['.$userPassword->getToken().']'
+                        'message' => 'Un email de confirmation de redefinition de mot de passe a été envoyé à l\'adresse mail du compte.'
                     ))
                 );
             }
@@ -198,5 +195,20 @@ class AccountController extends Controller
         return (array(
             'message' => 'Votre mot de passe a été modifié !'
         ));
+    }
+
+    private function sendMail($template, $subject, $data, $to, $from = null)
+    {
+        $from = is_null($from) ? 'service@woda-server.com' : $from;
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($to)
+            ->setContentType('text/html')
+            ->setBody($this->renderView($template, $data))
+        ;
+
+        $this->get('mailer')->send($message);
     }
 }

@@ -77,10 +77,14 @@ class SecurityController extends Controller
                   $em->persist($userRecoveryPassword);
                   $em->flush();
 
-                  // send email
+                  $this->sendMail('WodaUserBundle:Security/Mail:recoveryPassword.html.twig', 'Woda -- Mot de passe oublie', array(
+                        'login64' => base64_encode($user->getLogin()),
+                        'token' => $userRecoveryPassword->getToken()
+                    ), $user->getEmail()
+                  );
 
                   return ($this->render('WodaUserBundle:Security/Message:default.html.twig', array(
-                        'message' => 'Un email de redefinition de mot de passe a été envoyé à l\'adresse suivante: ' . $email . '['.base64_encode($user->getLogin()).']['.$userRecoveryPassword->getToken().']'
+                        'message' => 'Un email de redefinition de mot de passe a été envoyé à l\'adresse suivante: ' . $email . '.'
                     )
                   ));
               }
@@ -112,8 +116,6 @@ class SecurityController extends Controller
         }
 
         $userRecoveryPasswords = $em->getRepository('WodaUserBundle:UserRecoveryPassword')->findBy(array('user' => $user), array('date' => 'desc'), array(0, 1));
-
-        //$userRecoveryPassword = $em->getRepository('WodaUserBundle:UserRecoveryPassword')->findOneByUser($user);
 
         if (isset($userRecoveryPasswords[0]) &&
             ($userRecoveryPasswords[0]->getToken() === $token) &&
@@ -156,5 +158,20 @@ class SecurityController extends Controller
     {
         // non implementé
         return ;
+    }
+
+    private function sendMail($template, $subject, $data, $to, $from = null)
+    {
+        $from = is_null($from) ? 'service@woda-server.com' : $from;
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($to)
+            ->setContentType('text/html')
+            ->setBody($this->renderView($template, $data))
+        ;
+
+        $this->get('mailer')->send($message);
     }
 }

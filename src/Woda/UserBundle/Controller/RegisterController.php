@@ -45,11 +45,10 @@ class RegisterController extends Controller
                 $entityManager->persist($userValidation);
                 $entityManager->flush();
 
-                $this->sendMail('template', 'from', 'to', 'subject', array(
-                        'url' => 'URL://'.base64_encode($user->getLogin()).$userValidation->getToken()
-                        // 'login' => base64_encode($user->getLogin()),
-                        // 'token' => $userValidation->getToken()
-                    )
+                $this->sendMail('WodaUserBundle:Register/Mail:register.html.twig', 'Inscription sur Woda', array(
+                        'login64' => base64_encode($user->getLogin()),
+                        'token' => $userValidation->getToken()
+                    ), $user->getEmail()
                 );
 
                 return ($this->render('WodaUserBundle:Register/Message:default.html.twig', array(
@@ -95,8 +94,18 @@ class RegisterController extends Controller
         return ;
     }
 
-    private function sendMail($template, $from, $to, $subject, $data)
+    private function sendMail($template, $subject, $data, $to, $from = null)
     {
-        return (0);
+        $from = is_null($from) ? 'service@woda-server.com' : $from;
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($from)
+            ->setTo($to)
+            ->setContentType('text/html')
+            ->setBody($this->renderView($template, $data))
+        ;
+
+        $this->get('mailer')->send($message);
     }
 }

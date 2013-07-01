@@ -26,16 +26,6 @@ class User implements AdvancedUserInterface
     protected $login;
 
     /**
-     * @ORM\Column(name="first_name", type="string", length=25)
-     */
-    protected $firstname;
-
-    /**
-     * @ORM\Column(name="last_name", type="string", length=100)
-     */
-    protected $lastname;
-
-    /**
      * @Assert\Email
      * @ORM\Column(name="email", type="string", length=100, unique=true)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -108,48 +98,6 @@ class User implements AdvancedUserInterface
     public function getLogin()
     {
         return $this->login;
-    }
-
-    /**
-     * Set first name
-     *
-     * @return User
-     */
-    public function setFirstname($firstname)
-    {
-        $this->firstname = $firstname;
-        return $this;
-    }
-
-    /**
-     * Get first name
-     *
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * Set last name
-     *
-     * @return User
-     */
-    public function setLastname($lastname)
-    {
-        $this->lastname = $lastname;
-        return $this;
-    }
-
-    /**
-     * Get last name
-     *
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
     }
 
     /**

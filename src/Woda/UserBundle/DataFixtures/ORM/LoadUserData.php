@@ -24,13 +24,8 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function load(ObjectManager $objectManager)
     {
-        $firstnames = array('John', 'Gerard', 'Sylvie', 'Aude', 'Jules');
-        $lastnames = array('Paillote', 'Bar', 'Wiz', 'Superyop');
-
         $user = new User();
         $user->setLogin('admin');
-        $user->setFirstName('John');
-        $user->setLastName('Doe');
         $user->setEmail('admin@localhost');
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
         $user->setPassword($encoder->encodePassword('test', $user->getSalt()));
@@ -41,8 +36,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         for ( $t = 0; $t < self::USER_COUNT; ++ $t ) {
             $user = new User();
             $user->setLogin('user' . $t);
-            $user->setFirstName($firstnames[$t % count($firstnames)]);
-            $user->setLastName($lastnames[$t % count($lastnames)]);
             $user->setEmail('user' . $t . '@foobar');
             $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
             $user->setPassword($encoder->encodePassword('test', $user->getSalt()));

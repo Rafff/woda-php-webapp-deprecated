@@ -7,8 +7,6 @@ userbundle.profile.email: 'Adresse email'
 userbundle.profile.email_new: 'Nouvelle adresse mail'
 userbundle.profile.email_validation: 'Adresse mail (validation)'
 userbundle.profile.login: "Nom d'utilisateur"
-userbundle.profile.firstname: 'Prénom'
-userbundle.profile.lastname: 'Nom'
 userbundle.profile.password: 'Mot de passe'
 userbundle.profile.password_current: 'Mot de passe actuel'
 userbundle.profile.password_validation: 'Mot de passe (validation)'

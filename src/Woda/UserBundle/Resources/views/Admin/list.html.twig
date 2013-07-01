@@ -11,7 +11,6 @@
             <tr>
                 <th>ID</th>
                 <th>Nom d'utilisateur</th>
-                <th>Nom</th>
                 <th>Adresse email</th>
                 <th>Actions</th>
             </tr>
@@ -22,9 +21,6 @@
                     <td>#{{ user.id }}</td>
                     <td>
                         <a href="{{ path('WodaUserBundle.Admin.edit', { id: user.id }) }}">{{ user.username }}</a>
-                    </td>
-                    <td>
-                        <a href="{{ path('WodaUserBundle.Admin.edit', { id: user.id }) }}">{{ user.firstname }} {{ user.lastname }}</a>
                     </td>
                     <td>{{ user.email }}</td>
                     <td>
