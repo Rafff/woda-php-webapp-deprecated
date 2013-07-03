@@ -22,37 +22,15 @@
            			<img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" height="0px" />
            		</a> 
           		<div class="nav pull-right">						
-         	                  	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/>&nbsp;</a>
-                                {% endif %}
-                                <a class="btn" href="{{ path('WodaUserBundle.Account.index') }}"><b>My panel</b></a>
-                                <a class="btn" href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/>&nbsp;</a>
-                                <a class="btn btn-danger" href="{{ path('WodaUserBundle.Security.logout') }}">Sign out</a>
-                            {% else %}
-                                <a class="btn btn-danger" href="{{ path('WodaUserBundle.Register.index') }}">Sign up</a>
-                            {% endif %}
+                	<a class="btn btn-primary" href="{{ path('WodaUserBundle.Security.login') }}">Sign in</a>
 				</div>
-        	</div>
-      	</div>
-    </div>	
-
-	<div id ="login" class="center">
+				<div id ="login" class="span4">
                     {% block content %}
                     {% endblock %}
-    </div>
-	<div id ="download" class="center">
-		<div style="float:left;width:200px">
-		<img src="../mbp.png">
-		</div>
-		<div>
-		<p class="legend">Simple storage</p>
-		<p class="legend">Simple sharing</p>
-		</div>
-		<div>
-			<a class="btn btn-large btn-primary" href="#">Download</a>
-			<p>Mac, Linux and Windows</p>
-		</div
-	</div>            
+    			</div>   
+	     	</div>
+      	</div>	
+
+    </div>	    
     </body>
 </html>
