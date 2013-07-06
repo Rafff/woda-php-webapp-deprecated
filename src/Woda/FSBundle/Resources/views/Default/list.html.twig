@@ -9,9 +9,29 @@
 
   <style type="text/css">
     #modal-upload {
-      width: 80%;
-      left: 25%;
+      width: 592px;
+      padding:9px 15px;
+      border-bottom:1px solid #eee;
     }
+
+    #upload-startinfo
+    {
+      float:left;
+      padding: 10px 60px 10px 60px !important;
+      text-align:center;
+      width: 145px;
+      margin-bottom: 0px !important;
+    }
+
+    #upload-addbutton {
+      float:left;
+      margin: auto;
+      width: 50%;
+      text-align: center;
+      padding-top: 25px;
+    }
+
+
     .progress{
       width: 200px;
     }
@@ -51,7 +71,7 @@
         dataType: 'json',
         sequentialUploads: true
       }).bind('fileuploadadd', function (e, data) {
-        $('#upload-startinfo').hide();
+        //$('#upload-startinfo').hide();
         $.each(data.files, function(index, file){
           var tpl = $('.template-upload').first().clone();
           tpl.find('.name').html(file.name);
@@ -161,7 +181,7 @@
     </li>
   </ul>
 
-  <p><a href="#modal-newfolder" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-plus icon-white"></i> New folder</a> <a href="#modal-upload" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload file</a></p>
+  <p><a href="#modal-newfolder" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-plus icon-white"></i> New folder</a> <a href="#modal-upload" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-upload icon-white"></i>Upload file</a></p>
 
   <table class="table table-hover">
     <thead>
@@ -232,57 +252,49 @@
     </div>
   </div>
 
+<!-- Upload modal view -->
+
   <div id="modal-upload" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
-      <p>
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>Upload Files :</h3>
+      <h3>Upload Files</h3>
     </div>
     <div class="modal-body">
 
-      <div class="row">
-        <div class="span6">
-          <span class="btn btn-primary fileinput-button">
+
+    <div id="upload-startinfo" class="hero-unit">
+      <h3>Drag'n'drop</h3>
+    </div>
+
+    <div id="upload-addbutton">
+          <span class="btn btn-primary fileinput-button" style="float:none">
             <i class="icon-plus icon-white"></i>
             <span>Add files...</span>
             <input id="fileupload" name="files" type="file" name="files[]" data-url="{{ path('WodaFSBundle.Default.upload') }}" multiple>
           </span>
-        </div>
-        <div class="span2">
-        <h4 style="margin:0;">Global Progress :</h4>
-        </div>
-        <div class="span4"  style="margin-left:0;">
-          <div class="progress progress-primary progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressall-status" class="bar" style="width:40;"></div></div>
-        </div>
-      </div>
+    </div>
+    <div style="clear:both"></div>
+  
+    <table role="presentation" class="table table-striped" style="margin-top:20px; margin-bottom:0px">
+      <tbody id="uploadlist" class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+        <tr class="template-upload fade in hidden">
+          <td class="name"><span></span></td>
+          <td class="size"><span></span></td>
 
-      <hr>
+          <td>
+           <div class="progress progress-primary progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar progress-status" style="width:0%;"></div></div>
+          </td>
 
-      <div id="upload-startinfo" class="hero-unit" style="text-align:center;">
-        <h3>Drop some files here or use the button to start using upload</h3>
-      </div>
-
-      <table role="presentation" class="table table-striped">
-        <tbody id="uploadlist" class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
-
-          <tr class="template-upload fade in hidden">
-            <td class="name"><span></span></td>
-            <td class="size"><span></span></td>
-
-            <td>
-             <div class="progress progress-primary progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar progress-status" style="width:0%;"></div></div>
-            </td>
-
-            <td>
-                <button class="btn btn-danger cancel">
-                    <i class="icon-ban-circle icon-white"></i>
-                    <span>Cancel</span>
-                </button>
-            </td>
-          </tr>
-
+          <td>
+              <button class="btn btn-danger cancel">
+                  <i class="icon-ban-circle icon-white"></i>
+                  <span>Cancel</span>
+              </button>
+          </td>
+        </tr>
     </tbody>
     </table>
+
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
