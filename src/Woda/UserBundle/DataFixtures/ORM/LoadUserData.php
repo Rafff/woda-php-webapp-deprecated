@@ -31,6 +31,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $user->setPassword($encoder->encodePassword('test', $user->getSalt()));
         $user->setRoles(array('ROLE_USER', 'ROLE_ADMIN'));
         $user->setActive(true);
+        $this->setReference('user-admin', $user);
         $objectManager->persist($user);
 
         for ( $t = 0; $t < self::USER_COUNT; ++ $t ) {
