@@ -226,7 +226,7 @@ class DefaultController extends Controller
                 }
                 break;
             case 'DELETE':
-                 $return = $this->deleteFiles($bucket, $subFolder);
+                 $return = $this->deleteFiles($bucket .'/'. $subFolder);
                 break;
             default:
                 header('HTTP/1.1 405 Method Not Allowed');
@@ -262,20 +262,65 @@ class DefaultController extends Controller
             
             $s3 = $this->container->get('aws_s3');
             $fileparts = $s3->get_object_list('woda-files', array('prefix' => $file->getContentHash()));
-            $tmpfile = tmpfile();
             foreach ($fileparts as $fpart)
             {
                 $object = $s3->get_object('woda-files', $fpart);//, array('fileDownload' => $tmpfile)
                 echo $object->body;
             }
+        }
+        else
+            echo 'file iz null';
 
-            // fseek($tmpfile, 0);
+        return new Response();
+    }
 
-            // while ($r = fread($tmpfile, 5*1024*1024))
-            // {
-            //     echo $r;
-            // }
-            // fclose($tmpfile);
+    /**
+     * Delete file from system
+     *
+     * @Route("delete/{id}/", requirements={"_method" = "GET"}, name="WodaFSBundle.Default.delete")
+     */
+    public function deleteAction($id)
+    {
+        echo 'F1RST >>';
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:XFile');
+        $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+        $response = new Response();
+        if ($file != null)
+        {
+            $hash = $file->getContentHash();
+            $this->getDoctrine()->getEntityManager()->remove($file);
+            $this->getDoctrine()->getEntityManager()->flush();
+
+            $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:XFile');
+            $otherfiles = $repository->findOneBy(array('content_hash' => $hash));
+            if ($otherfiles == null)
+            {
+                echo 'F1RST >>';
+                $s3 = $this->container->get('aws_s3');
+                $fileparts = $s3->get_object_list('woda-files', array('prefix' => $hash));
+                foreach ($fileparts as $fpart)
+                {
+                    echo 'delete part';
+                    $object = $s3->delete_object('woda-files', $fpart);
+                    var_dump($object->isOK());
+                }
+                $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:Content');
+                $content = $repository->findOneBy(array('content_hash' => $hash));
+                var_dump($content);
+                $this->getDoctrine()->getEntityManager()->remove($content);
+                $this->getDoctrine()->getEntityManager()->flush();
+            }
+
+            
+
         }
         else
             echo 'file iz null';

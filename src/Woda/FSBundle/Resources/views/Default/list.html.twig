@@ -38,7 +38,8 @@
 
     .fileinput-button {
       position: relative;
-      overflow: hidden;
+      overflow: hidden;-
+      
       float: left;
       margin-right: 4px;
     }
@@ -55,6 +56,22 @@
       direction: ltr;
       cursor: pointer;
     }
+
+    table.flist th {
+      color:grey;
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .filehover {
+      text-align:right !important;
+      display:none;
+      padding-right: 20% !important;
+    }
+
+    .filetr:hover, .foldertr:hover {
+      background-color: #49afcd;
+    }
   </style>
 
   <script type="text/javascript">
@@ -62,7 +79,7 @@
 
       function bytesToSize(bytes) {
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes == 0) return '0 B';
+        if (bytes == 0) return '0 Bytes';
         var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
       };
@@ -104,6 +121,9 @@
           var newfile = filetr.first().clone();
           newfile.find('.filename').html(data.name)
           newfile.find('.filedate').html(data.time);
+          newfile.find('.dellink').attr('data-name', data.name)
+                                  .attr('data-id', data.id);
+          newfile.addClass("file-" + data.id);
           linkelem = newfile.find('.dllink');
           linkelem.attr('href', linkelem.attr('href').replace('0', data.id));
           filetr.last().after(newfile);
@@ -152,43 +172,74 @@
       $('#modal-upload').on('hidden', function(){
         $('#listfiles').html('');
       });
+
+      $('.flist').on('click', '.dellink', function(){
+        $('#delete-name').html($(this).attr('data-name'));
+        $('#delete-valid').attr('data-id', $(this).attr('data-id'));
+        $('#modal-delete').modal('show');
+      });
+
+      $('#delete-valid').on('click', function(){
+        var id = $(this).attr('data-id');
+        var url = "{{ path('WodaFSBundle.Default.delete', {"id": 0}) }}";
+        url = url.replace("0", id);
+        $.getJSON(url, function(data) {
+        });
+        $('.file-' + id).hide();
+        $('#modal-delete').modal('hide');
+      });
+
+      $('#fscontainer').on({
+        mouseenter: function() {
+          that = $(this);
+          that.find('.nohover').hide();
+          that.find('.filehover').show();
+        },
+        mouseleave: function(){
+          that = $(this);
+          that.find('.nohover').show();
+          that.find('.filehover').hide();
+        }}, '.filetr');
+
     });
   </script>
 
-  <h1>My Woda folder</h1>
+  <div class="row">
+    <div class="span8">
+      {% set curpath = '' %}
+      <ul class="breadcrumb" style="position:relative;">
+        <li><a href="{{ path('WodaFSBundle.Default.list') }}">Home</a>
+        {% for folder in path|split('/') %}
 
-  {% set curpath = '' %}
-  <ul class="breadcrumb">
-    <li><a href="{{ path('WodaFSBundle.Default.list') }}">Home</a>
-    {% for folder in path|split('/') %}
+           {% if folder != '' %}
+            {% if loop.first == false %}
+              {% set curpath = curpath ~ '/' %}
+            {% endif %}
+            {% set curpath = curpath ~ folder %}
+             <span class="divider">/</span></li>
+             {% if loop.index == (loop.length - 1) %}
+              <li class="active">{{ folder }}
+             {% else %}
+              <li><a href="{{ path('WodaFSBundle.Default.list.param', { "path": curpath }) }}">{{ folder }}</a>
+             {% endif %}
+          {% endif %}
+        {% endfor %}
+        </li>
+       
+      </ul>
+      
+    </div>
+      <div style="text-align:right; margin:0; margin-top:2px;" class=""><a href="#modal-newfolder" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-folder-open icon-white"></i></a> <a href="#modal-upload" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-upload icon-white"></i></a></div>
+  </div>
+  
 
-       {% if folder != '' %}
-        {% if loop.first == false %}
-          {% set curpath = curpath ~ '/' %}
-        {% endif %}
-        {% set curpath = curpath ~ folder %}
-         <span class="divider">/</span></li>
-         {% if loop.index == (loop.length - 1) %}
-          <li class="active">{{ folder }}
-         {% else %}
-          <li><a href="{{ path('WodaFSBundle.Default.list.param', { "path": curpath }) }}">{{ folder }}</a>
-         {% endif %}
-      {% endif %}
-
-
-
-    {% endfor %}
-    </li>
-  </ul>
-
-  <p><a href="#modal-newfolder" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-plus icon-white"></i> New folder</a> <a href="#modal-upload" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-upload icon-white"></i>Upload file</a></p>
-
-  <table class="table table-hover">
+  <table class="table flist">
     <thead>
       <tr>
-        <th colspan="2">Filename</th>
-        <th>Type</th>
-        <th>Last motified</th>
+        <th colspan="2">Files</th>
+        <th>Shared</th>
+        <th>Owners</th>
+        <th>Modified</th>
         <th></th>
       </tr>
     </thead>
@@ -196,32 +247,36 @@
 
       <tr style="display:none;" class="foldertr fsdraggable">
           <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href=""></a></td>
-          <td>Folder</td>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
       </tr>
       {% for folder in folders %}
         <tr class="foldertr fsdraggable">
           <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
-          <td>Folder</td>
+          <td></td>
+          <td></td>
           <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
           <td></td>
         </tr>
       {% endfor %}
 
 
-      <tr style="display:none;" class="filetr fsdraggable">
+      <tr style="display:none;" class="filetr">
           <td colspan="2"><i class="icon-file"></i> <span class="filename"></span></td>
-          <td>File</td>
-          <td class="filedate"></td>
-          <td class="file-icons"><a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": 0}) }}"><i class="icon-download" ></i></a> <i class="icon-share" ></i> <i class="icon-remove" ></i></td>
+          <td colspan="5" class="file-icons filehover" ><i class="icon-star-empty"></i> <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": 0}) }}"><i class="icon-download" > </i></a> <i class="icon-share"></i> <i class="icon-trash dellink" data-name="" data-id=""></i></td>
+          <td class="nohover"></td>
+          <td class="nohover"></td>
+          <td class="filedate nohover"></td>
       </tr>
       {% for file in files %}
-        <tr class="filetr fsdraggable">
+        <tr class="filetr file-{{file.id}}">
           <td colspan="2"><i class="icon-file"></i> <span class="filename">{{ file.name }}</span></td>
-          <td>File</td>
-          <td class="filedate">{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
-          <td class="file-icons"><a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" ></i></a> <i class="icon-share" ></i> <i class="icon-remove" ></i></td>
+          <td colspan="5" class="file-icons filehover" ><i class="icon-star-empty"></i> <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" > </i></a> <i class="icon-share"></i> <i class="icon-trash dellink" data-name="{{ file.name }}" data-id="{{ file.id }}"></i></td>
+          <td class="nohover"></td>
+          <td class="nohover"></td>
+          <td class="filedate nohover">{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
         </tr>
       {% endfor %}
 
@@ -298,6 +353,21 @@
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+  </div>
+
+  <div id="modal-delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Delete file</h3>
+    </div>
+    <div class="modal-body">
+    You are deleting file : <span style="font-size:14px;font-weight:bold;" id="delete-name"></span>.<br />
+    Are you sure ?
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button> <button class="btn btn-danger" data-id="" id="delete-valid">Continue</button>
     </div>
   </div>
 
