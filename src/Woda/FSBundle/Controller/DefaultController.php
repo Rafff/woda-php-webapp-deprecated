@@ -24,7 +24,7 @@ class DefaultController extends Controller
     /**
      * Lists all FS files and folders.
      *
-     * @Route("/", defaults={"path" = null}, name="WodaFSBundle.Default.list")
+     * @Route("/", defaults={"path" = ""}, name="WodaFSBundle.Default.list")
      * @Route("/{path}/", requirements={"path" = ".+", "_method" = "GET"}, name="WodaFSBundle.Default.list.param")
      * @Template()
      */
