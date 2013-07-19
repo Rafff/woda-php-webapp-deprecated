@@ -23,6 +23,9 @@ class SecurityController extends Controller
         $request = $this->getRequest();
         $session = $request->getSession();
         
+        if ($this->get('security.context')->getToken()->getUser() != 'anon.')
+            return ($this->redirect($this->generateUrl('WodaFSBundle.Default.list', array('path' => ''))));
+
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
