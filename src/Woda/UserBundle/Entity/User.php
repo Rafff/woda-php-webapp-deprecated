@@ -61,12 +61,19 @@ class User implements AdvancedUserInterface
      */
     protected $roles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Woda\FSBundle\Entity\XFile")
+     */
+    protected $favorites;
+
     public function __construct()
     {
         $this->roles = array();
         $this->active = false;
         $this->locked = false;
         $this->salt = uniqid(null, true);
+
+        $this->favorites = array();
     }
 
     /**
@@ -275,5 +282,21 @@ class User implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->active;
+    }
+
+    public function getFavorites()
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(\Woda\FSBundle\Entity\XFile $file)
+    {
+        $this->favorites[] = $file;
+        return $this;
+    }
+
+    public function removeFavorite(\Woda\FSBundle\Entity\XFile $file)
+    {
+        $this->favorites->removeElement($file);
     }
 }

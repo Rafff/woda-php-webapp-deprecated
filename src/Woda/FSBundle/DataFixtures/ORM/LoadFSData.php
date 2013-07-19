@@ -30,16 +30,10 @@ class LoadFSData extends AbstractFixture implements ContainerAwareInterface, Ord
     {
         $exts = array('jpg', 'png', 'mp3', 'css', 'c', 'cpp');
 
-        $user = $this->getReference('user-admin');
-        $folder = new Folder();
-        $folder->setParent(null);
-        $folder->setUser($user);
-        $folder->setName('Superfolder #admin');
-        $folder->setLastModificationTime(new \Datetime());
-        $objectManager->persist($folder);
+        $admin = $this->getReference('user-admin');
 
-        for ($t = 0; $t < LoadUserData::USER_COUNT; ++ $t) {
-            $user = $this->getReference('user-' . $t);
+        for ($t = 0; $t <= LoadUserData::USER_COUNT; ++ $t) {
+            $user = $this->getReference('user-' . ($t === LoadUserData::USER_COUNT ? 'admin' : $t));
 
             for ($u = 0; $u < self::FOLDER_COUNT_PER_USER; ++ $u) {
                 $folder = new Folder();

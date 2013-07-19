@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Woda\FSBundle\Entity\Folder;
@@ -259,7 +260,7 @@ class DefaultController extends Controller
             $response->headers->set('Content-Disposition', 'attachment;filename="' . $file->getName() . '"');
             $response->headers->set('Content-length', $content->getSize());
             $response->sendHeaders();
-            
+
             $s3 = $this->container->get('aws_s3');
             $fileparts = $s3->get_object_list('woda-files', array('prefix' => $file->getContentHash()));
             foreach ($fileparts as $fpart)
@@ -319,7 +320,7 @@ class DefaultController extends Controller
                 $this->getDoctrine()->getEntityManager()->flush();
             }
 
-            
+
 
         }
         else
@@ -396,12 +397,36 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("-starit/{id}", name="WodaFSBundle.Default.star")
+     */
+    public function starAction($id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:XFile');
+        $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+
+        if ($user->getFavorites()->contains($file)) {
+            $user->removeFavorite($file);
+        } else {
+            $user->addFavorite($file);
+        }
+
+        $this->getDoctrine()->getEntityManager()->persist($user);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $this->redirect($this->generateUrl('WodaFSBundle.Default.starred'));
+    }
+
+    /**
      * @Route("-starred/", name="WodaFSBundle.Default.starred")
      * @Template("WodaFSBundle:Default:starred.html.twig")
      */
     public function starredAction()
     {
-        return (array());
+        $user = $this->get('security.context')->getToken()->getUser();
+        return (array('folders' => array(), 'files' => $user->getFavorites(), 'path' => null));
     }
 
     /**

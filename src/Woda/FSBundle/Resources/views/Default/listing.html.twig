@@ -1,0 +1,391 @@
+{% extends "WodaUIBundle::layout.html.twig" %}
+
+{% block content %}
+
+  {% block header %}
+  {% endblock %}
+
+  <script src="/js/jquery.ui.widget.js"></script>
+  <script src="/js/jquery.iframe-transport.js"></script>
+  <script src="/js/jquery.fileupload.js"></script>
+
+  <style type="text/css">
+    #modal-upload {
+      width: 592px;
+      padding:9px 15px;
+      border-bottom:1px solid #eee;
+    }
+
+    #upload-startinfo
+    {
+      float:left;
+      padding: 10px 60px 10px 60px !important;
+      text-align:center;
+      width: 145px;
+      margin-bottom: 0px !important;
+    }
+
+    #upload-addbutton {
+      float:left;
+      margin: auto;
+      width: 50%;
+      text-align: center;
+      padding-top: 25px;
+    }
+
+
+    .progress{
+      width: 200px;
+    }
+
+    .fileinput-button {
+      position: relative;
+      overflow: hidden;-
+
+      float: left;
+      margin-right: 4px;
+    }
+
+    .fileinput-button input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      transform: translate(-300px, 0) scale(4);
+      font-size: 23px;
+      direction: ltr;
+      cursor: pointer;
+    }
+
+    table.flist th {
+      color:grey;
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .filehover {
+      text-align:right !important;
+      display:none;
+      padding-right: 20% !important;
+    }
+
+    .filetr:hover, .foldertr:hover {
+      background-color: #49afcd;
+    }
+  </style>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+      function bytesToSize(bytes) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Bytes';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+      };
+
+      $('#fileupload').fileupload({
+        dataType: 'json',
+        sequentialUploads: true
+      }).bind('fileuploadadd', function (e, data) {
+        //$('#upload-startinfo').hide();
+        $.each(data.files, function(index, file){
+          var tpl = $('.template-upload').first().clone();
+          tpl.find('.name').html(file.name);
+          tpl.find('.size').html(bytesToSize(file.size));
+          tpl.appendTo('#uploadlist');
+          tpl.removeClass('hidden');
+          data.formData = {id: tpl.index(), path:'{{path}}'};
+        });
+      }).bind('fileuploadprogress', function (e, data) {
+        if (data.lengthComputable)
+        {
+          var elem = $('.template-upload').get(data.formData.id);
+          elem = $(elem);
+          elem.find('.progress-status').css('width', (data.loaded * 100 / data.total) + '%');
+        }
+      }).bind('fileuploaddone', function (e, data) {
+        var elem = $($('.template-upload').get(data.formData.id));
+        if (data.result.files[0]['error'] != undefined)
+          elem.find('.cancel')
+            .addClass('disabled')
+            .html('Upload failed');
+        else {
+          elem.find('.cancel')
+            .removeClass('btn-danger')
+            .addClass('btn-primary')
+            .addClass('disabled')
+            .html('Done');
+          filetr = $('.filetr');
+          data = data.result.files[0];
+          var newfile = filetr.first().clone();
+          newfile.find('.filename').html(data.name)
+          newfile.find('.filedate').html(data.time);
+          newfile.find('.dellink').attr('data-name', data.name)
+                                  .attr('data-id', data.id);
+          newfile.addClass("file-" + data.id);
+          linkelem = newfile.find('.dllink');
+          linkelem.attr('href', linkelem.attr('href').replace('0', data.id));
+          filetr.last().after(newfile);
+          newfile.show();
+        }
+      }).bind('fileuploadprogressall', function (e, data) {
+        $('#progressall-status').css('width', (data.loaded * 100 / data.total) + '%');
+      }).bind('fileuploadfail', function(e, data) {
+        var elem = $($('.template-upload').get(data.formData.id));
+        elem.find('.cancel')
+            .addClass('disabled')
+            .html('Upload failed');
+      });
+
+      $('#post-newfolder').click(function(){
+        var foldername = $('#newfoldername-input').val();
+        if (foldername != '')
+        {
+          var url = '{{ path('WodaFSBundle.Default.addFolder') }}';
+          $.post(url,{fname:foldername,path:'{{ path }}'},
+            function(data){
+              if (data.responseCode == 200)
+              {
+                var folder = $('.foldertr').last();
+                var newfolder = folder.clone();
+                newfolder.find('.folderlink').attr('href', foldername).html(foldername);
+                $('#modal-newfolder').modal('hide');
+                folder.after(newfolder);
+                newfolder.show();
+              } else if (data.responseCode == 401) {
+                $('#newfolder-errorexists').show();
+              } else if (data.responseCode == 403) {
+                $('#newfolder-forbidden').show();
+              }
+          });
+        } else {
+          $('#newfolder-errorempty').show();
+        }
+      });
+
+      $('#modal-newfolder').on('hidden', function(){
+        $('#newfoldername-input').val('');
+        $('.newfolder-error').hide();
+      });
+
+      $('#modal-upload').on('hidden', function(){
+        $('#listfiles').html('');
+      });
+
+      $('.flist').on('click', '.dellink', function(){
+        $('#delete-name').html($(this).attr('data-name'));
+        $('#delete-valid').attr('data-id', $(this).attr('data-id'));
+        $('#modal-delete').modal('show');
+      });
+
+      $('#delete-valid').on('click', function(){
+        var id = $(this).attr('data-id');
+        var url = "{{ path('WodaFSBundle.Default.delete', {"id": 0}) }}";
+        url = url.replace("0", id);
+        $.getJSON(url, function(data) {
+        });
+        $('.file-' + id).hide();
+        $('#modal-delete').modal('hide');
+      });
+
+      $('#fscontainer').on({
+        mouseenter: function() {
+          that = $(this);
+          that.find('.nohover').hide();
+          that.find('.filehover').show();
+        },
+        mouseleave: function(){
+          that = $(this);
+          that.find('.nohover').show();
+          that.find('.filehover').hide();
+        }}, '.filetr');
+
+    });
+  </script>
+
+  {% if path %}
+  <div class="row">
+    <div class="span8">
+      {% set curpath = '' %}
+      <ul class="breadcrumb" style="position:relative;">
+        <li><a href="{{ path('WodaFSBundle.Default.list') }}">Home</a>
+        {% for folder in path|split('/') %}
+
+           {% if folder != '' %}
+            {% if loop.first == false %}
+              {% set curpath = curpath ~ '/' %}
+            {% endif %}
+            {% set curpath = curpath ~ folder %}
+             <span class="divider">/</span></li>
+             {% if loop.index == (loop.length - 1) %}
+              <li class="active">{{ folder }}
+             {% else %}
+              <li><a href="{{ path('WodaFSBundle.Default.list.param', { "path": curpath }) }}">{{ folder }}</a>
+             {% endif %}
+          {% endif %}
+        {% endfor %}
+        </li>
+
+      </ul>
+
+    </div>
+      <div style="text-align:right; margin:0; margin-top:2px;" class=""><a href="#modal-newfolder" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-folder-open icon-white"></i></a> <a href="#modal-upload" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-upload icon-white"></i></a></div>
+  </div>
+  {% endif %}
+
+
+  <table class="table flist">
+    <thead>
+      <tr>
+        <th colspan="2">Files</th>
+        <th>Shared</th>
+        <th>Owners</th>
+        <th>Modified</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="fscontainer">
+
+      <tr style="display:none;" class="foldertr fsdraggable">
+          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href=""></a></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+
+      {% for folder in folders %}
+        <tr class="foldertr fsdraggable">
+          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
+          <td></td>
+          <td></td>
+          <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
+          <td></td>
+        </tr>
+      {% endfor %}
+
+      <tr style="display:none;" class="filetr">
+          <td colspan="2">
+              <i class="icon-file"></i> <span class="filename"></span>
+          </td>
+          <td colspan="5" class="file-icons filehover" >
+              <i class="icon-star-empty"></i> <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": 0}) }}"><i class="icon-download" > </i></a>
+              <i class="icon-share"></i> <i class="icon-trash dellink" data-name="" data-id=""></i>
+          </td>
+          <td class="nohover"></td>
+          <td class="nohover"></td>
+          <td class="filedate nohover"></td>
+      </tr>
+
+      {% for file in files %}
+        <tr class="filetr file-{{file.id}}">
+          <td colspan="2">
+              <i class="icon-file"></i> <span class="filename">{{ file.name }}</span>
+          </td>
+          <td colspan="5" class="file-icons filehover" >
+              <a href="{{ path('WodaFSBundle.Default.star', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
+              <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" > </i></a>
+              <i class="icon-share"></i>
+              <i class="icon-trash dellink" data-name="{{ file.name }}" data-id="{{ file.id }}"></i>
+          </td>
+          <td class="nohover"></td>
+          <td class="nohover"></td>
+          <td class="filedate nohover">{{ file.lastModificationTime|date('d/m/Y H:i') }}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+  <div id="modal-newfolder" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Create new folder :</h3>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error newfolder-error hide" id="newfolder-errorexists">
+        Cannot create this folder : Folder already exists.
+      </div>
+      <div class="alert alert-error newfolder-error hide" id="newfolder-forbidden">
+        Cannot create this folder : The folder's name contains forbidden characters (/).
+      </div>
+      <div class="alert alert-error newfolder-error hide" id="newfolder-errorempty">
+        You must enter a folder name.
+      </div>
+      <p>Please enter a name for the new folder :</p>
+      <input type="text" name="foldername" id="newfoldername-input" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button id="post-newfolder" class="btn btn-primary">Create</button>
+    </div>
+  </div>
+
+<!-- Upload modal view -->
+
+  <div id="modal-upload" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Upload Files</h3>
+    </div>
+    <div class="modal-body">
+
+
+    <div id="upload-startinfo" class="hero-unit">
+      <h3 style="color:#4d4d4d">Drag'n'drop</h3>
+    </div>
+
+    <div id="upload-addbutton">
+          <span class="btn btn-primary fileinput-button" style="float:none">
+            <i class="icon-plus icon-white"></i>
+            <span>Add files...</span>
+            <input id="fileupload" name="files" type="file" name="files[]" data-url="{{ path('WodaFSBundle.Default.upload') }}" multiple>
+          </span>
+    </div>
+    <div style="clear:both"></div>
+
+    <table role="presentation" class="table table-striped" style="margin-top:20px; margin-bottom:0px">
+      <tbody id="uploadlist" class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+        <tr class="template-upload fade in hidden">
+          <td class="name"><span></span></td>
+          <td class="size"><span></span></td>
+
+          <td>
+           <div class="progress progress-primary progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar progress-status" style="width:0%;"></div></div>
+          </td>
+
+          <td>
+              <button class="btn btn-danger cancel">
+                  <i class="icon-ban-circle icon-white"></i>
+                  <span>Cancel</span>
+              </button>
+          </td>
+        </tr>
+    </tbody>
+    </table>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+  </div>
+
+  <div id="modal-delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Delete file</h3>
+    </div>
+    <div class="modal-body">
+    You are deleting file : <span style="font-size:14px;font-weight:bold;" id="delete-name"></span>.<br />
+    Are you sure ?
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button> <button class="btn btn-danger" data-id="" id="delete-valid">Continue</button>
+    </div>
+  </div>
+
+{% endblock %}
