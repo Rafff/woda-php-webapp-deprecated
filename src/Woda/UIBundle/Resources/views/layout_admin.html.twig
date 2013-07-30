@@ -2,46 +2,167 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Woda - Administration</title>
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/wodaui/bootstrap/css/bootstrap.min.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/wodaui/css/style_admin.css') }}" />
+        <title>Woda</title>
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/wodaui/css/style.css') }}" />
+        <style>
+            {% block style %}
+            {% endblock %}
+        </style>
+        <style>
+.navbar .nav,
+.navbar .nav > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+    *zoom:1; /* hasLayout ie7 trigger */
+    vertical-align: top;
 
-        <script type="text/javascript" src="{{asset('bundles/wodaui/tiny_mce/tiny_mce.js') }}"></script>
-        <script type="text/javascript">
-            tinyMCE.init({ mode : "textareas" });
-        </script>
+}
+ .navbar-inner {
+}
+
+.nav-tabs>li>a {
+    border-color:#cccccc #cccccc #cccccc;
+    margin: 0;
+}
+
+
+.nav-tabs>li>a:hover {
+    border-color:#bbbbbb #bbbbbb #bbbbbb;
+}
+
+
+#menu_admin {
+    border-bottom-style: solid;
+    border-width:0px 0px 1px 0px !important;
+    border-bottom-color:#CCCCCC !important; 
+    text-align: center;
+    float: none;   
+}
+
+.navbar .nav, .navbar .nav > li {
+    border-bottom-width: 0px !important;
+}
+
+
+</style>
+               <script type="text/javascript">
+  $(document).ready(function() 
+  { 
+    $height = $('#jsrow').height() - $('#sub-menu').height();
+
+    $('#menu-separator').css('height', $height);
+     
+  });
+</script>
     </head>
     <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
+        <div id="left"></div>
+        <div id="right"></div>
+        <div id="page" class="container">
+            <div class="row">
+                <div class="span3 col">
                     <a class="brand" href="#">
-                        Woda
+                        <img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" style="margin-top:10px" />
                     </a>
-                    <ul class="nav">
-                        <li class="active">
-                            <a href="{{ path('WodaAdminBundle.Default.index') }}">
-                                Admin panel
+                </div>
+                <div id="header" class="span9 col">
+                    <div class="row">
+                        <div id="searchbar" class="span4">
+                            <form class="form-search" action="{{ path('WodaSearchBundle.Search.result') }}" method="post">
+                                <div class="input-append">
+                                    <input type="text" name="query" placeholder="Documents, Musics, Movies, Users, ...">
+                                    <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="user" class="span3 offset2">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                                <a href="{{ path('WodaUserBundle.Account.index') }}"><b>mon profil</b></a>
+                                <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/></a>
+                                <a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a>
+                            {% else %}
+                                <!--
+                                <a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a>
+                                <a href="{{ path('WodaUserBundle.Register.index') }}">Inscription</a>
+                                -->
+                            {% endif %}
+                        </div>
+                    </div> 
+                    {% render 'WodaAdminBundle:Menu:master' %}
+                </div>
+            </div>
+
+            <div class="row" id="jsrow">
+                <div id="menu" class="span2 offset1">
+
+                    <ul class="nav nav-pills nav-stacked" id="sub-menu">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/administrator-32.png') }}" width="16px" height="16px" alt="administration"/>
+                                <span>Admin</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+
+                        <li>
+                            <a href="{{ path('WodaFSBundle.Default.list') }}">
+                                <img src="{{ asset('bundles/wodaui/img/icons/home-32.png') }}" alt="home" width="16px" height="16px" />
+                                <span>Home</span>
                             </a>
                         </li>
+
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <li>
+                                <a href="{{ path('WodaFSBundle.Default.starred') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/starred-32.png') }}" alt="starred" width="16px" height="16px" />
+                                    <span>Starred</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('WodaFSBundle.Default.recent') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/recent-32.png') }}" alt="recent" width="16px" height="16px" />
+                                    <span>Recent</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('WodaFSBundle.Default.shared') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="recent" width="16px" height="16px" />
+                                    <span>Shared</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('WodaFSBundle.Default.sharing') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="sharing" width="16px" height="16px" />
+                                    <span>Sharing</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('WodaUserBundle.Friends.list') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="sharing" width="16px" height="16px" />
+                                    <span>Friends</span>
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
+                    {% block leftpannel %}
+                    {% endblock %}
+                    <div id="menu-separator">&nbsp;</div>
+                </div>
+                <div id="content" class="span9">
+                    {% block content %}
+                    {% endblock %}
                 </div>
             </div>
+            
         </div>
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
-                    <div id="menu">
-                        {% render 'WodaAdminBundle:Menu:master' %}
-                    </div>
-                </div>
-                <div class="span10">
-                    <div id="main" class="well">
-                        {% block content %}
-                        {% endblock %}
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </body>
 </html>

@@ -1,8 +1,9 @@
-<div class="well" style="padding: 10px 0">
-    {% for element in root %}
-        {% if not loop.first %}
-            <hr />
-        {% endif %}
-        {% render 'WodaAdminBundle:Menu:element' with { 'element' : element } %}
-    {% endfor %}
+<div class="navbar">
+	<div id="menu_admin">
+		<ul class="nav nav-tabs">
+    		{% for element in root %}
+        		{% render 'WodaAdminBundle:Menu:element' with { 'element' : element } %}
+    		{% endfor %}
+		</ul>
+	</div>
 </div>
