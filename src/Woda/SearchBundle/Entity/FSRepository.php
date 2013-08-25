@@ -11,16 +11,16 @@ class FSRepository extends EntityRepository
     public function findAllLikeName($name)
     {
         return ($this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where p.name like :name')
-            ->setParameter('name', '%'.$name.'%')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where LOWER(p.name) like :name')
+            ->setParameter('name', '%'.strtolower($name).'%')
             ->getResult());
     }
 
     public function findFileLikeName($name, $order = array(), $limit = null)
     {
         $query = $this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where p.name like :name')
-            ->setParameter('name', '%'.$name.'%')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where LOWER(p.name) like :name')
+            ->setParameter('name', '%'.strtolower($name).'%')
         ;
 
         if (!empty($limit)) {
