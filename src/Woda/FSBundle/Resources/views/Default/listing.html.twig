@@ -286,6 +286,7 @@
               <i class="icon-file"></i> <span class="filename">{{ file.name }}</span>
           </td>
           <td colspan="5" class="file-icons filehover" >
+              <a href="{{ path('WodaFSBundle.Default.public', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
               <a href="{{ path('WodaFSBundle.Default.star', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
               <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" > </i></a>
               <i class="icon-share"></i>

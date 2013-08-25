@@ -420,6 +420,25 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("-public/{id}", name="WodaFSBundle.Default.public")
+     */
+    public function publicAction($id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:XFile');
+        $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+
+        $file->setPublic(!$file->isPublic());
+
+        $this->getDoctrine()->getEntityManager()->persist($file);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $this->redirect($this->generateUrl('WodaFSBundle.Default.list'));
+    }
+
+    /**
      * @Route("-starred/", name="WodaFSBundle.Default.starred")
      * @Template("WodaFSBundle:Default:starred.html.twig")
      */

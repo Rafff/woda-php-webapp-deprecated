@@ -51,7 +51,7 @@ class XFile
      */
     protected $public;
     public function setPublic($public){ $this->public = $public; return $this; }
-    public function isPublic($public){ return $this->public; }
+    public function isPublic(){ return $this->public; }
 
     public function __construct()
     {
