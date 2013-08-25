@@ -26,7 +26,7 @@ class SearchController extends Controller
     {
         $result = new \stdClass();
         $result->data = array();
-        $query = '%' . trim($request->get('query')) . '%';
+        $query = trim($request->get('query'));
 
         $fileRows = $this->get('doctrine')->getRepository('WodaFSBundle:XFile')
             ->findFileLikeName($query, array(), array(0, 50));
