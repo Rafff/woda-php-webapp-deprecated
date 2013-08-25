@@ -15,25 +15,28 @@ class FolderRepository extends EntityRepository
 
     /**
      * findByPath method
-     * 
+     *
      * Returns folder by its path. Returns rootfolder if path's wrong.
      */
     public function findByPath($path, $user)
     {
         if ($user === null)
             return null;
+
         $path = explode('/', $path);
         $folder = $this->findOneBy(array('user' => $user, 'parent' => null));
 
-        foreach ($path as $key => $fname) {
+        foreach ($path as $fname) {
             if ($fname == '')
+                continue;
+
+            $folder = $this->findOneBy(array('user' => $user, 'parent' => $folder, 'name' => $fname));
+
+            if ($folder === null) {
                 break;
-            $tmp = $this->findOneBy(array('user' => $user, 'parent' => $folder, 'name' => $fname));
-            if ($tmp === null)
-                return null;
-            $folder = $tmp;
+            }
         }
-        
+
         return $folder;
     }
 }

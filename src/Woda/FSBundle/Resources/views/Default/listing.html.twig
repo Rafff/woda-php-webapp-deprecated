@@ -259,7 +259,7 @@
 
       {% for folder in folders %}
         <tr class="foldertr fsdraggable">
-          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name }}">{{ folder.name }}</a></td>
+          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name | url_encode(true) }}/">{{ folder.name }}</a></td>
           <td></td>
           <td></td>
           <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>

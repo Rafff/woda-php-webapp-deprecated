@@ -46,6 +46,17 @@ class XFile
      */
     protected $user;
 
+    /**
+     * @ORM\Column(name="public", type="boolean")
+     */
+    protected $public;
+    public function setPublic($public){ $this->public = $public; return $this; }
+    public function isPublic($public){ return $this->public; }
+
+    public function __construct()
+    {
+        $this->public = false;
+    }
 
     public function getId()
     {

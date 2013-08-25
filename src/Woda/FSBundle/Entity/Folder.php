@@ -26,7 +26,7 @@ class Folder
     protected $parent;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     protected $name;
 
@@ -50,6 +50,13 @@ class Folder
      * @ORM\OneToMany(targetEntity="XFile", mappedBy="parent", cascade={"delete"})
      */
     protected $files;
+
+    /**
+     * @ORM\Column(name="public", type="boolean")
+     */
+    protected $public;
+    public function setPublic($public){ $this->public = $public; return $this; }
+    public function isPublic($public){ return $this->public; }
 
     public function getId()
     {
@@ -110,8 +117,10 @@ class Folder
     {
         return $this->files;
     }
+
     public function __construct()
     {
+        $this->public = false;
         $this->folders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
     }
