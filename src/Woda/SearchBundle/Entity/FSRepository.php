@@ -8,19 +8,21 @@ use Woda\FSBundle\Entity\XFile;
 
 class FSRepository extends EntityRepository
 {
-    public function findAllLikeName($name)
+    public function searchAll($user, $term)
     {
         return ($this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where LOWER(p.name) like :name')
-            ->setParameter('name', '%'.strtolower($name).'%')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where (p.public = true OR p.user=:owner) AND LOWER(p.name) like :name')
+            ->setParameter('owner', $user)
+            ->setParameter('name', '%'.strtolower($term).'%')
             ->getResult());
     }
 
-    public function findFileLikeName($name, $order = array(), $limit = null)
+    public function search($user, $term, $order = array(), $limit = null)
     {
         $query = $this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where LOWER(p.name) like :name')
-            ->setParameter('name', '%'.strtolower($name).'%')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where (p.public = true OR p.user=:owner) AND LOWER(p.name) like :name')
+            ->setParameter('owner', $user)
+            ->setParameter('name', '%'.strtolower($term).'%')
         ;
 
         if (!empty($limit)) {

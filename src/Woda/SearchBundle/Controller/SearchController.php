@@ -24,12 +24,14 @@ class SearchController extends Controller
      */
     public function searchAction(Request $request)
     {
+        $user = $this->get('security.context')->getToken()->getUser();
+
         $result = new \stdClass();
         $result->data = array();
         $query = trim($request->get('query'));
 
         $fileRows = $this->get('doctrine')->getRepository('WodaFSBundle:XFile')
-            ->findFileLikeName($query, array(), array(0, 50));
+            ->search($user, $query, array(), array(0, 50));
 
         $files = array( );
         foreach ($fileRows as $row) {
