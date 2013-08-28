@@ -19,7 +19,8 @@ html, body {
 }
 
 #left {
-    background: #F5F5F5;
+    /*background: #F5F5F5;*/
+    background: #EBEBEB;
     left: 0;
 }
 
@@ -36,6 +37,12 @@ html, body {
     margin: 0 auto -60px;
 }
 
+#logo {
+    width: 200px;
+    margin-left: 100px;
+    margin-top: 10px;
+}
+
 #search {
     float: left;
     margin: 5px 0px;
@@ -44,46 +51,73 @@ html, body {
 #searchbar {
     margin-top: 50px;
 }
+#searchbar input {
+    width: 350px;
+}
+
+.form-search .input-append input {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.form-search .input-append .btn.btn-info {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    background-color: #177DFE;
+    background-image: linear-gradient(to bottom, #3EA2FF, #0066FF);
+}
+
+.form-search .input-append .btn.btn-info:hover {
+    background-position: 0px;
+}
 
 #user {
     margin-top: 50px;
     font-family: "Helvetica Neue";
     font-size: 14px;
     color: #0088CC;
-    text-decoration: underline;
+    /* text-decoration: underline; */
 }
-
 
 #header {
     background: #FFF;
     padding-left: 20px;
     margin-left: 0px;
-    border-left: 1px solid #cccccc;
-
-}
-
-.btn {
-    border-radius: 0;
 }
 
 #menu {
     background: #FFF;
+    width: 140px;
+    margin-left: 160px;
 }
 
 #menu > ul {
-    padding: 2px;
+    padding: 2px 2px 2px 5px;
     margin-bottom: 0px;
-    border-left: 1px solid #cccccc;
-    border-top: 1px solid #cccccc;
+/*
+    border-left: 1px solid #F0F;
+    border-top: 1px solid #F0F;
+    border-bottom: 1px solid #F0F;
+*/
 }
 
-#menu-separator {
-    border-top: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
-    background-color: #f5f5f5;
+#menu > ul li span {
+    padding-left: 5px;
+}
+
+#menu > ul li.underline {
+    border-bottom: 1px solid #D4D4D4;
+    margin-right: 15px;
+}
+
+.menu-separator {
+    background: #EBEBEB;
 }
 
 #content {
+    /*overflow:scroll;*/
     min-height: 850px;
     background: #FFF;
     margin-left: 0px;
@@ -98,5 +132,4 @@ html, body {
     height: 60px;
     background-color: #FFF;
     padding-left: 20px;
-    margin-left: 0px;
 }

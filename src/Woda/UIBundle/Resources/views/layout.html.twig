@@ -13,22 +13,13 @@
             {% block style %}
             {% endblock %}
         </style>
-               <script type="text/javascript">
-  $(document).ready(function() 
-  { 
-    $height = $('#jsrow').height() - $('#sub-menu').height();
-
-    $('#menu-separator').css('height', $height);
-     
-  });
-</script>
     </head>
     <body>
         <div id="left"></div>
         <div id="right"></div>
         <div id="page" class="container">
             <div class="row col-wrap">
-                <div class="span3 col">
+                <div id="logo" class="span3 col">
                     <a class="brand" href="#">
                         <img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" />
                     </a>
@@ -48,9 +39,9 @@
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/></a>
                                 {% endif %}
-                                <a href="{{ path('WodaUserBundle.Account.index') }}"><b>mon profil</b></a>
+                                <a href="{{ path('WodaUserBundle.Account.index') }}"><b>{% render 'WodaUIBundle:Helper:getUserName' %}</b></a>
                                 <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/></a>
-                                <a href="{{ path('WodaUserBundle.Security.logout') }}">Déconnexion</a>
+                                <a href="{{ path('WodaUserBundle.Security.logout') }}"><img src="{{ asset('bundles/wodaui/img/icons/logout-32.png') }}" width="16px" height="16px" alt="logout"/></a>
                             {% else %}
                                 <!--
                                 <a href="{{ path('WodaUserBundle.Security.login') }}">Connexion</a>
@@ -105,7 +96,7 @@
                     </ul>
                     {% block leftpannel %}
                     {% endblock %}
-                    <div id="menu-separator">&nbsp;</div>
+                    <!-- <div id="menu-separator">&nbsp;</div> -->
                 </div>
                 <div id="content" class="span9">
                     {% block content %}
