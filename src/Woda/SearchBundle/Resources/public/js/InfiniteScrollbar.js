@@ -1,6 +1,7 @@
 function InfiniteScrollbar(content, opts) {
     this.content = content;
     this.options = opts;
+    this.text = opts.text;
     this.pos = 0;
     this.url = '';
     this.isLoading = false;
@@ -47,7 +48,7 @@ InfiniteScrollbar.prototype.__interpretTemplate = function(data) {
 }
 
 InfiniteScrollbar.prototype.begin = function() {
-    this.scroll(0, 0);
+    this.scroll(0, 50);
 }
 
 InfiniteScrollbar.prototype.end = function() {
@@ -67,6 +68,8 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                 dataType: 'json',
                 scope: me
             }).always(function(data, status) {
+                me.isLoading = false;
+
                 if (status == "success") {
                     console.debug('data: ', data);
 
@@ -74,18 +77,22 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                          this.scope.content.append(data.error);
                      } else {
                          for (var i = 0 ; i < data.data.length ; ++i) {
-                             this.scope.content.append(this.scope.__interpretTemplate(data.data[i]));
+                            this.scope.content.append(this.scope.__interpretTemplate(data.data[i]));
                          }
 
                          if (this.scope.options.counter) {
                              this.scope.options.counter.html(data.count);
+
+                             if (data.count === 0 && this.scope.content.is(':empty')) {
+                                 this.scope.content.append(this.scope.text.error ? this.scope.text.error : 'No result found !');
+                             }
                          }
 
                          this.scope.options.offset = data.offset;
                          this.scope.options.length = data.length;
                      } 
                  } else if (status == "error") {
-                     alert('ERREUR');
+                     console.error('ERREUR');
                  }
             });
         }

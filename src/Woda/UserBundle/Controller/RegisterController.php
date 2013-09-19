@@ -34,7 +34,7 @@ class RegisterController extends Controller
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $userValidation = new UserValidation();
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+                $encoder = $this->container->get('woda.user.password_encoder');
                 $entityManager = $this->container->get('doctrine')->getEntityManager();
 
                 $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));

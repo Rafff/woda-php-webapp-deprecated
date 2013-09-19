@@ -19,6 +19,13 @@ class XFile
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Content", inversedBy="content_hash")
+     * @ORM\Column(name="content_hash", type="string", length=256)
+     */
+    protected $content_hash;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Folder", inversedBy="files")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -28,12 +35,6 @@ class XFile
      * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Content", inversedBy="content_hash")
-     * @ORM\Column(name="content_hash", type="string", length=256)
-     */
-    protected $content_hash;
 
     /**
      * @ORM\Column(name="last_modification_time", type="datetime")
@@ -47,15 +48,45 @@ class XFile
     protected $user;
 
     /**
-     * @ORM\Column(name="public", type="boolean")
+     * @ORM\Column(name="uuid", type="string", length=36, nullable=true)
+     */
+    protected $uuid;
+
+    /**
+     * @ORM\Column(name="is_public", type="boolean")
      */
     protected $public;
     public function setPublic($public){ $this->public = $public; return $this; }
     public function isPublic(){ return $this->public; }
 
+    /**
+     * @ORM\Column(name="read_only", type="boolean")
+     */
+    protected $readOnly;
+    public function setReadOnly($readOnly){ $this->readOnly = $readOnly; return $this; }
+    public function isReadOnly(){ return $this->readOnly; }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="XFile", inversedBy="id")
+     * @ORM\Column(name="x_file_id", type="integer", nullable=true)
+     */
+    protected $x_file_id;
+
+    /**
+     * @ORM\Column(name="init_vector", type="string", length=33, nullable=true)
+     */
+    protected $initVector;
+
+    /**
+     * @ORM\Column(name="start_download", type="integer", nullable=true)
+     */
+    protected $startDownload;
+
+
     public function __construct()
     {
         $this->public = false;
+        $this->readOnly = false;
     }
 
     public function getId()
@@ -86,6 +117,10 @@ class XFile
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function setUuid($uuid){
+        $this->uuid = $uuid;
     }
 
     // /**
@@ -139,6 +174,11 @@ class XFile
         $this->lastModificationTime = $mod;
     }
 
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
     /**
      * Set user
      *
@@ -160,4 +200,5 @@ class XFile
     {
         return $this->user;
     }
+
 }

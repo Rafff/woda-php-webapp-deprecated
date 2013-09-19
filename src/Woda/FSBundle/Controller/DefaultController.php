@@ -125,7 +125,8 @@ class DefaultController extends Controller
 
             $response = array();
             $response['name'] = $uploadedFile->getClientOriginalName();
-            if ($contentexists || ($upstatus != null &&$upstatus->isOK()))
+
+           if ($contentexists || ($upstatus != null &&$upstatus->isOK()))
             {
                 $objectManager->flush();
                 $response['time'] = $time->format('d/m/Y H:i');
@@ -275,6 +276,33 @@ class DefaultController extends Controller
         return new Response();
     }
 
+    private function deleteFile($file)
+    {
+        $hash = $file->getContentHash();
+        $this->getDoctrine()->getEntityManager()->remove($file);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        $repository = $this->getDoctrine()
+                       ->getManager()
+                       ->getRepository('WodaFSBundle:XFile');
+        $otherfiles = $repository->findOneBy(array('content_hash' => $hash));
+        if ($otherfiles == null)
+        {
+            $s3 = $this->container->get('aws_s3');
+            $fileparts = $s3->get_object_list('woda-files', array('prefix' => $hash));
+            foreach ($fileparts as $fpart)
+            {
+                $object = $s3->delete_object('woda-files', $fpart);
+            }
+            $repository = $this->getDoctrine()
+                       ->getManager()
+                       ->getRepository('WodaFSBundle:Content');
+            $content = $repository->findOneBy(array('content_hash' => $hash));
+            $this->getDoctrine()->getEntityManager()->remove($content);
+            $this->getDoctrine()->getEntityManager()->flush();
+        }
+    }
+
     /**
      * Delete file from system
      *
@@ -282,8 +310,6 @@ class DefaultController extends Controller
      */
     public function deleteAction($id)
     {
-        echo 'F1RST >>';
-
         $user = $this->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()
                            ->getManager()
@@ -291,42 +317,113 @@ class DefaultController extends Controller
         $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
         $response = new Response();
         if ($file != null)
-        {
-            $hash = $file->getContentHash();
-            $this->getDoctrine()->getEntityManager()->remove($file);
-            $this->getDoctrine()->getEntityManager()->flush();
+            $this->deleteFile($file);
+        else
+            echo 'file iz null';
+        return $response;
+    }
 
+    /**
+     * Delete folder from system
+     *
+     * @Route("deletef/{id}/", requirements={"_method" = "GET"}, name="WodaFSBundle.Default.deletefolder")
+     */
+    public function deleteFolderAction($id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()
+                           ->getManager()
+                           ->getRepository('WodaFSBundle:Folder');
+        $folder = $repository->findOneBy(array('id' => $id, 'user' => $user));
+        $response = new Response();
+        if ($folder != null)
+        {
+            $this->getDoctrine()->getEntityManager()->remove($folder);
+            $this->getDoctrine()->getEntityManager()->flush();
             $repository = $this->getDoctrine()
                            ->getManager()
                            ->getRepository('WodaFSBundle:XFile');
-            $otherfiles = $repository->findOneBy(array('content_hash' => $hash));
-            if ($otherfiles == null)
+            $files = $repository->findBy(array('parent' => $id, 'user' => $user));
+            foreach ($files as $file)
             {
-                echo 'F1RST >>';
-                $s3 = $this->container->get('aws_s3');
-                $fileparts = $s3->get_object_list('woda-files', array('prefix' => $hash));
-                foreach ($fileparts as $fpart)
-                {
-                    echo 'delete part';
-                    $object = $s3->delete_object('woda-files', $fpart);
-                    var_dump($object->isOK());
-                }
-                $repository = $this->getDoctrine()
-                           ->getManager()
-                           ->getRepository('WodaFSBundle:Content');
-                $content = $repository->findOneBy(array('content_hash' => $hash));
-                var_dump($content);
-                $this->getDoctrine()->getEntityManager()->remove($content);
-                $this->getDoctrine()->getEntityManager()->flush();
+                $this->deleteFile($file);
             }
-
-
-
         }
         else
-            echo 'file iz null';
+            echo 'folder iz null';
+        return $response;
+    }
 
-        return new Response();
+    private function gen_uuid() {
+         $uuid = array(
+          'time_low'  => 0,
+          'time_mid'  => 0,
+          'time_hi'  => 0,
+          'clock_seq_hi' => 0,
+          'clock_seq_low' => 0,
+          'node'   => array()
+         );
+
+         $uuid['time_low'] = mt_rand(0, 0xffff) + (mt_rand(0, 0xffff) << 16);
+         $uuid['time_mid'] = mt_rand(0, 0xffff);
+         $uuid['time_hi'] = (4 << 12) | (mt_rand(0, 0x1000));
+         $uuid['clock_seq_hi'] = (1 << 7) | (mt_rand(0, 128));
+         $uuid['clock_seq_low'] = mt_rand(0, 255);
+
+         for ($i = 0; $i < 6; $i++) {
+          $uuid['node'][$i] = mt_rand(0, 255);
+         }
+
+         $uuid = sprintf('%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x',
+          $uuid['time_low'],
+          $uuid['time_mid'],
+          $uuid['time_hi'],
+          $uuid['clock_seq_hi'],
+          $uuid['clock_seq_low'],
+          $uuid['node'][0],
+          $uuid['node'][1],
+          $uuid['node'][2],
+          $uuid['node'][3],
+          $uuid['node'][4],
+          $uuid['node'][5]
+         );
+
+         return $uuid;
+    }
+
+    /**
+     * Ajax call actions that adds a folder
+     *
+     * @Route("-file/{id}", name="WodaFSBundle.Default.publicdl")
+     */
+    public function publicDownloadAction($id)
+    {
+        
+    }
+
+    /**
+     * Ajax call actions that adds a folder
+     *
+     * @Route("-getDLink/{id}", name="WodaFSBundle.Default.dLink")
+     */
+    public function getDownloadLink($id)
+    {
+        $response = null;
+        if ($this->get('Request')->isXMLHttpRequest()) {
+            $request = $this->get('request');
+            $id = $request->request->get('id');
+            $repository = $this->getDoctrine()
+                                       ->getManager()
+                                       ->getRepository('WodaFSBundle:XFile');
+            $user = $this->get('security.context')->getToken()->getUser();
+            $xfile = $repository->findOneBy(array('id' => $id, 'user' => $user));
+            if ($xfile === null)
+                $uuid = $this->gen_uuid();
+            else
+                $uuid = $xfile->getUuid();
+            $response = array('id' => $uuid);
+       }
+       return new Response(json_encode($response));
     }
 
     /**

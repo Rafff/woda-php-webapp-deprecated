@@ -12,6 +12,17 @@ body {
     background: #eee;
     border-radius: 2px;
 }
+
+ul#typeofquery li a {
+    padding-right: 0px;
+    border: none;
+}
+
+.notfound {
+    text-align: left;
+    font-size: 20px;
+    padding-top: 5px;
+}
 /*
 ul#typeofquery li a {
     color: #000;

@@ -19,7 +19,6 @@ html, body {
 }
 
 #left {
-    /*background: #F5F5F5;*/
     background: #EBEBEB;
     left: 0;
 }
@@ -38,8 +37,6 @@ html, body {
 }
 
 #logo {
-    width: 200px;
-    margin-left: 100px;
     margin-top: 10px;
 }
 
@@ -51,9 +48,9 @@ html, body {
 #searchbar {
     margin-top: 50px;
 }
+
 #searchbar input {
-    width: 350px;
-}
+ }
 
 .form-search .input-append input {
     -webkit-border-radius: 0px;
@@ -89,8 +86,6 @@ html, body {
 
 #menu {
     background: #FFF;
-    width: 140px;
-    margin-left: 160px;
 }
 
 #menu > ul {
@@ -107,29 +102,34 @@ html, body {
     padding-left: 5px;
 }
 
-#menu > ul li.underline {
+#menu > ul li.search_title {
     border-bottom: 1px solid #D4D4D4;
     margin-right: 15px;
+    font-size: 21px;
 }
 
+.nav-tabs.nav-stacked > li > a,
+.nav-tabs.nav-stacked > li > a:hover {
+    border: none;
+}
+
+#menu .nav-pills > li > a {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+#menu > ul li.underline {
+    border-bottom: 1px solid #D4D4D4;
+}
 .menu-separator {
     background: #EBEBEB;
 }
 
 #content {
-    /*overflow:scroll;*/
     min-height: 850px;
     background: #FFF;
     margin-left: 0px;
     padding: 10px;
 }
 
-#footer {
-    position: relative;
-}
-
-#footer_content {
-    height: 60px;
-    background-color: #FFF;
-    padding-left: 20px;
-}
