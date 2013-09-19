@@ -17,22 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class SearchController extends Controller
 {
     /**
-     * @Route("/test", name="WodaSearchBundle.Search.test")
-     */
-    public function testAction()
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $r = $this->get('doctrine')->getRepository('WodaFSBundle:XFile')->search($user, 'su', array(), array(0, 50), 'file');
-
-        if (!empty($r->result)) {
-            foreach ($r->result as $res) {
-                echo $res->getName();
-            }
-        }
-        exit(0);
-    }
-
-    /**
      * @Route("/result/{type}/{length}/{offset}", name="WodaSearchBundle.Search.result", defaults={ "length" : 50, "offset" : 0, "type" : "file" }, requirements={ "type" : "private_file|shared|file|folder|movie|music|picture|user"})
      * @Template("WodaSearchBundle:Search:result.html.twig")
      */
