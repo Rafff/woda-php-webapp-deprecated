@@ -107,11 +107,19 @@ html, body {
     padding-left: 5px;
 }
 
-#menu > ul li.underline {
+#menu > ul li.underline_w_margin_right {
     border-bottom: 1px solid #D4D4D4;
     margin-right: 15px;
 }
 
+.nav-tabs.nav-stacked > li > a,
+.nav-tabs.nav-stacked > li > a:hover {
+    border: none;
+}
+
+#menu > ul li.underline {
+    border-bottom: 1px solid #D4D4D4;
+}
 .menu-separator {
     background: #EBEBEB;
 }

@@ -1,5 +1,7 @@
 {% extends 'WodaUIBundle::layout.html.twig' %}
 
+{% block title %}{{ query }} | Search result | {% endblock %}
+
 {% block content %}
 
 {% stylesheets '@WodaSearchBundle/Resources/public/css/search.css' filter='cssrewrite' %}
@@ -10,90 +12,123 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
-<h2>Résultat de votre recherche: "<span id="query">{{ query }}</span>"</h2>
+<h2>Search Result: "<span id="query">{{ query }}</span>"</h2>
 
 <div class="tabbable tabs-left">
-<!--
-    <ul id="typeofquery" class="nav nav-tabs">
-        <li class="files {{ displayed == 'files' ? 'active' : '' }}" >
-            <a href="#file" data-toggle="tab">Fichiers: <span class="counter">{{ files | length }}</span></a>
-        </li>
-        <li class="users {{ displayed == 'users' ? 'active' : '' }}" >
-            <a href="#user" data-toggle="tab">Utilisateurs: <span class="counter">{{ users | length }}</span></a>
-        </li>
-    </ul>
--->
-{% for file in files %}
-    <div><a href="#">{{ file.name }}</a></div>
-{% endfor %}
-{% for user in users %}
-    <div><a href="#">{{ user.name }}</a></div>
-{% endfor %}
+    <div id="results" class="tab-content">
+        {% for t in types %}
+            <div class="tab-pane{% if (type == t) %} active {% endif %}" id="_{{ t }}_" style="min-height:1px"></div>
+        {% endfor %}
+    </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function initScrollbar(selector, type, length, offset, counter, template) {
+            var baseUrl = '{{ app.request.baseUrl }}';
+
+            return (new InfiniteScrollbar($(selector), {
+                autoload: true,
+                progress: 90,
+                url: baseUrl + '/search/result/' + type + '/{length}/{offset}',
+                length: length,
+                offset: offset,
+                extraParams: {
+                    query: $('#query')[0].innerHTML
+                },
+                counter: $(counter),
+                template: template
+            }));
+        }
+
+        var aScrollbar = [];
+
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', '<div><a href="#">{link}</a></div>'));
+        //shared
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', '<div><a href="#">{link}</a></div>'));
+        //folder
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', '<div><a href="#">{link}</a></div>'));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', '<div><a href="#">{link}</a></div>'));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', '<div><a href="#">{link}</a></div>'));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', '<div><a href="#">{link}</a></div>'));
+
+        for (var i = 0, length = aScrollbar.length ; i < length ; i++) {
+            aScrollbar[i].begin();
+        }
+
+        $('body').bind('mousewheel', function(e) {
+            for (var i = 0, length = aScrollbar.length ; i < length ; ++i) {
+                if (aScrollbar[i].content.hasClass('active')) {
+                    aScrollbar[i].scroll(0, e.originalEvent.wheelDeltaY);
+                    return ;
+                }
+            }
+        });
+    });
+</script>
 
 {% endblock %}
 
 {% block leftpannel %}
     <div class="menu-separator">&nbsp;</div>
-    <ul class="nav nav-pills nav-stacked">
-        <li class="underline">
+    <ul id="typeofquery" class="nav nav-tabs nav-pills nav-stacked">
+        <li class="underline_w_margin_right">
             <img src="{{ asset('bundles/wodaui/img/icons/result-32.png') }}" alt="result" width="16px" height="16px" />
             <span>Results</span>
         </li>
-        <li>
-            <a href="#">
+        <li class="private_files{% if (type == 'private_file') %} active {% endif %}">
+            <a href="#_private_file_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/my_file-32.png') }}" alt="my files" width="16px" height="16px" />
                 <span>My files</span>
                 <span class="counter">0</span>
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li  class="shared{% if (type == 'shared') %} active {% endif %} underline">
+            <a href="#_shared_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="shared" width="16px" height="16px" />
                 <span>Shared</span>
                 <span class="counter">0</span>
             </a>
         </li>
-        <li class="underline">
-            <a href="#">
-                <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="user" width="16px" height="16px" />
-                <span>Users</span>
-                <span class="counter">0</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
+        <li class="files{% if (type == 'file') %} active {% endif %}">
+            <a href="#_file_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/file-32.png') }}" alt="document" width="16px" height="16px" />
                 <span>Files</span>
-                <span class="counter">10000</span>
+                <span class="counter">{% if (type == 'file') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="folder{% if (type == 'folder') %} active {% endif %}">
+            <a href="#_folder_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/folder-32.png') }}" alt="folder" width="16px" height="16px" />
                 <span>Folders</span>
-                <span class="counter">0</span>
+                <span class="counter">{% if (type == 'folder') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="movies{% if (type == 'movie') %} active {% endif %}">
+            <a href="#_movie_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/movie-32.png') }}" alt="movie" width="16px" height="16px" />
                 <span>Movies</span>
-                <span class="counter">0</span>
+                <span class="counter">{% if (type == 'movie') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="musics{% if (type == 'music') %} active {% endif %}">
+            <a href="#_music_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/music-32.png') }}" alt="music" width="16px" height="16px" />
                 <span>Musics</span>
-                <span class="counter">0</span>
+                <span class="counter">{% if (type == 'music') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="pictures{% if (type == 'picture') %} active {% endif %} underline">
+            <a href="#_picture_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/picture-32.png') }}" alt="picture" width="16px" height="16px" />
                 <span>Pictures</span>
-                <span class="counter">0</span>
+                <span class="counter">{% if (type == 'picture') %} {{ count }} {% else %} 0 {% endif %}</span>
+            </a>
+        </li>
+        <li class="users{% if (type == 'user') %} active {% endif %}">
+            <a href="#_user_" data-toggle="tab">
+                <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="user" width="16px" height="16px" />
+                <span>Users</span>
+                <span class="counter">{% if (type == 'user') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
     </ul>

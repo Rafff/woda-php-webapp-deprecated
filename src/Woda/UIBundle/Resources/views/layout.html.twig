@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Woda</title>
+        <title>{% block title %}{% endblock %} Woda</title>
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" />
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
@@ -20,14 +20,14 @@
         <div id="page" class="container">
             <div class="row col-wrap">
                 <div id="logo" class="span3 col">
-                    <a class="brand" href="#">
+                    <a class="brand" href="{{ path('WodaFSBundle.Default.list') }}">
                         <img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" />
                     </a>
                 </div>
                 <div id="header" class="span9 col">
                     <div class="row">
                         <div id="searchbar" class="span4">
-                            <form class="form-search" action="{{ path('WodaSearchBundle.Search.result') }}" method="post">
+                            <form class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'length' : 25, 'offset' : 0 }) }}" method="post">
                                 <div class="input-append">
                                     <input type="text" name="query" placeholder="Documents, Musics, Movies, Users, ...">
                                     <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i></button>
