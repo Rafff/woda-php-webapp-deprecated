@@ -33,12 +33,12 @@ class User implements AdvancedUserInterface
     protected $email;
 
     /**
-     * @ORM\Column(name="pass_salt", type="string", length=23)
+     * @ORM\Column(name="pass_salt", type="string", length=64)
      */
     protected $salt;
 
     /**
-     * @ORM\Column(name="pass_hash", type="string", length=44)
+     * @ORM\Column(name="pass_hash", type="string", length=64)
      */
     protected $password;
 
@@ -66,12 +66,22 @@ class User implements AdvancedUserInterface
      */
     protected $favorites;
 
+    private function randomSalt() {
+        $string = "";
+        $chaine = "abcdefghijklmnpqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+        srand((double)microtime()*1000000);
+        for($i=0; $i<32; $i++) {
+            $string .= $chaine[rand()%strlen($chaine)];
+        }
+        return $string;
+    }
+
     public function __construct()
     {
         $this->roles = array();
         $this->active = false;
         $this->locked = false;
-        $this->salt = uniqid(null, true);
+        $this->salt = bin2hex($this->randomSalt());
 
         $this->favorites = array();
     }

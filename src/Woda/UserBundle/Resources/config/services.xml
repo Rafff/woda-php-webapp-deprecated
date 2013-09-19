@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="woda_user.admin_menu.class">Woda\UserBundle\Service\Menu</parameter>
+        <parameter key="woda.user.password_encoder.class">Woda\UserBundle\Service\HexSha</parameter>
     </parameters>
 
     <services>
@@ -13,6 +14,7 @@
             <argument type="service" id="router" />
             <tag name="woda_admin.menu_provider" container="woda_admin.admin_menu" />
         </service>
+        <service id="woda.user.password_encoder" class="%woda.user.password_encoder.class%"></service>
     </services>
 
 </container>

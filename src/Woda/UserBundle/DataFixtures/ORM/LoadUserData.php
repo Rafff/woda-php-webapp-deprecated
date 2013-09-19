@@ -27,7 +27,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $user = new User();
         $user->setLogin('admin');
         $user->setEmail('admin@localhost');
-        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+        $encoder = $this->container->get('woda.user.password_encoder');
         $user->setPassword($encoder->encodePassword('test', $user->getSalt()));
         $user->setRoles(array('ROLE_USER', 'ROLE_ADMIN'));
         $user->setActive(true);
@@ -38,7 +38,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
             $user = new User();
             $user->setLogin('user' . $t);
             $user->setEmail('user' . $t . '@foobar');
-            $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+            $encoder = $this->container->get('woda.user.password_encoder');
             $user->setPassword($encoder->encodePassword('test', $user->getSalt()));
             $user->setRoles(array('ROLE_USER'));
             $user->setActive(true);
