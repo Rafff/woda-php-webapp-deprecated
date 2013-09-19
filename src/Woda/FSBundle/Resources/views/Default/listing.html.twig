@@ -207,8 +207,8 @@
   </script>
 
   {% if path is not null %}
-  <div class="row">
-    <div class="span8">
+  <div class="row-fluid">
+    <div class="span9" style="margin-right:10px;">
       {% set curpath = '' %}
       <ul class="breadcrumb" style="position:relative;">
         <li><a href="{{ path('WodaFSBundle.Default.list') }}">Home</a>
@@ -232,7 +232,7 @@
       </ul>
 
     </div>
-      <div style="text-align:right; margin:0; margin-top:2px;" class=""><a href="#modal-newfolder" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-folder-open icon-white"></i></a> <a href="#modal-upload" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-upload icon-white"></i></a></div>
+      <div style="margin-top:2px"><a href="#modal-newfolder" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-folder-open icon-white"></i></a> <a href="#modal-upload" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-upload icon-white"></i></a></div>
   </div>
   {% endif %}
 

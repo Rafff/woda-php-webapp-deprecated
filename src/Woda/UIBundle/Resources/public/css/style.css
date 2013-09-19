@@ -19,7 +19,6 @@ html, body {
 }
 
 #left {
-    /*background: #F5F5F5;*/
     background: #EBEBEB;
     left: 0;
 }
@@ -38,8 +37,6 @@ html, body {
 }
 
 #logo {
-    width: 200px;
-    margin-left: 100px;
     margin-top: 10px;
 }
 
@@ -53,7 +50,6 @@ html, body {
 }
 
 #searchbar input {
-    width: 350px;
 }
 
 .form-search .input-append input {
@@ -90,8 +86,6 @@ html, body {
 
 #menu {
     background: #FFF;
-    width: 140px;
-    margin-left: 160px;
 }
 
 #menu > ul {
@@ -133,19 +127,9 @@ html, body {
 }
 
 #content {
-    /*overflow:scroll;*/
     min-height: 850px;
     background: #FFF;
     margin-left: 0px;
     padding: 10px;
 }
 
-#footer {
-    position: relative;
-}
-
-#footer_content {
-    height: 60px;
-    background-color: #FFF;
-    padding-left: 20px;
-}

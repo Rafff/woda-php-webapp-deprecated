@@ -18,15 +18,15 @@
         <div id="left"></div>
         <div id="right"></div>
         <div id="page" class="container">
-            <div class="row col-wrap">
+            <div class="row-fluid col-wrap">
                 <div id="logo" class="span3 col">
                     <a class="brand" href="{{ path('WodaFSBundle.Default.list') }}">
                         <img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" />
                     </a>
                 </div>
                 <div id="header" class="span9 col">
-                    <div class="row">
-                        <div id="searchbar" class="span4">
+                    <div class="row-fluid">
+                        <div id="searchbar" class="span5">
                             <form class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'length' : 25, 'offset' : 0 }) }}" method="post">
                                 <div class="input-append">
                                     <input type="text" name="query" placeholder="Documents, Musics, Movies, Users, ...">
@@ -34,7 +34,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div id="user" class="span3 offset2">
+                        <div id="user" class="span2 offset3">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/></a>
@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="jsrow">
+            <div class="row-fluid" id="jsrow">
                 <div id="menu" class="span2 offset1">
                     <ul class="nav nav-pills nav-stacked" id="sub-menu">
                         <li>
