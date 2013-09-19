@@ -23,7 +23,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        function initScrollbar(selector, type, length, offset, counter, template) {
+        function initScrollbar(selector, type, length, offset, counter, template, text) {
             var baseUrl = '{{ app.request.baseUrl }}';
 
             return (new InfiniteScrollbar($(selector), {
@@ -36,20 +36,36 @@
                     query: $('#query')[0].innerHTML
                 },
                 counter: $(counter),
-                template: template
+                template: template,
+                text: text
             }));
         }
 
-        var aScrollbar = [];
+        var aScrollbar = [],
+            textError = '<div class="row" style="padding-top:100px"><div class="span2 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>';
 
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', '<div><a href="#">{link}</a></div>'));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
         //shared
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', '<div><a href="#">{link}</a></div>'));
-        //folder
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', '<div><a href="#">{link}</a></div>'));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', '<div><a href="#">{link}</a></div>'));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', '<div><a href="#">{link}</a></div>'));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', '<div><a href="#">{link}</a></div>'));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', '<div><a href="#">{link}</a></div>', {
+            error: textError
+        }));
 
         for (var i = 0, length = aScrollbar.length ; i < length ; i++) {
             aScrollbar[i].begin();
@@ -71,7 +87,7 @@
 {% block leftpannel %}
     <div class="menu-separator">&nbsp;</div>
     <ul id="typeofquery" class="nav nav-tabs nav-pills nav-stacked">
-        <li class="underline_w_margin_right">
+        <li class="search_title">
             <img src="{{ asset('bundles/wodaui/img/icons/result-32.png') }}" alt="result" width="16px" height="16px" />
             <span>Results</span>
         </li>
@@ -96,7 +112,7 @@
                 <span class="counter">{% if (type == 'file') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li class="folder{% if (type == 'folder') %} active {% endif %}">
+        <li class="folders{% if (type == 'folder') %} active {% endif %}">
             <a href="#_folder_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/folder-32.png') }}" alt="folder" width="16px" height="16px" />
                 <span>Folders</span>

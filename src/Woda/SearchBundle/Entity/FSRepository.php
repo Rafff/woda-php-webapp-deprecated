@@ -5,6 +5,7 @@ namespace Woda\SearchBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Woda\FSBundle\Entity\XFile;
+use Woda\FSBundle\Entity\Folder;
 
 class FSRepository extends EntityRepository
 {
@@ -47,7 +48,7 @@ class FSRepository extends EntityRepository
         $type = str_replace(' ', '', ucwords(str_replace('_', ' ', $type)));
 
         $rMethod = new \ReflectionMethod($this, 'getQuery'.$type);
-        //exception
+
         return ($rMethod->invoke($this, $user, $term));
     }
 

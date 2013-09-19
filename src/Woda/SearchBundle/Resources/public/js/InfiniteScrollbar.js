@@ -1,6 +1,7 @@
 function InfiniteScrollbar(content, opts) {
     this.content = content;
     this.options = opts;
+    this.text = opts.text;
     this.pos = 0;
     this.url = '';
     this.isLoading = false;
@@ -83,7 +84,7 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                              this.scope.options.counter.html(data.count);
 
                              if (data.count === 0 && this.scope.content.is(':empty')) {
-                                 this.scope.content.append('Aucun résultat !');
+                                 this.scope.content.append(this.scope.text.error ? this.scope.text.error : 'No result found !');
                              }
                          }
 
@@ -91,7 +92,7 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                          this.scope.options.length = data.length;
                      } 
                  } else if (status == "error") {
-                     alert('ERREUR');
+                     console.error('ERREUR');
                  }
             });
         }

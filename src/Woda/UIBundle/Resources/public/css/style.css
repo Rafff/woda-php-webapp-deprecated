@@ -51,6 +51,7 @@ html, body {
 #searchbar {
     margin-top: 50px;
 }
+
 #searchbar input {
     width: 350px;
 }
@@ -107,14 +108,21 @@ html, body {
     padding-left: 5px;
 }
 
-#menu > ul li.underline_w_margin_right {
+#menu > ul li.search_title {
     border-bottom: 1px solid #D4D4D4;
     margin-right: 15px;
+    font-size: 18px;
 }
 
 .nav-tabs.nav-stacked > li > a,
 .nav-tabs.nav-stacked > li > a:hover {
     border: none;
+}
+
+#menu .nav-pills > li > a {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
 
 #menu > ul li.underline {

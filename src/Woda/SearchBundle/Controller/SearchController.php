@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Woda\Bundle\FSBundle\Entity\FolderRepository as FolderRepository;
+
 /**
  * Search controller.
  *
@@ -83,7 +85,16 @@ class SearchController extends Controller
                 }
             }
         } else if ($type === 'folder') {
-            //non implemente
+            $r = $this->get('doctrine')->getRepository('WodaFSBundle:Folder')->search($user, $query, $order, $limit);
+
+            $result->count = $r->count;
+            if (!empty($r->result)) {
+                foreach ($r->result as $res) {
+                    $result->data[] = array(
+                        'link' => $res->getName()
+                    );
+                }
+            }
         } else {
             $r = $this->get('doctrine')->getRepository('WodaFSBundle:XFile')->search($user, $query, $order, $limit, $type);
 
@@ -100,63 +111,3 @@ class SearchController extends Controller
         return ($result);
     }
 }
-
-/*
-{% for t in types %}
-            <div class="tab-pane{% if (type == t) %} active {% endif %}" id="{{ t }}s">
-                {% if (type == t) %}
-                    {% for d in data %}
-                        <div><a href="#">{{ d.link }}</a></div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        {% endfor %}
- */
-
-/*
-    /**
-     * @Route("/search", name="WodaSearchBundle.Search.result")
-     * @Template("WodaSearchBundle:Search:result.html.twig")
-     * /
-    public function searchAction(Request $request)
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        $result = new \stdClass();
-        $result->data = array();
-        $query = trim($request->get('query'));
-
-        $fileRows = $this->get('doctrine')->getRepository('WodaFSBundle:XFile')
-            ->search($user, $query, array(), array(0, 50));
-
-        $files = array( );
-        foreach ($fileRows as $row) {
-            $files[] = array(
-                'name' => $row->getName()
-            );
-        }
-
-        $userRows = $this->get('doctrine')->getRepository('WodaUserBundle:User')
-            ->findUserLikeLogin($query, array(), array(0, 50));
-
-        $users = array();
-        foreach ($userRows as $row) {
-            $users[] = array(
-                'name' => $row->getLogin()
-            );
-        }
-
-        if ($request->isXmlHttpRequest()) {
-            return (new Response(json_encode($result), 200, array('Content-Type'=>'application/json')));
-        } else {
-            return (
-                array(
-                    'displayed' => (!count($files) && count($users)) ? 'users' : 'files',
-                    'query' => $query,
-                    'files' => $files,
-                    'users' => $users,
-                )
-            );
-        }
-    }
-*/
