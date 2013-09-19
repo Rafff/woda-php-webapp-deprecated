@@ -35,7 +35,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $objectManager->persist($user);
 
         for ( $t = 0; $t < self::USER_COUNT; ++ $t ) {
-            $user = new User();
+            $user = new User(); 
             $user->setLogin('user' . $t);
             $user->setEmail('user' . $t . '@foobar');
             $encoder = $this->container->get('woda.user.password_encoder');
