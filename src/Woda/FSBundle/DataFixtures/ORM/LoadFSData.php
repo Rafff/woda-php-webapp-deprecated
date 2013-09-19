@@ -58,6 +58,7 @@ class LoadFSData extends AbstractFixture implements ContainerAwareInterface, Ord
                     $file->setContentHash('lolhash');
                     $file->setFileType('text/plain');
                     $file->setLastModificationTime(new \Datetime());
+                    $file->setUuid('');
                     $objectManager->persist($file);
                 }
             }

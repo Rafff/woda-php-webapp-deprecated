@@ -50,7 +50,7 @@ html, body {
 }
 
 #searchbar input {
-}
+ }
 
 .form-search .input-append input {
     -webkit-border-radius: 0px;
@@ -105,7 +105,7 @@ html, body {
 #menu > ul li.search_title {
     border-bottom: 1px solid #D4D4D4;
     margin-right: 15px;
-    font-size: 18px;
+    font-size: 21px;
 }
 
 .nav-tabs.nav-stacked > li > a,
