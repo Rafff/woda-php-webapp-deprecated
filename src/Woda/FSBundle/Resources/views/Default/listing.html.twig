@@ -1,5 +1,7 @@
 {% extends "WodaUIBundle::layout.html.twig" %}
 
+{# TODO : CHECK ON ADD FILE/FOLDER for operations links #}
+
 {% block content %}
 
   {% block header %}
@@ -74,6 +76,10 @@
     .filetr:hover, .foldertr:hover {
       background-color: #49afcd;
     }
+
+    .dellink {
+      cursor: pointer;
+    }
   </style>
 
   <script type="text/javascript">
@@ -125,7 +131,7 @@
           newfile.find('.filedate').html(data.time);
           newfile.find('.dellink').attr('data-name', data.name)
                                   .attr('data-id', data.id);
-          newfile.addClass("file-" + data.id);
+          newfile.attr('id', "file-" + data.id);
           linkelem = newfile.find('.dllink');
           linkelem.attr('href', linkelem.attr('href').replace('0', data.id));
           filetr.last().after(newfile);
@@ -176,18 +182,44 @@
       });
 
       $('.flist').on('click', '.dellink', function(){
+
+        if ($(this).parent().parent().hasClass('filetr'))
+          $('.delete-type').html('file');
+        else
+          $('.delete-type').html('folder');
         $('#delete-name').html($(this).attr('data-name'));
         $('#delete-valid').attr('data-id', $(this).attr('data-id'));
         $('#modal-delete').modal('show');
+
+      }).on('click', '.share-dlink', function(){
+
+        $('#modal-dlink').modal('show');
+        var id = $(this).parent().parent().attr('id').substr(5);
+        var url = '{{ path('WodaFSBundle.Default.dLink', {"id": ''}) }}/' + id;
+        console.log(url);
+        $.getJSON(url, function(data){
+            $('#dlink-loading').hide();
+            var link = '{{ url('WodaFSBundle.Default.publicdl', {"id": ''}) }}/' + data.id;
+            $('#dlink').html('<a href="'+link+'">'+link+'</a>').show();
+        });
       });
 
       $('#delete-valid').on('click', function(){
         var id = $(this).attr('data-id');
-        var url = "{{ path('WodaFSBundle.Default.delete', {"id": 0}) }}";
+        if ($('.delete-type').eq(0).html() == 'folder')
+        {
+          var url = "{{ path('WodaFSBundle.Default.deletefolder', {"id": 0}) }}";
+          $('.folder-' + id).hide();
+        }
+        else
+        {
+          var url = "{{ path('WodaFSBundle.Default.delete', {"id": 0}) }}";
+          $('#file-' + id).hide();
+        }
         url = url.replace("0", id);
         $.getJSON(url, function(data) {
         });
-        $('.file-' + id).hide();
+        $('#file-' + id).hide();
         $('#modal-delete').modal('hide');
       });
 
@@ -201,7 +233,7 @@
           that = $(this);
           that.find('.nohover').show();
           that.find('.filehover').hide();
-        }}, '.filetr');
+        }}, '.filetr,.foldertr');
 
     });
   </script>
@@ -249,7 +281,7 @@
     </thead>
     <tbody id="fscontainer">
 
-      <tr style="display:none;" class="foldertr fsdraggable">
+      <tr style="display:none;" class="foldertr ">
           <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href=""></a></td>
           <td></td>
           <td></td>
@@ -258,12 +290,17 @@
       </tr>
 
       {% for folder in folders %}
-        <tr class="foldertr fsdraggable">
+        <tr class="foldertr folder-{{folder.id}}">
           <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name | url_encode(true) }}/">{{ folder.name }}</a></td>
-          <td></td>
-          <td></td>
-          <td>{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
-          <td></td>
+          <td colspan="5" class="file-icons filehover" >
+              <a href="{{ path('WodaFSBundle.Default.public', {"id": folder.id}) }}"><i class="icon-star-empty"></i></a>
+              <a href="{{ path('WodaFSBundle.Default.star', {"id": folder.id}) }}"><i class="icon-star-empty"></i></a>
+              <i class="icon-share"></i>
+              <i class="icon-trash dellink" data-name="{{ folder.name }}" data-id="{{ folder.id }}"></i>
+          </td>
+          <td class="nohover"></td>
+          <td class="nohover"></td>
+          <td class="nohover">{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
         </tr>
       {% endfor %}
 
@@ -281,7 +318,7 @@
       </tr>
 
       {% for file in files %}
-        <tr class="filetr file-{{file.id}}">
+        <tr class="filetr" id="file-{{file.id}}">
           <td colspan="2">
               <i class="icon-file"></i> <span class="filename">{{ file.name }}</span>
           </td>
@@ -289,7 +326,7 @@
               <a href="{{ path('WodaFSBundle.Default.public', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
               <a href="{{ path('WodaFSBundle.Default.star', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
               <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" > </i></a>
-              <i class="icon-share"></i>
+              <i class="icon-share share-dlink"></i>
               <i class="icon-trash dellink" data-name="{{ file.name }}" data-id="{{ file.id }}"></i>
           </td>
           <td class="nohover"></td>
@@ -377,15 +414,33 @@
   <div id="modal-delete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>Delete file</h3>
+      <h3>Delete <span class="delete-type">file</span></h3>
     </div>
     <div class="modal-body">
-    You are deleting file : <span style="font-size:14px;font-weight:bold;" id="delete-name"></span>.<br />
+    You are deleting <span class="delete-type">file</span> : <span style="font-size:14px;font-weight:bold;" id="delete-name"></span>.<br />
     Are you sure ?
 
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button> <button class="btn btn-danger" data-id="" id="delete-valid">Continue</button>
+    </div>
+  </div>
+
+  <div id="modal-dlink" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>Get download link</h3>
+    </div>
+    <div class="modal-body">
+      <div id="dlink-loading">
+      Please wait..
+      </div>
+      <div id="dlink" style="display:none">
+        <a href=""
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button>
     </div>
   </div>
 
