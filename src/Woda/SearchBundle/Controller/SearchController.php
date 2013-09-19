@@ -47,7 +47,7 @@ class SearchController extends Controller
                     'query' => $query,
                     'type' => $type,
                     'types' => array(
-                        'file_private',
+                        'private_file',
                         'shared',
                         'file',
                         'folder',

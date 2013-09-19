@@ -47,13 +47,14 @@ class FSRepository extends EntityRepository
         $type = str_replace(' ', '', ucwords(str_replace('_', ' ', $type)));
 
         $rMethod = new \ReflectionMethod($this, 'getQuery'.$type);
+        //exception
         return ($rMethod->invoke($this, $user, $term));
     }
 
     public function getQueryPrivateFile($user, $term)
     {
         return ($this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where p.user=:owner AND LOWER(p.name) like :name')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where p.user = :owner AND LOWER(p.name) like :name')
             ->setParameter('owner', $user)
             ->setParameter('name', '%'.strtolower($term).'%')
         );
@@ -62,7 +63,7 @@ class FSRepository extends EntityRepository
     public function getQueryFile($user, $term)
     {
         return ($this->getEntityManager()
-            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where (p.public = true OR p.user=:owner) AND LOWER(p.name) like :name')
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where (p.public = true OR p.user = :owner) AND LOWER(p.name) like :name')
             ->setParameter('owner', $user)
             ->setParameter('name', '%'.strtolower($term).'%')
         );
