@@ -127,7 +127,7 @@ class DefaultController extends Controller
 
                 while (($filepart = fread($handle, $filepartsize)) && ($i == 0 || $upstatus->isOK()))
                 {
-                    $upstatus = $s3->create_object('woda-files', $filehash .'/'. $i, array('body' => $filepart, 'encryption'=>'AES256', 'encryption_key' => $content->getCryptKey()));
+                    $upstatus = $s3->create_object('woda-files', $filehash .'/'. $i, array('body' => $filepart));
                     $i++;
                 }
                 fclose($handle);
