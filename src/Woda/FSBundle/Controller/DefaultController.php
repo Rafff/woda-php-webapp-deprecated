@@ -74,6 +74,15 @@ class DefaultController extends Controller
         return $resultArray;
     }
 
+    private function randomKey() {
+        $string = "";
+        $chaine = "abcdefghijklmnpqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+        srand((double)microtime()*1000000);
+        for($i=0; $i<32; $i++) {
+            $string .= $chaine[rand()%strlen($chaine)];
+        }
+        return $string;
+    }
 
     private function uploadSingleFile($bucket, $uploadedFile, $user, $folder, $repository, $s3)
     {
@@ -107,7 +116,7 @@ class DefaultController extends Controller
             {
                 $content = new Content();
                 $content->setContentHash($filehash);
-                $content->setCryptKey(substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 32));
+                $content->setCryptKey($this->randomKey());
                 $content->setSize($filesize);
                 $content->setFileType($uploadedFile->getMimeType());
                 $objectManager->persist($content);
@@ -115,9 +124,10 @@ class DefaultController extends Controller
                 $filecontent = file_get_contents($filepath);
                 $i = 0;
                 $handle = fopen($filepath, "r");
+
                 while (($filepart = fread($handle, $filepartsize)) && ($i == 0 || $upstatus->isOK()))
                 {
-                    $upstatus = $s3->create_object('woda-files', $filehash .'/'. $i, array('body' => $filepart, 'encryption'=>'AES256'));
+                    $upstatus = $s3->create_object('woda-files', $filehash .'/'. $i, array('body' => $filepart, 'encryption'=>'AES256', 'encryption_key' => $content->getCryptKey()));
                     $i++;
                 }
                 fclose($handle);
@@ -266,7 +276,7 @@ class DefaultController extends Controller
             $fileparts = $s3->get_object_list('woda-files', array('prefix' => $file->getContentHash()));
             foreach ($fileparts as $fpart)
             {
-                $object = $s3->get_object('woda-files', $fpart);//, array('fileDownload' => $tmpfile)
+                $object = $s3->get_object('woda-files', $fpart, array('encryption_key' => $content->getCryptKey()));
                 echo $object->body;
             }
         }

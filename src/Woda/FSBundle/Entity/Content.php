@@ -56,12 +56,12 @@ class Content
 
     public function getContentHash()
     {
-        return $this->content_hash;
+        return hex2bin($this->content_hash);
     }
 
     public function setContentHash($contentHash)
     {
-        $this->content_hash = $contentHash;
+        $this->content_hash = bin2hex($contentHash);
     }
 
     /**
@@ -72,8 +72,7 @@ class Content
      */
     public function setCryptKey($cryptKey)
     {
-        $this->crypt_key = $cryptKey;
-        return $this;
+        $this->crypt_key = bin2hex($cryptKey);
     }
 
     /**
@@ -83,7 +82,7 @@ class Content
      */
     public function getCryptKey()
     {
-        return $this->crypt_key;
+        return hex2bin($this->crypt_key);
     }
 
     /**
