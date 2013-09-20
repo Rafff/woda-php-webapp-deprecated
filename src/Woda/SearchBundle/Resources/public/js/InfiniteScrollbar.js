@@ -6,6 +6,7 @@ function InfiniteScrollbar(content, opts) {
     this.url = '';
     this.isLoading = false;
 
+    this.__appendRoot();
     this.__urlize();
     this.content.bind('afterscroll', { me: this }, this.afterscrollHander);
 }
@@ -29,16 +30,20 @@ InfiniteScrollbar.prototype.__urlize = function() {
     return (this.url);
 }
 
+InfiniteScrollbar.prototype.__appendRoot = function() {
+    this.content.append(this.options.template.root);
+}
+
 InfiniteScrollbar.prototype.__interpretTemplate = function(data) {
     if (!this.options.template) {
         return ('<p>' + data + '</p>');
     }
 
-    var attributes = this.options.template.match(/\{\w+}/g),
+    var attributes = this.options.template.loop.match(/\{\w+}/g),
         attribute,
         str;
 
-        str = this.options.template;
+    str = this.options.template.loop;
     for (var idx = 0, length = attributes.length ; idx < length ; ++idx) {
         attribute = attributes[idx].replace('{', '').replace('}', '');
         str = str.replace('{' + attribute + '}', data[attribute]);
@@ -58,7 +63,7 @@ InfiniteScrollbar.prototype.end = function() {
 InfiniteScrollbar.prototype.afterscrollHander = function(e) {
     var me = e.data.me;
 
-    if (me.isLoading == false && me.options.autoload == true) {
+    if (me.isLoading === false && me.options.autoload === true) {
         if (((me.pos * 100) / me.content[0].scrollHeight) >= me.options.progress) {
             me.isLoading = true;
 
@@ -68,17 +73,20 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                 dataType: 'json',
                 scope: me
             }).always(function(data, status) {
+                var str = '';
                 me.isLoading = false;
 
-                if (status == "success") {
+                if (status === "success") {
                     console.debug('data: ', data);
 
                      if (data.error) {
                          this.scope.content.append(data.error);
                      } else {
                          for (var i = 0 ; i < data.data.length ; ++i) {
-                            this.scope.content.append(this.scope.__interpretTemplate(data.data[i]));
+                             str += this.scope.__interpretTemplate(data.data[i]);
                          }
+
+                         this.scope.content.find('.loop').append(str);
 
                          if (this.scope.options.counter) {
                              this.scope.options.counter.html(data.count);
@@ -90,8 +98,8 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
 
                          this.scope.options.offset = data.offset;
                          this.scope.options.length = data.length;
-                     } 
-                 } else if (status == "error") {
+                     }
+                 } else if (status === "error") {
                      console.error('ERREUR');
                  }
             });
