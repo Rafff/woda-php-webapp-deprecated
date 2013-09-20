@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-bash /var/serv/current/script/stop_server
+test -e "/var/serv/current/script/stop_server" && bash /var/serv/current/script/stop_server
 
 php app/console doctrine:database:drop --force && php app/console doctrine:database:create && php app/console doctrine:schema:update --force && php app/console doctrine:fixtures:load
 
-bash /var/serv/current/script/start_server
+test -e "/var/serv/current/script/start_server" && bash /var/serv/current/script/start_server

@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Woda\FSBundle\Entity\Folder;
 use Woda\UserBundle\Form\UserType;
 use Woda\UserBundle\Entity\User;
 use Woda\UserBundle\Entity\UserValidation;
@@ -41,7 +42,13 @@ class RegisterController extends Controller
                 $user->setRoles(array('ROLE_USER'));
                 $userValidation->setUser($user);
 
+                $userRoot = new Folder();
+                $userRoot->setParent(null);
+                $userRoot->setUser($user);
+                $userRoot->setLastModificationTime(new \Datetime());
+
                 $entityManager->persist($user);
+                $entityManager->persist($userRoot);
                 $entityManager->persist($userValidation);
                 $entityManager->flush();
 
