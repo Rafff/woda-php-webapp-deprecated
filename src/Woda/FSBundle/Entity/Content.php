@@ -24,7 +24,7 @@ class Content
     private $content_hash;
 
     /**
-     * @ORM\Column(name="crypt_key", type="string", length=32)
+     * @ORM\Column(name="crypt_key", type="string", length=64)
      */
     private $crypt_key;
 
