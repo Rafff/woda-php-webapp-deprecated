@@ -408,7 +408,7 @@ class DefaultController extends Controller
      */
     public function publicDownloadAction($id)
     {
-        
+
     }
 
     /**
@@ -561,7 +561,13 @@ class DefaultController extends Controller
      */
     public function sharedAction()
     {
-        return (array());
+        $user = $this->get('security.context')->getToken()->getUser();
+        $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array(
+            'user' => $user,
+            'public' => true
+        ));
+
+        return (array('folders' => array(), 'files' => $files, 'path' => null));
     }
 
     /**
@@ -570,7 +576,11 @@ class DefaultController extends Controller
      */
     public function sharingAction()
     {
-        return (array());
+        $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array(
+            'public' => true
+        ));
+
+        return (array('folders' => array(), 'files' => $files, 'path' => null));
     }
 }
 
