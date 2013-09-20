@@ -68,7 +68,7 @@ class Content
      * Set crypt_key
      *
      * @param string $cryptKey
-     * @return Content
+     * @return Content 
      */
     public function setCryptKey($cryptKey)
     {
