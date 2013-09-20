@@ -65,7 +65,7 @@
         <div id="left"></div>
         <div id="right"></div>
         <div id="page" class="container">
-            <div class="row">
+            <div class="row col-wrap">
                 <div class="span3 col">
                     <a class="brand" href="#">
                         <img src="{{ asset('bundles/wodaui/img/logo.png') }}" alt="logo" width="80px" style="margin-top:10px" />
@@ -154,7 +154,6 @@
                     </ul>
                     {% block leftpannel %}
                     {% endblock %}
-                    <div id="menu-separator">&nbsp;</div>
                 </div>
                 <div id="content" class="span9">
                     {% block content %}
