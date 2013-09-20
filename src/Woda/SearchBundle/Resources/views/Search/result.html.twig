@@ -12,7 +12,7 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
-<h2>Search Result: "<span id="query">{{ query }}</span>"</h2>
+<h2 style="text-align:center">Search Result: "<span id="query">{{ query }}</span>"</h2>
 
 <div class="tabbable tabs-left">
     <div id="results" class="tab-content">
@@ -41,29 +41,40 @@
             }));
         }
 
+        function getTemplateFile(classCss) {
+            return ({
+                root : '<table class="table flist"><thead><tr><th colspan="2">Files</th><th>Shared</th><th>Owners</th><th>Modified</th><th></th></tr></thead><tbody class="loop"></tbody></table>',
+                loop: '<tr><td colspan="2"><i class="' + classCss + '"></i><a href="#">{link}</a></td><td></td><td><a href="#">{owner}</a></td><td>{date}</td><td></td></tr>'
+            });
+        }
+
         var aScrollbar = [],
+            userTemplate = {
+                root : '<table class="table flist"><thead><tr><th colspan="2">Username</th><th>Link</th></tr></thead><tbody class="loop"></tbody></table>',
+                loop: '<tr><td colspan="2"><i class="icon-user"></i><a href="#">{link}</a></td><td><a href="#">link</a></td></tr>'
+            },
             textError = '<div class="row" style="padding-top:100px"><div class="span2 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>';
 
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('icon-file'), {
             error: textError
         }));
         //shared
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('icon-file'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('icon-folder-open'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('icon-film'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('icon-music'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('icon-picture'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', '<div><a href="#">{link}</a></div>', {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', userTemplate, {
             error: textError
         }));
 
