@@ -20,7 +20,7 @@ class XFile
 
     /**
      * @ORM\ManyToOne(targetEntity="Content", inversedBy="content_hash")
-     * @ORM\Column(name="content_hash", type="string", length=256)
+     * @ORM\Column(name="content_hash", type="string", length=256, nullable=true)
      */
     protected $content_hash;
 
