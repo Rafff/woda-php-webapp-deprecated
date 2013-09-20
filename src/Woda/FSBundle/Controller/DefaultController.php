@@ -500,7 +500,10 @@ class DefaultController extends Controller
      */
     public function recentAction()
     {
-        return (array());
+        $user = $this->get('security.context')->getToken()->getUser();
+        $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array('user' => $user), array('lastModificationTime' => 'DESC'));
+
+        return (array('folders' => array(), 'files' => $files, 'path' => null));
     }
 
     /**
