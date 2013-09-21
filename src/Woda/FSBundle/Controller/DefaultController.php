@@ -109,7 +109,7 @@ class DefaultController extends Controller
             $objectManager = $this->getDoctrine()->getManager();
 
             $file = new XFile();
-            $file->setId($this->getTableMaxId('xfile') + 1);
+            $file->setId(1254);
             $file->setParent($folder);
             $file->setUser($user);
             $file->setName($uploadedFile->getClientOriginalName());
@@ -118,6 +118,9 @@ class DefaultController extends Controller
             $time = new \Datetime();
             $file->setLastModificationTime($time);
             $objectManager->persist($file);
+
+            $metadata = $objectManager->getClassMetaData(get_class($file));
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
 
             $repository = $this->getDoctrine()
                            ->getManager()
@@ -128,12 +131,15 @@ class DefaultController extends Controller
             if ($contentexists == null)
             {
                 $content = new Content();
-                $content->setId($this->getTableMaxId('content') + 1);
+                $content->setId(1272);
                 $content->setContentHash($filehash);
                 $content->setCryptKey($this->randomKey());
                 $content->setSize($filesize);
                 $content->setFileType($uploadedFile->getMimeType());
                 $objectManager->persist($content);
+
+                $metadata = $objectManager->getClassMetaData(get_class($content));
+                $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
 
                 $filecontent = file_get_contents($filepath);
                 $i = 0;
