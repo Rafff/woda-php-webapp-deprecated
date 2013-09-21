@@ -22,7 +22,7 @@ class XFile
      * @ORM\ManyToOne(targetEntity="Content", inversedBy="content_hash")
      * @ORM\Column(name="content_hash", type="string", length=256, nullable=true)
      */
-    protected $content_hash;
+    protected $content_hash; 
 
 
     /**
@@ -82,6 +82,15 @@ class XFile
      */
     protected $startDownload;
 
+
+    public function getLastByIdAndByType($id_employee, $type)
+    {
+        $query = $this->_em->createQuery('SELECT m FROM MyBundle:Message m JOIN m.employee e WHERE e.id = :id_employee AND m.type = :type ORDER BY m.sentAt DESC')
+                           ->setMaxResults(1)
+                           ->setParameter('id_employee', $id_employee)
+                           ->setParameter('type', $type);
+        return $query->getOneOrNullResult();
+    }
 
     public function __construct()
     {
