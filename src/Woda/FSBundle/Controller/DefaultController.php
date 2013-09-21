@@ -296,7 +296,8 @@ class DefaultController extends Controller
             $fileparts = $s3->get_object_list('woda-files', array('prefix' => $file->getContentHash()));
             foreach ($fileparts as $fpart)
             {
-                $object = $s3->get_object('woda-files', $fpart, array('encryption_key' => $content->getCryptKey()));
+                $object = $s3->get_object('woda-files', $fpart, array());
+                echo $object->body;
             }
         }
         else
