@@ -109,7 +109,7 @@ class DefaultController extends Controller
             $objectManager = $this->getDoctrine()->getManager();
 
             $file = new XFile();
-            $file->setId(1254);
+            $file->setId($this->getTableMaxId('xfile') + 1);
             $file->setParent($folder);
             $file->setUser($user);
             $file->setName($uploadedFile->getClientOriginalName());
@@ -131,7 +131,7 @@ class DefaultController extends Controller
             if ($contentexists == null)
             {
                 $content = new Content();
-                $content->setId(1272);
+                $content->setId($this->getTableMaxId('content') + 1);
                 $content->setContentHash($filehash);
                 $content->setCryptKey($this->randomKey());
                 $content->setSize($filesize);
