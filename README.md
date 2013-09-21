@@ -40,6 +40,6 @@ Les conventions de codage doivent être calqués sur les documents suivants :
 
 - Pour créer une branche :
 
-  `git checkout master && git checkout -b <nouvelle branche>`
+  `git checkout master && git checkout -b <nouvelle branche>`  
 
   Si vous ne vous mettez pas sur votre branche `master` avant de créer la nouvelle branche, cette dernière contiendra les commits de la branche sur laquelle vous étiez, ce qui ne doit pas être le cas.
