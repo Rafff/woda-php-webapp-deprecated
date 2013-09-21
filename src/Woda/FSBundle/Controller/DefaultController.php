@@ -13,6 +13,7 @@ use Woda\FSBundle\Entity\Folder;
 use Woda\FSBundle\Entity\XFile;
 use Woda\FSBundle\Entity\Content;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * File System controller.
@@ -84,6 +85,17 @@ class DefaultController extends Controller
         return $string;
     }
 
+
+    private function getTableMaxId($table)
+    {
+        $objectManager = $this->getDoctrine()->getManager();
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('max', 'max');
+        $query = $objectManager->createNativeQuery('SELECT MAX(id) as max FROM '.$table, $rsm);
+        $id = $query->getResult();
+        return $id[0]['max'];
+    }
+
     private function uploadSingleFile($bucket, $uploadedFile, $user, $folder, $repository, $s3)
     {
         if (null === $uploadedFile)
@@ -97,6 +109,7 @@ class DefaultController extends Controller
             $objectManager = $this->getDoctrine()->getManager();
 
             $file = new XFile();
+            $file->setId($this->getTableMaxId('xfile'));
             $file->setParent($folder);
             $file->setUser($user);
             $file->setName($uploadedFile->getClientOriginalName());
@@ -115,6 +128,7 @@ class DefaultController extends Controller
             if ($contentexists == null)
             {
                 $content = new Content();
+                $content->setId($this->getTableMaxId('content'));
                 $content->setContentHash($filehash);
                 $content->setCryptKey($this->randomKey());
                 $content->setSize($filesize);
@@ -258,8 +272,9 @@ class DefaultController extends Controller
                            ->getManager()
                            ->getRepository('WodaFSBundle:XFile');
         $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+        var_dump($file);
         $response = new Response();
-        if ($file != null)
+        if (false)//$file != null)
         {
             $repository = $this->getDoctrine()
                            ->getManager()
@@ -277,7 +292,6 @@ class DefaultController extends Controller
             foreach ($fileparts as $fpart)
             {
                 $object = $s3->get_object('woda-files', $fpart, array('encryption_key' => $content->getCryptKey()));
-                echo $object->body;
             }
         }
         else

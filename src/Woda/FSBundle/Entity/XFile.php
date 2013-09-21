@@ -146,12 +146,12 @@ class XFile
 
     public function getContentHash()
     {
-        return hex2bin($this->content_hash);
+        return $this->content_hash;
     }
 
     public function setContentHash($contentHash)
     {
-        $this->content_hash = bin2hex($contentHash);
+        $this->content_hash = $contentHash;
     }
 
     public function getFileType()
