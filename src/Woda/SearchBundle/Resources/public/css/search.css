@@ -34,6 +34,11 @@ ul#typeofquery li a {
     margin-right: 5px;
 }
 
+.search-icon-hover {
+    width: 20px;
+    height: 20px;    
+}
+
 .search-icon-file {
     background-image: url("/web/bundles/wodasearch/img/icons/file-14.png");
 }
@@ -52,4 +57,24 @@ ul#typeofquery li a {
 
 .search-icon-folder {
     background-image: url("/web/bundles/wodasearch/img/icons/folder-14.png");
+}
+
+.search-icon-shared {
+    background-image: url("/web/bundles/wodasearch/img/icons/shared-20.png");
+}
+
+.search-icon-sharing {
+    background-image: url("/web/bundles/wodasearch/img/icons/sharing-20.png");
+}
+
+.search-icon-starred {
+    background-image: url("/web/bundles/wodasearch/img/icons/starred-20.png");
+}
+
+.search-icon-download {
+    background-image: url("/web/bundles/wodasearch/img/icons/download-20.png");
+}
+
+._hover_ {
+    display: none;
 }

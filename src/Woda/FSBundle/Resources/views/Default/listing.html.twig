@@ -7,9 +7,9 @@
   {% block header %}
   {% endblock %}
 
-  <script src="/js/jquery.ui.widget.js"></script>
-  <script src="/js/jquery.iframe-transport.js"></script>
-  <script src="/js/jquery.fileupload.js"></script>
+{% javascripts '@WodaFSBundle/Resources/public/js/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
   <script type="text/javascript">
     $(document).ready(function(){
