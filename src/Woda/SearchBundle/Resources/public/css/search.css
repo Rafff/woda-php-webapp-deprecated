@@ -23,14 +23,33 @@ ul#typeofquery li a {
     font-size: 20px;
     padding-top: 5px;
 }
-/*
-ul#typeofquery li a {
-    color: #000;
+
+.search-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    margin-top: 1px;
+    margin-right: 5px;
 }
 
-div#results div.tab-pane {
-    height: 600px;
-    overflow-y: scroll;
-    overflow: hidden;
+.search-icon-file {
+    background-image: url("/web/bundles/wodasearch/img/icons/file-14.png");
 }
-*/
+
+.search-icon-music {
+    background-image: url("/web/bundles/wodasearch/img/icons/music-14.png");
+}
+
+.search-icon-picture {
+    background-image: url("/web/bundles/wodasearch/img/icons/picture-14.png");
+}
+
+.search-icon-movie {
+    background-image: url("/web/bundles/wodasearch/img/icons/movie-14.png");
+}
+
+.search-icon-folder {
+    background-image: url("/web/bundles/wodasearch/img/icons/folder-14.png");
+}

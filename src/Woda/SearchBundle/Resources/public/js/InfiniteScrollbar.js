@@ -91,7 +91,7 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                          if (this.scope.options.counter) {
                              this.scope.options.counter.html(data.count);
 
-                             if (data.count === 0 && this.scope.content.is(':empty')) {
+                             if (data.count === 0) { //&& this.scope.content.is(':empty')) {
                                  this.scope.content.append(this.scope.text.error ? this.scope.text.error : 'No result found !');
                              }
                          }

@@ -5,14 +5,14 @@
 {% block content %}
 
 {% stylesheets '@WodaSearchBundle/Resources/public/css/search.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
 {% endstylesheets %}
 
 {% javascripts '@WodaSearchBundle/Resources/public/js/InfiniteScrollbar.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
-<h2 style="text-align:center">Search Result: "<span id="query">{{ query }}</span>"</h2>
+<h2 style="text-align:right">Search Result : "<span id="query">{{ query }}</span>"</h2>
 
 <div class="tabbable tabs-left">
     <div id="results" class="tab-content">
@@ -44,34 +44,41 @@
         function getTemplateFile(classCss) {
             return ({
                 root : '<table class="table flist"><thead><tr><th colspan="2">Files</th><th>Shared</th><th>Owners</th><th>Modified</th><th></th></tr></thead><tbody class="loop"></tbody></table>',
-                loop: '<tr><td colspan="2"><i class="' + classCss + '"></i><a href="#">{link}</a></td><td></td><td><a href="#">{owner}</a></td><td>{date}</td><td></td></tr>'
+                loop: '<tr class="foldertr">' + 
+                        '<td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="#">{link}</a></td>' +
+                        '<td colspan="5" class="file-icons filehover" ><a href="#"><i class="icon-star-empty"></i></a><a href="#"><i class="icon-star-empty"></i></a><i class="icon-share"></i><i class="icon-trash dellink" data-name="xxx" data-id="xxx"></i></td>' +
+                        '<td class="nohover">XXX</td>' +
+                        '<td class="nohover">{owner}</td>' +
+                        '<td class="nohover">{date}</td>' +
+                      '</tr>'
             });
         }
 
+//         <td colspan="2"><i class="search-icon ' + classCss + '"></i><a href="#">{link}</a></td><td>xxx</td><td><a href="#">{owner}</a></td><td>{date}</td><td></td>\n\
         var aScrollbar = [],
             userTemplate = {
                 root : '<table class="table flist"><thead><tr><th colspan="2">Username</th><th>Link</th></tr></thead><tbody class="loop"></tbody></table>',
                 loop: '<tr><td colspan="2"><i class="icon-user"></i><a href="#">{link}</a></td><td><a href="#">link</a></td></tr>'
             },
-            textError = '<div class="row" style="padding-top:100px"><div class="span2 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>';
+            textError = '<div class="row" style="padding-top:100px"><div class="span3 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>';
 
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('icon-file'), {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('search-icon-file'), {
             error: textError
         }));
         //shared
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('icon-file'), {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('search-icon-file'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('icon-folder-open'), {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('search-icon-folder'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('icon-film'), {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('search-icon-movie'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('icon-music'), {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('search-icon-music'), {
             error: textError
         }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('icon-picture'), {
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('search-icon-picture'), {
             error: textError
         }));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', userTemplate, {
