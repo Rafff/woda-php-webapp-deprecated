@@ -332,6 +332,11 @@ class User implements AdvancedUserInterface
         return $this;
     }
 
+    public function getFriends()
+    {
+        return $this->friends;
+    }
+
     public function addFriend(User $user)
     {
         $this->friends[] = $user;

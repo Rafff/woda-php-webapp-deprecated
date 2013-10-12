@@ -43,7 +43,7 @@ class AccountController extends Controller
      */
     public function testAction(Request $request)
     {
-        
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Hello Email')
             ->setFrom('service@woda-server.com')

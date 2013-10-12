@@ -4,5 +4,15 @@
 
   <h1>friends</h1>
 
-{% endblock %}
+  <form action="{{ path('WodaUserBundle.Friends.add') }}" method="post">
+      <input type="text" name="email" />
+      <input type="submit" />
+  </form>
 
+  <ul>
+      {% for friend in friends %}
+          <li>{{ friend.username }} (<a href="{{ path('WodaUserBundle.Friends.remove') }}?id={{ friend.id }}">remove</a>)</li>
+      {% endfor %}
+  </ul>
+
+{% endblock %}
