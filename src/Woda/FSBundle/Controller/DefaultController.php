@@ -277,7 +277,12 @@ class DefaultController extends Controller
         $repository = $this->getDoctrine()
                            ->getManager()
                            ->getRepository('WodaFSBundle:XFile');
-        $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+        if (is_int($id))
+          $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
+        else
+        {
+          $file = $repository->findOneBy(array('uuid' => $id));
+        }
         $response = new Response();
         if ($file != null)
         {
@@ -425,10 +430,11 @@ class DefaultController extends Controller
      * Ajax call actions that adds a folder
      *
      * @Route("-file/{id}", name="WodaFSBundle.Default.publicdl")
+     * @Template("WodaFSBundle:Default:download.html.twig")
      */
     public function publicDownloadAction($id)
     {
-
+      return array('id' => $id);
     }
 
     /**
