@@ -599,9 +599,9 @@ class DefaultController extends Controller
      */
     public function sharingAction()
     {
-        $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array(
-            'public' => true
-        ));
+        $id = $this->get('security.context')->getToken()->getUser()->getId();
+        $query = 'SELECT user, friend, file FROM WodaUserBundle:User user JOIN user.friends friend JOIN friend.files file WHERE user.id = ' . $id . ' AND file.public = true';
+        $files = $this->getDoctrine()->getEntityManager()->createQuery($query)->getResult();
 
         return (array('folders' => array(), 'files' => $files, 'path' => null));
     }

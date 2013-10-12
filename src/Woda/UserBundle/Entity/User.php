@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="Woda\SearchBundle\Entity\UserRepository")
@@ -66,6 +67,24 @@ class User implements AdvancedUserInterface
      */
     protected $favorites;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+     */
+    protected $friendsWithMe;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Woda\FSBundle\Entity\XFile", mappedBy="user")
+     */
+    protected $files;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
+     * @ORM\JoinTable(name="friends"
+     *     , joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *     , inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")})
+     */
+    protected $friends;
+
     private function randomSalt() {
         $string = "";
         $chaine = "abcdefghijklmnpqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
@@ -83,7 +102,9 @@ class User implements AdvancedUserInterface
         $this->locked = false;
         $this->salt = bin2hex($this->randomSalt());
 
-        $this->favorites = array();
+        $this->favorites = new ArrayCollection();
+        $this->friendsWithMe = new ArrayCollection();
+        $this->friends = new ArrayCollection();
     }
 
     /**
@@ -308,5 +329,18 @@ class User implements AdvancedUserInterface
     public function removeFavorite(\Woda\FSBundle\Entity\XFile $file)
     {
         $this->favorites->removeElement($file);
+        return $this;
+    }
+
+    public function addFriend(User $user)
+    {
+        $this->friends[] = $user;
+        return $this;
+    }
+
+    public function removeFriend(User $file)
+    {
+        $this->friends->removeElement($file);
+        return $this;
     }
 }

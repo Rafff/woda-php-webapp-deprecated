@@ -22,7 +22,7 @@ class XFile
      * @ORM\ManyToOne(targetEntity="Content", inversedBy="content_hash")
      * @ORM\Column(name="content_hash", type="string", length=256, nullable=true)
      */
-    protected $content_hash; 
+    protected $content_hash;
 
 
     /**
@@ -42,7 +42,7 @@ class XFile
     protected $lastModificationTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="folders")
+     * @ORM\ManyToOne(targetEntity="Woda\UserBundle\Entity\User", inversedBy="files")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
