@@ -5,6 +5,7 @@ function InfiniteScrollbar(content, opts) {
     this.pos = 0;
     this.url = '';
     this.isLoading = false;
+    this.empty = false;
 
     this.__appendRoot();
     this.__urlize();
@@ -32,6 +33,9 @@ InfiniteScrollbar.prototype.__urlize = function() {
 
 InfiniteScrollbar.prototype.__appendRoot = function() {
     this.content.append(this.options.template.root);
+    if (this.options.onParams) {
+        this.content.find('.loop').on(this.options.onParams.events, this.options.onParams.selector);
+    }
 }
 
 InfiniteScrollbar.prototype.__interpretTemplate = function(data) {
@@ -91,8 +95,9 @@ InfiniteScrollbar.prototype.afterscrollHander = function(e) {
                          if (this.scope.options.counter) {
                              this.scope.options.counter.html(data.count);
 
-                             if (data.count === 0) { //&& this.scope.content.is(':empty')) {
+                             if (!this.scope.empty && data.count === 0) {
                                  this.scope.content.append(this.scope.text.error ? this.scope.text.error : 'No result found !');
+                                 this.scope.empty = true;
                              }
                          }
 
