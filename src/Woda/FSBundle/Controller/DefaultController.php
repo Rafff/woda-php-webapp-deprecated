@@ -107,9 +107,6 @@ class DefaultController extends Controller
             $file->setLastModificationTime($time);
             $objectManager->persist($file);
 
-            $metadata = $objectManager->getClassMetaData(get_class($file));
-            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
-
             $repository = $this->getDoctrine()
                            ->getManager()
                            ->getRepository('WodaFSBundle:Content');
@@ -124,14 +121,8 @@ class DefaultController extends Controller
                 $content->setSize($filesize);
                 $content->setFileType($uploadedFile->getMimeType());
                 $objectManager->persist($content);
-
-                $metadata = $objectManager->getClassMetaData(get_class($content));
-                $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
-
-                $filecontent = file_get_contents($filepath);
                 $i = 0;
                 $handle = fopen($filepath, "r");
-
                 while (($filepart = fread($handle, $filepartsize)) && ($i == 0 || $upstatus->isOK()))
                 {
                     $upstatus = $s3->create_object('woda-files', $filehash .'/'. $i, array('body' => $filepart));
@@ -267,7 +258,9 @@ class DefaultController extends Controller
         if (is_numeric($id))
           $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
         else
+        {
           $file = $repository->findOneBy(array('uuid' => $id));
+        }
         $response = new Response();
         if ($file != null)
         {
