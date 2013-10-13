@@ -80,6 +80,7 @@ class SearchController extends Controller
             if (!empty($r->result)) {
                 foreach ($r->result as $res) {
                     $result->data[] = array(
+                        'id' => $res->getId(),
                         'link' => $res->getLogin()
                     );
                 }
@@ -91,6 +92,7 @@ class SearchController extends Controller
             if (!empty($r->result)) {
                 foreach ($r->result as $res) {
                     $result->data[] = array(
+                        'id' => $res->getId(),
                         'link' => $res->getName(),
                         'owner' => $res->getUser()->getLogin(),
                         'date' => $res->getLastModificationTime()->format('d/m/Y H:i')
@@ -104,6 +106,7 @@ class SearchController extends Controller
             if (!empty($r->result)) {
                 foreach ($r->result as $res) {
                     $result->data[] = array(
+                        'id' => $res->getId(),
                         'link' => $res->getName(),
                         'owner' => $res->getUser()->getLogin(),
                         'date' => $res->getLastModificationTime()->format('d/m/Y H:i')

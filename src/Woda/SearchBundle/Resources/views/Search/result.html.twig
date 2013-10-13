@@ -21,6 +21,25 @@
         {% endfor %}
     </div>
 </div>
+
+<div id="modal-dlink" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Get download link</h3>
+  </div>
+  <div class="modal-body">
+    <div id="dlink-loading">
+    Please wait..
+    </div>
+    <div id="dlink" style="display:none">
+      <a href=""> xxx </a>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button>
+  </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function() {
         function initScrollbar(selector, type, length, offset, counter, template, text, onParams) {
@@ -45,14 +64,14 @@
         function getTemplateFile(classCss) {
             return ({
                 root : '<table class="table flist"><thead><tr><th colspan="2">Files</th><th>Shared</th><th>Owners</th><th>Modified</th><th></th></tr></thead><tbody class="loop"></tbody></table>',
-                loop: '<tr class="foldertr">' +
+                loop: '<tr class="foldertr" id="file-{id}">' +
                         '<td colspan="2"><i class="search-icon ' + classCss + '"></i> <a class="folderlink" href="#">{link}</a></td>' +
                         '<td class="_hover_"></td>' +
                         '<td class="_hover_"><a href="#">{owner}</a></td>' +
                         '<td colspan="5" class="file-icons _hover_" style="display:none">' +
-                            '<a href="#"><i class="search-icon search-icon-hover search-icon-download"></i></a>' + 
-                            '<a href="#"><i class="search-icon search-icon-hover search-icon-shared"></i></a>' + 
+                            '<a class="dllink" href="{% render 'WodaSearchBundle:Helper:getDownloadLinks' %}"><i class="search-icon search-icon-hover search-icon-download"></i></a>' + 
                             '<a href="#"><i class="search-icon search-icon-hover search-icon-sharing"></i></a>' +
+                            '<a href="#modal-dlink"><i class="search-icon search-icon-hover search-icon-shared share-dlink"></i></a>' + 
                             '<a href="#"><i class="search-icon search-icon-hover search-icon-starred"></i></a>' +
                         '</td>' +
                         '<td class="_nohover_">XXX</td>' +
@@ -63,17 +82,19 @@
         }
 
         var aScrollbar = [],
-            events = {
-                mouseenter: function() {
-                    that = $(this);
-                    that.find('._nohover_').hide();
-                    that.find('._hover_').show();
-                },
-                mouseleave: function(){
-                    that = $(this);
-                    that.find('._nohover_').show();
-                    that.find('._hover_').hide();
-                }
+            eventsParam = {
+                events: {
+                    mouseenter: function() {
+                        that = $(this);
+                        that.find('._nohover_').hide();
+                        that.find('._hover_').show();
+                    },
+                    mouseleave: function(){
+                        that = $(this);
+                        that.find('._nohover_').show();
+                        that.find('._hover_').hide();
+                    }
+                }, selector: '.foldertr'
             },
             userTemplate = {
                 root : '<table class="table flist"><thead><tr><th colspan="2">Username</th><th>Link</th></tr></thead><tbody class="loop"></tbody></table>',
@@ -83,20 +104,28 @@
                 error: '<div class="row" style="padding-top:100px"><div class="span3 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>'
             };
 
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('search-icon-file'), text, {
-            events: events,
-            selector: '.foldertr'
-        }));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('search-icon-file'), text, eventsParam));
         //shared
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('search-icon-file'), text, {
-            events: events,
-            selector: '.foldertr'
-        }));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('search-icon-folder'), text));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('search-icon-movie'), text));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('search-icon-music'), text));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('search-icon-picture'), text));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('search-icon-file'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('search-icon-folder'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('search-icon-movie'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('search-icon-music'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('search-icon-picture'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', userTemplate, text));
+
+        // function used to get shared link
+        $('.flist').on('click', '.share-dlink', function() {
+            $('#modal-dlink').modal('show');
+            var id = $(this).parent().parent().parent().attr('id').substr(5);
+            var url = '{{ path('WodaFSBundle.Default.dLink', {"id": ''}) }}/' + id;
+
+            console.log(url);
+            $.getJSON(url, function(data){
+                $('#dlink-loading').hide();
+                var link = '{{ url('WodaFSBundle.Default.publicdl', {"id": ''}) }}/' + data.id;
+                $('#dlink').html('<a href="'+link+'">'+link+'</a>').show();
+            });
+        });
 
         for (var i = 0, length = aScrollbar.length ; i < length ; i++) {
             aScrollbar[i].begin();
