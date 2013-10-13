@@ -425,7 +425,6 @@ class DefaultController extends Controller
         $response = null;
         if ($this->get('Request')->isXMLHttpRequest()) {
             $request = $this->get('request');
-            $id = $request->request->get('id');
             $em = $this->getDoctrine()->getManager();
             $repository = $em->getRepository('WodaFSBundle:XFile');
             $user = $this->get('security.context')->getToken()->getUser();
