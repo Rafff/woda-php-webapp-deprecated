@@ -264,12 +264,10 @@ class DefaultController extends Controller
         $repository = $this->getDoctrine()
                            ->getManager()
                            ->getRepository('WodaFSBundle:XFile');
-        if (is_int($id))
+        if (is_numeric($id))
           $file = $repository->findOneBy(array('id' => $id, 'user' => $user));
         else
-        {
           $file = $repository->findOneBy(array('uuid' => $id));
-        }
         $response = new Response();
         if ($file != null)
         {
