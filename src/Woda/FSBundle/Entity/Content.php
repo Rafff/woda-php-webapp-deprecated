@@ -39,11 +39,6 @@ class Content
     private $file_type;
 
 
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
     /**
      * Get id
      *

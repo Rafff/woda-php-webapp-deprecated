@@ -426,15 +426,25 @@ class DefaultController extends Controller
         if ($this->get('Request')->isXMLHttpRequest()) {
             $request = $this->get('request');
             $id = $request->request->get('id');
-            $repository = $this->getDoctrine()
-                                       ->getManager()
-                                       ->getRepository('WodaFSBundle:XFile');
+            $em = $this->getDoctrine()->getManager();
+            $repository = $em->getRepository('WodaFSBundle:XFile');
             $user = $this->get('security.context')->getToken()->getUser();
             $xfile = $repository->findOneBy(array('id' => $id, 'user' => $user));
-            if ($xfile === null)
-                $uuid = $this->gen_uuid();
+            if ($xfile == null)
+            {
+              echo 'file iz null';
+              return new Response();
+            }
+            if ($xfile->getUuid() == null)
+            {
+              $uuid = $this->gen_uuid();
+              $xfile->setUuid($uuid);
+              $em->persist($xfile);
+              $em->flush();
+            }
             else
                 $uuid = $xfile->getUuid();
+            
             $response = array('id' => $uuid);
        }
        return new Response(json_encode($response));
