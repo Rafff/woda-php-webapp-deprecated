@@ -85,17 +85,6 @@ class DefaultController extends Controller
         return $string;
     }
 
-
-    private function getTableMaxId($table)
-    {
-        $objectManager = $this->getDoctrine()->getManager();
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('max', 'max');
-        $query = $objectManager->createNativeQuery('SELECT MAX(id) as max FROM '.$table, $rsm);
-        $id = $query->getResult();
-        return $id[0]['max'];
-    }
-
     private function uploadSingleFile($bucket, $uploadedFile, $user, $folder, $repository, $s3)
     {
         if (null === $uploadedFile)
@@ -109,7 +98,6 @@ class DefaultController extends Controller
             $objectManager = $this->getDoctrine()->getManager();
 
             $file = new XFile();
-            $file->setId($this->getTableMaxId('xfile') + 1);
             $file->setParent($folder);
             $file->setUser($user);
             $file->setName($uploadedFile->getClientOriginalName());
@@ -131,7 +119,6 @@ class DefaultController extends Controller
             if ($contentexists == null)
             {
                 $content = new Content();
-                $content->setId($this->getTableMaxId('content') + 1);
                 $content->setContentHash($filehash);
                 $content->setCryptKey($this->randomKey());
                 $content->setSize($filesize);

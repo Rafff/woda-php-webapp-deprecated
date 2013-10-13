@@ -12,9 +12,9 @@ use Symfony\Component\Validator\Constraint as Assert;
 class Cms
 {
     /**
-     * @ORM\GeneratedValue
      * @ORM\Id
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
