@@ -24,57 +24,6 @@ ul#typeofquery li a {
     padding-top: 5px;
 }
 
-.search-icon {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    line-height: 14px;
-    vertical-align: text-top;
-    margin-top: 1px;
-    margin-right: 5px;
-}
-
-.search-icon-hover {
-    width: 20px;
-    height: 20px;    
-}
-
-.search-icon-file {
-    background-image: url(../img/icons/file-14.png);
-}
-
-.search-icon-music {
-    background-image: url(../img/icons/music-14.png);
-}
-
-.search-icon-picture {
-    background-image: url(../img/icons/picture-14.png);
-}
-
-.search-icon-movie {
-    background-image: url(../img/icons/movie-14.png);
-}
-
-.search-icon-folder {
-    background-image: url(../img/icons/folder-14.png);
-}
-
-.search-icon-shared {
-    background-image: url(../img/icons/shared-20.png);
-}
-
-.search-icon-sharing {
-    background-image: url(../img/icons/sharing-20.png);
-}
-
-.search-icon-starred {
-    background-image: url(../img/icons/starred-20.png);
-}
-
-.search-icon-download {
-    background-image: url(../img/icons/download-20.png);
-}
-
 ._hover_ {
     display: none;
 }

@@ -31,9 +31,7 @@
     <div id="dlink-loading">
     Please wait..
     </div>
-    <div id="dlink" style="display:none">
-      <a href="">&nbsp;</a>
-    </div>
+    <div id="dlink" style="display:none"></div>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button>
@@ -81,13 +79,13 @@
             return ({
                 root : '<table class="table flist"><thead><tr><th colspan="2">Files</th><th>Owners</th><th>Modified</th><th></th></tr></thead><tbody class="loop"></tbody></table>',
                 loop: '<tr class="foldertr" id="file-{id}">' +
-                        '<td colspan="2"><i class="search-icon ' + classCss + '"></i> <a class="folderlink" href="#">{link}</a></td>' +
+                        '<td colspan="2"><i class="w-icon ' + classCss + '"></i> <a class="folderlink" href="#camarchepasencore">{link}</a></td>' +
                         '<td class="_hover_"><a href="#">{owner}</a></td>' +
                         '<td colspan="5" class="file-icons _hover_" style="display:none;padding-left:20px;">' +
-                            '<a href="#modal-download"><i class="search-icon search-icon-hover search-icon-download download"></i></a>' + 
-                            '<a href="#"><i class="search-icon search-icon-hover search-icon-sharing"></i></a>' +
-                            '<a href="#modal-dlink"><i class="search-icon search-icon-hover search-icon-shared share-dlink"></i></a>' + 
-                            '<a href="#"><i class="search-icon search-icon-hover search-icon-starred"></i></a>' +
+                            '<a href="#modal-download"><i class="w-icon w-icon-hover w-icon-download download"></i></a>' + 
+                            '<a href="#"><i class="w-icon w-icon-hover w-icon-sharing"></i></a>' +
+                            '<a href="#modal-dlink"><i class="w-icon w-icon-hover w-icon-shared share-dlink"></i></a>' + 
+                            '<a href="#"><i class="w-icon w-icon-hover w-icon-starred"></i></a>' +
                         '</td>' +
                         '<td class="_nohover_">{owner}</td>' +
                         '<td class="_nohover_">{date}</td>' +
@@ -118,12 +116,12 @@
                 error: '<div class="row" style="padding-top:100px"><div class="span3 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>'
             };
 
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('search-icon-file'), text, eventsParam));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('search-icon-file'), text, eventsParam));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('search-icon-folder'), text, eventsParam));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('search-icon-movie'), text, eventsParam));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('search-icon-music'), text, eventsParam));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('search-icon-picture'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('w-icon-file'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('w-icon-file'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('w-icon-folder'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('w-icon-movie'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('w-icon-music'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_picture_', 'picture', {{ length }}, {{ offset }}, 'ul#typeofquery li.pictures span.counter', getTemplateFile('w-icon-picture'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_user_', 'user', {{ length }}, {{ offset }}, 'ul#typeofquery li.users span.counter', userTemplate, text));
 
         // function used to get shared link
@@ -132,7 +130,6 @@
             var id = $(this).parent().parent().parent().attr('id').substr(5);
             var url = '{{ path('WodaFSBundle.Default.dLink', {"id": ''}) }}/' + id;
 
-            console.log(url);
             $.getJSON(url, function(data) {
                 $('#dlink-loading').hide();
                 var link = '{{ url('WodaFSBundle.Default.publicdl', {"id": ''}) }}/' + data.id;
@@ -175,7 +172,7 @@
             <img src="{{ asset('bundles/wodaui/img/icons/result-32.png') }}" alt="result" width="17px" height="17px" />
             <span>Results</span>
         </li>
-        <li class="private_files{% if (type == 'private_file') %} active {% endif %}">
+        <li class="private_files{% if (type == 'private_file') %} active {% endif %} underline">
             <a href="#_private_file_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/my_file-32.png') }}" alt="my files" width="16px" height="16px" />
                 <span>My files</span>

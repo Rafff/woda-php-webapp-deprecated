@@ -36,9 +36,6 @@
                         </div>
                         <div id="user" class="span2 offset3">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('WodaAdminBundle.Default.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" width="16px" height="16px" alt="administration"/></a>
-                                {% endif %}
                                 <a href="{{ path('WodaUserBundle.Account.index') }}"><b>{% render 'WodaUIBundle:Helper:getUserName' %}</b></a>
                                 <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/></a>
                                 <a href="{{ path('WodaUserBundle.Security.logout') }}"><img src="{{ asset('bundles/wodaui/img/icons/logout-32.png') }}" width="16px" height="16px" alt="logout"/></a>

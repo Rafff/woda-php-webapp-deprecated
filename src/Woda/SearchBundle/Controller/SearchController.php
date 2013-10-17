@@ -93,6 +93,7 @@ class SearchController extends Controller
                     $result->data[] = array(
                         'id' => $res->getId(),
                         'link' => $res->getName(),
+                        'link_encoded' => rawurlencode($res->getName()),
                         'owner' => $res->getUser()->getLogin(),
                         'date' => $res->getLastModificationTime()->format('d/m/Y H:i')
                     );
@@ -107,6 +108,7 @@ class SearchController extends Controller
                     $result->data[] = array(
                         'id' => $res->getId(),
                         'link' => $res->getName(),
+                        'link_encoded' => rawurlencode($res->getName()),
                         'owner' => $res->getUser()->getLogin(),
                         'date' => $res->getLastModificationTime()->format('d/m/Y H:i')
                     );

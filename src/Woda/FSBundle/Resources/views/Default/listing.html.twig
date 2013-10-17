@@ -211,7 +211,7 @@
     <tbody id="fscontainer">
 
       <tr style="display:none;" class="foldertr ">
-          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href=""></a></td>
+          <td colspan="2"><i class="w-icon w-icon-folder"></i> <a class="folderlink" href=""></a></td>
           <td></td>
           <td></td>
           <td></td>
@@ -220,7 +220,7 @@
 
       {% for folder in folders %}
         <tr class="foldertr folder-{{folder.id}}">
-          <td colspan="2"><i class="icon-folder-open"></i> <a class="folderlink" href="{{ folder.name | url_encode(true) }}/">{{ folder.name }}</a></td>
+          <td colspan="2"><i class="w-icon w-icon-folder"></i> <a class="folderlink" href="{{ folder.name | url_encode(true) }}/">{{ folder.name }}</a></td>
           <td colspan="5" class="file-icons filehover" >
               <a href="{{ path('WodaFSBundle.Default.public', {"id": folder.id}) }}"><i class="icon-star-empty"></i></a>
               <a href="{{ path('WodaFSBundle.Default.star', {"id": folder.id}) }}"><i class="icon-star-empty"></i></a>
@@ -235,7 +235,7 @@
 
       <tr style="display:none;" class="filetr">
           <td colspan="2">
-              <i class="icon-file"></i> <span class="filename"></span>
+              <i class="w-icon w-icon-folder"></i> <span class="filename"></span>
           </td>
           <td colspan="5" class="file-icons filehover" >
               <i class="icon-star-empty"></i> <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": 0}) }}"><i class="icon-download" > </i></a>
@@ -249,7 +249,7 @@
       {% for file in files %}
         <tr class="filetr" id="file-{{file.id}}">
           <td colspan="2">
-              <i class="icon-file"></i> <span class="filename">{{ file.name }}</span>
+              <i class="w-icon w-icon-folder"></i> <span class="filename">{{ file.name }}</span>
           </td>
           <td colspan="5" class="file-icons filehover" >
               <a href="{{ path('WodaFSBundle.Default.public', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
