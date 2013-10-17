@@ -52,6 +52,14 @@
             <div class="row-fluid" id="jsrow">
                 <div id="menu" class="span2 offset1">
                     <ul class="nav nav-pills nav-stacked" id="sub-menu">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('WodaAdminBundle.Default.index') }}">
+                                    <img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" alt="admin" width="16px" height="16px" />
+                                    <span>Admin</span>
+                                </a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="{{ path('WodaFSBundle.Default.list') }}">
                                 <img src="{{ asset('bundles/wodaui/img/icons/home-32.png') }}" alt="home" width="16px" height="16px" />
@@ -59,14 +67,6 @@
                             </a>
                         </li>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <li>
-                                    <a href="{{ path('WodaAdminBundle.Default.index') }}">
-                                        <img src="{{ asset('bundles/wodaui/img/icons/admin-32.png') }}" alt="admin" width="16px" height="16px" />
-                                        <span>Admin</span>
-                                    </a>
-                                </li>
-                            {% endif %}
                             <li>
                                 <a href="{{ path('WodaFSBundle.Default.starred') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/starred-32.png') }}" alt="starred" width="16px" height="16px" />
