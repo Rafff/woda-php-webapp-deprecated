@@ -4,8 +4,8 @@
 
 {% block content %}
 
-{% stylesheets '@WodaSearchBundle/Resources/public/css/search.css' filter='cssrewrite' %}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% stylesheets 'bundles/wodasearch/css/search.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %}
 
 {% javascripts '@WodaSearchBundle/Resources/public/js/InfiniteScrollbar.js' %}
@@ -32,8 +32,24 @@
     Please wait..
     </div>
     <div id="dlink" style="display:none">
-      <a href=""> xxx </a>
+      <a href="">&nbsp;</a>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button>
+  </div>
+</div>
+
+<div id="modal-download" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Download</h3>
+  </div>
+  <div class="modal-body">
+    <div id="downloading-loading">
+    Please wait..
+    </div>
+    <div id="downloading" style="display:none;text-align:center;"></div>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Exit</button>
@@ -63,18 +79,16 @@
 
         function getTemplateFile(classCss) {
             return ({
-                root : '<table class="table flist"><thead><tr><th colspan="2">Files</th><th>Shared</th><th>Owners</th><th>Modified</th><th></th></tr></thead><tbody class="loop"></tbody></table>',
+                root : '<table class="table flist"><thead><tr><th colspan="2">Files</th><th>Owners</th><th>Modified</th><th></th></tr></thead><tbody class="loop"></tbody></table>',
                 loop: '<tr class="foldertr" id="file-{id}">' +
                         '<td colspan="2"><i class="search-icon ' + classCss + '"></i> <a class="folderlink" href="#">{link}</a></td>' +
-                        '<td class="_hover_"></td>' +
                         '<td class="_hover_"><a href="#">{owner}</a></td>' +
-                        '<td colspan="5" class="file-icons _hover_" style="display:none">' +
-                            '<a class="dllink" href="{% render 'WodaSearchBundle:Helper:getDownloadLinks' %}"><i class="search-icon search-icon-hover search-icon-download"></i></a>' + 
+                        '<td colspan="5" class="file-icons _hover_" style="display:none;padding-left:20px;">' +
+                            '<a href="#modal-download"><i class="search-icon search-icon-hover search-icon-download download"></i></a>' + 
                             '<a href="#"><i class="search-icon search-icon-hover search-icon-sharing"></i></a>' +
                             '<a href="#modal-dlink"><i class="search-icon search-icon-hover search-icon-shared share-dlink"></i></a>' + 
                             '<a href="#"><i class="search-icon search-icon-hover search-icon-starred"></i></a>' +
                         '</td>' +
-                        '<td class="_nohover_">XXX</td>' +
                         '<td class="_nohover_">{owner}</td>' +
                         '<td class="_nohover_">{date}</td>' +
                       '</tr>'
@@ -89,7 +103,7 @@
                         that.find('._nohover_').hide();
                         that.find('._hover_').show();
                     },
-                    mouseleave: function(){
+                    mouseleave: function() {
                         that = $(this);
                         that.find('._nohover_').show();
                         that.find('._hover_').hide();
@@ -97,15 +111,14 @@
                 }, selector: '.foldertr'
             },
             userTemplate = {
-                root : '<table class="table flist"><thead><tr><th colspan="2">Username</th><th>Link</th></tr></thead><tbody class="loop"></tbody></table>',
-                loop: '<tr><td colspan="2"><i class="icon-user"></i><a href="#">{link}</a></td><td><a href="#">link</a></td></tr>'
+                root : '<table class="table flist"><thead><tr><th colspan="2">Username</th></tr></thead><tbody class="loop"></tbody></table>',
+                loop: '<tr><td colspan="2"><i class="icon-user"></i><a href="#">{link}</a></td></tr>'
             },
             text = {
                 error: '<div class="row" style="padding-top:100px"><div class="span3 offset4" style="overflow:hidden"><img src="{{ asset('bundles/wodaui/img/icons/sad-128.png') }}" alt="no result" width="128px" height="128px" /><div class="notfound">No result found !</div></div>'
             };
 
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('search-icon-file'), text, eventsParam));
-        //shared
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('search-icon-file'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('search-icon-folder'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('search-icon-movie'), text, eventsParam));
@@ -120,11 +133,22 @@
             var url = '{{ path('WodaFSBundle.Default.dLink', {"id": ''}) }}/' + id;
 
             console.log(url);
-            $.getJSON(url, function(data){
+            $.getJSON(url, function(data) {
                 $('#dlink-loading').hide();
                 var link = '{{ url('WodaFSBundle.Default.publicdl', {"id": ''}) }}/' + data.id;
-                $('#dlink').html('<a href="'+link+'">'+link+'</a>').show();
+                $('#dlink').html('<input type="text" value="'+link+'" style="width:80%;"/>').show();
             });
+        });
+
+        // function used to get download link
+        $('.flist').on('click', '.download', function() {
+            $('#modal-download').modal('show');
+            var id = $(this).parent().parent().parent().attr('id').substr(5);
+            var url = '{% render 'WodaSearchBundle:Helper:getDownloadLinks' %}';
+
+            url = url.replace('{id}', id);
+            $('#downloading-loading').hide();
+            $('#downloading').html('<a href="' + url + '" class="center">Click Here.</a>').show();
         });
 
         for (var i = 0, length = aScrollbar.length ; i < length ; i++) {
@@ -158,13 +182,6 @@
                 <span class="counter">{% if (type == 'private_file') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li  class="shared{% if (type == 'shared') %} active {% endif %} underline">
-            <a href="#_shared_" data-toggle="tab">
-                <img src="{{ asset('bundles/wodaui/img/icons/shared-32.png') }}" alt="shared" width="16px" height="16px" />
-                <span>Shared</span>
-                <span class="counter">{% if (type == 'shared') %} {{ count }} {% else %} 0 {% endif %}</span>
-            </a>
-        </li>       
         <li class="files{% if (type == 'file') %} active {% endif %}">
             <a href="#_file_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/file-32.png') }}" alt="document" width="16px" height="16px" />

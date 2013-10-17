@@ -50,7 +50,6 @@ class SearchController extends Controller
                     'type' => $type,
                     'types' => array(
                         'private_file',
-                        'shared',
                         'file',
                         'folder',
                         'movie',

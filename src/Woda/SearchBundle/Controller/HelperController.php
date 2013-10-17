@@ -17,6 +17,6 @@ class HelperController extends Controller
         $router = $this->get('router');
         $collectionRoute = $router->getRouteCollection();
 
-        return (new Response($collectionRoute->get('WodaFSBundle.Default.download')->getPattern()));
+        return (new Response($this->getRequest()->getBaseURL() . $collectionRoute->get('WodaFSBundle.Default.download')->getPattern()));
     }
 }

@@ -40,39 +40,39 @@ ul#typeofquery li a {
 }
 
 .search-icon-file {
-    background-image: url(../img/icons/file-14.png);
+    background-image: url(../Resources/public/css/file-14.png);
 }
 
 .search-icon-music {
-    background-image: url(../img/icons/music-14.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/music-14.png");
 }
 
 .search-icon-picture {
-    background-image: url(../img/icons/picture-14.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/picture-14.png");
 }
 
 .search-icon-movie {
-    background-image: url(../img/icons/movie-14.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/movie-14.png");
 }
 
 .search-icon-folder {
-    background-image: url(../img/icons/folder-14.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/folder-14.png");
 }
 
 .search-icon-shared {
-    background-image: url(../img/icons/shared-20.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/shared-20.png");
 }
 
 .search-icon-sharing {
-    background-image: url(../img/icons/sharing-20.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/sharing-20.png");
 }
 
 .search-icon-starred {
-    background-image: url(../img/icons/starred-20.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/starred-20.png");
 }
 
 .search-icon-download {
-    background-image: url(../img/icons/download-20.png);
+    background-image: url("/web/bundles/wodasearch/img/icons/download-20.png");
 }
 
 ._hover_ {
