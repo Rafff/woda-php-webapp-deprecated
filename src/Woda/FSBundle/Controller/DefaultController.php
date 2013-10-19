@@ -456,7 +456,7 @@ class DefaultController extends Controller
     {
         $request = $this->get('request');
         $id = $request->query->get('id');
-        $target = $request->query->get('path');
+        $target = substr($request->query->get('path'), 1);
 
         $user = $this->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('WodaFSBundle:Folder');
@@ -640,12 +640,10 @@ class DefaultController extends Controller
 
         $paths = array();
         foreach ($repo->findBy(array('user' => $user)) as $folder) {
-            if (count($folder->getFolders()) !== 0)
-                continue ;
             for ($parts = array(), $tmpfolder = $folder; $tmpfolder; $tmpfolder = $tmpfolder->getParent())
-                if ($tmpfolder->getParent()) // we want to exclude the root node
-                    $parts[] = $tmpfolder->getName();
-            $paths[] = implode('/', array_reverse($parts));
+                $parts[] = $tmpfolder->getName();
+            $path = implode('/', array_reverse($parts));
+            $paths[] = empty($path) ? '/' : $path;
         }
 
         return $paths;

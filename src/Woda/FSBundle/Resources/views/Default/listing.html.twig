@@ -117,7 +117,6 @@
 
       $('#post-moveto').click(function (){
           var location = '{{ path('WodaFSBundle.Default.moveFile') }}?id=%ID&path=%TARGET'.replace('%ID', encodeURIComponent($(this).attr('data-id'))).replace('%TARGET', encodeURIComponent($('#moveto-target').val()));
-          alert(location);
           document.location = location;
       });
 
