@@ -605,12 +605,8 @@ class DefaultController extends Controller
      * @Route("-shared/", name="WodaFSBundle.Default.links")
      * @Template("WodaFSBundle:Default:links.html.twig")
      */
-    public function linksAction()
+    public function sharedAction()
     {
-        /*
-         * verifier si cette action fait ce qu'il faut vu que c'est plus shared mais links.
-         */
-
         $user = $this->get('security.context')->getToken()->getUser();
         $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array(
             'user' => $user,
