@@ -24,8 +24,12 @@ class FriendsController extends Controller
     public function addAction(Request $request)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $other = $this->getDoctrine()->getRepository('WodaUserBundle:User')->findBy(array('email' => $request->get('email')))[0];
+        $others = $this->getDoctrine()->getRepository('WodaUserBundle:User')->findBy(array('email' => $request->get('email')));
 
+        if (count($others) === 0)
+            return $this->redirect($this->generateUrl('WodaUserBundle.Friends.list', array('error' => 1)));
+
+        $other = $others[0];
         if (!$user->getFriends()->contains($other))
             $user->addFriend($other);
 
@@ -41,8 +45,12 @@ class FriendsController extends Controller
     public function removeAction(Request $request)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $other = $this->getDoctrine()->getRepository('WodaUserBundle:User')->findBy(array('id' => $request->get('id')))[0];
+        $others = $this->getDoctrine()->getRepository('WodaUserBundle:User')->findBy(array('id' => $request->get('id')));
 
+        if (count($others) === 0)
+            return $this->redirect($this->generateUrl('WodaUserBundle.Friends.list', array('error' => 1)));
+
+        $other = $others[0];
         if ($user->getFriends()->contains($other))
             $user->removeFriend($other);
 
@@ -58,7 +66,8 @@ class FriendsController extends Controller
      */
     public function listAction()
     {
+        $error = array(1 => 'User not found')[$this->getRequest()->query->get('error')];
         $user = $this->get('security.context')->getToken()->getUser();
-        return (array('friends' => $user->getFriends()));
+        return (array('friends' => $user->getFriends(), 'error' => $error));
     }
 }

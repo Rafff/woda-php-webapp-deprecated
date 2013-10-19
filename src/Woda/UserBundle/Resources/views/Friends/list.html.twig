@@ -4,6 +4,12 @@
 
   <h1>friends</h1>
 
+  {% if error %}
+      <div class="error">
+          {{ error }}
+      </div>
+  {% endif %}
+
   <form action="{{ path('WodaUserBundle.Friends.add') }}" method="post">
       <input type="text" name="email" />
       <input type="submit" />
