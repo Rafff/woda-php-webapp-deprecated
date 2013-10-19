@@ -41,7 +41,7 @@ class DefaultController extends Controller
         if ($folder === null)
             return ($this->redirect($this->generateUrl('WodaFSBundle.Default.list', array('path' => ''))));
 
-        return (array('folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path));
+        return (array('folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path, 'paths'=>$this->getAllPaths()));
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -443,10 +443,40 @@ class DefaultController extends Controller
             }
             else
                 $uuid = $xfile->getUuid();
-            
+
             $response = array('id' => $uuid);
        }
        return new Response(json_encode($response));
+    }
+
+    /**
+     * @Route("-movefile/", name="WodaFSBundle.Default.moveFile")
+     */
+    public function moveFileAction()
+    {
+        $request = $this->get('request');
+        $id = $request->query->get('id');
+        $target = $request->query->get('path');
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()->getRepository('WodaFSBundle:Folder');
+        $folder = $repository->findByPath($target, $user);
+        if ($folder === null)
+            return $this->redirect($this->generateUrl('WodaFSBundle.Default.list'));
+
+        $file = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->find($id);
+
+        $oldparent = $file->getParent();
+        $oldparent->removeFile($file);
+        $folder->addFile($file);
+        $file->setParent($folder);
+
+        $this->getDoctrine()->getEntityManager()->persist($oldparent);
+        $this->getDoctrine()->getEntityManager()->persist($folder);
+        $this->getDoctrine()->getEntityManager()->persist($file);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $this->redirect($this->generateUrl('WodaFSBundle.Default.list'));
     }
 
     /**
@@ -516,7 +546,7 @@ class DefaultController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array('user' => $user), array('lastModificationTime' => 'DESC'));
 
-        return (array('folders' => array(), 'files' => $files, 'path' => null));
+        return (array('folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**
@@ -568,7 +598,7 @@ class DefaultController extends Controller
     public function starredAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        return (array('folders' => array(), 'files' => $user->getFavorites(), 'path' => null));
+        return (array('folders' => array(), 'files' => $user->getFavorites(), 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**
@@ -587,7 +617,7 @@ class DefaultController extends Controller
             'public' => true
         ));
 
-        return (array('folders' => array(), 'files' => $files, 'path' => null));
+        return (array('folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**
@@ -600,7 +630,25 @@ class DefaultController extends Controller
         $query = 'SELECT user, friend, file FROM WodaUserBundle:User user JOIN user.friends friend JOIN friend.files file WHERE user.id = ' . $id . ' AND file.public = true';
         $files = $this->getDoctrine()->getEntityManager()->createQuery($query)->getResult();
 
-        return (array('folders' => array(), 'files' => $files, 'path' => null));
+        return (array('folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
+    }
+
+    private function getAllPaths()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repo = $this->getDoctrine()->getRepository('WodaFSBundle:Folder');
+
+        $paths = array();
+        foreach ($repo->findBy(array('user' => $user)) as $folder) {
+            if (count($folder->getFolders()) !== 0)
+                continue ;
+            for ($parts = array(), $tmpfolder = $folder; $tmpfolder; $tmpfolder = $tmpfolder->getParent())
+                if ($tmpfolder->getParent()) // we want to exclude the root node
+                    $parts[] = $tmpfolder->getName();
+            $paths[] = implode('/', array_reverse($parts));
+        }
+
+        return $paths;
     }
 }
 

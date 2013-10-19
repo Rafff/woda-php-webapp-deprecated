@@ -110,6 +110,17 @@
         $('#listfiles').html('');
       });
 
+      $('.flist').on('click', '.movelink', function(){
+        $('#post-moveto').attr('data-id', $(this).attr('data-id'));
+        $('#modal-moveto').modal('show');
+      });
+
+      $('#post-moveto').click(function (){
+          var location = '{{ path('WodaFSBundle.Default.moveFile') }}?id=%ID&path=%TARGET'.replace('%ID', encodeURIComponent($(this).attr('data-id'))).replace('%TARGET', encodeURIComponent($('#moveto-target').val()));
+          alert(location);
+          document.location = location;
+      });
+
       $('.flist').on('click', '.dellink', function(){
 
         if ($(this).parent().parent().hasClass('filetr'))
@@ -193,7 +204,7 @@
       </ul>
 
     </div>
-      <div style="margin-top:2px"><a href="#modal-newfolder" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-folder-open icon-white"></i></a> <a href="#modal-upload" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-upload icon-white"></i></a></div>
+    <div style="margin-top:2px"><a href="#modal-newfolder" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-folder-open icon-white"></i></a> <a href="#modal-upload" role="button" class="btn btn-danger" data-toggle="modal"><i class="icon-upload icon-white"></i></a></div>
   </div>
   {% endif %}
 
@@ -254,6 +265,7 @@
           <td colspan="5" class="file-icons filehover" >
               <a href="{{ path('WodaFSBundle.Default.public', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
               <a href="{{ path('WodaFSBundle.Default.star', {"id": file.id}) }}"><i class="icon-star-empty"></i></a>
+              <i class="icon-star-empty movelink" data-id="{{ file.id }}"></i>
               <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": file.id}) }}"><i class="icon-download" > </i></a>
               <i class="icon-share share-dlink"></i>
               <i class="icon-trash dellink" data-name="{{ file.name }}" data-id="{{ file.id }}"></i>
@@ -266,6 +278,31 @@
 
     </tbody>
   </table>
+
+  <div id="modal-moveto" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3>Move to</h3>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-error moveto-error hide" id="moveto-errorsame">
+              Cannot move this entity : Destination is source.
+          </div>
+          <div class="alert alert-error moveto-error hide" id="moveto-errorchild">
+              Cannot move this folder : Destination is source child.
+          </div>
+          <p>Please select the destination path for the entity :</p>
+          <select id="moveto-target">
+              {% for path in paths %}
+                  <option>{{ path }}</option>
+              {% endfor %}
+          </select>
+      </div>
+      <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button id="post-moveto" class="btn btn-primary">Move</button>
+      </div>
+  </div>
 
   <div id="modal-newfolder" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
