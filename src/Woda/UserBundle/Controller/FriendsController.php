@@ -66,7 +66,8 @@ class FriendsController extends Controller
      */
     public function listAction()
     {
-        $error = array('' => null, 1 => 'User not found')[$this->getRequest()->query->get('error')];
+        $errors = array('' => null, 1 => 'User not found');
+        $error = $errors[$this->getRequest()->query->get('error')];
         $user = $this->get('security.context')->getToken()->getUser();
         return (array('friends' => $user->getFriends(), 'error' => $error));
     }
