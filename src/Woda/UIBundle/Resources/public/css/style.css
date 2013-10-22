@@ -82,7 +82,11 @@ html, body {
     background: #FFF;
     padding-left: 20px;
     margin-left: 0px;
+    border-color:#bbbbbb;
+	border-style: solid;
+	border-width: 0px 0px 0px 1px
 }
+
 
 #topmenu {
     background: #FFF;
@@ -95,14 +99,12 @@ html, body {
 }
 
 #menu > ul {
-    padding: 2px 2px 2px 5px;
+    padding: 2px;
     margin-bottom: 0px;
-/*
-    border-left: 1px solid #F0F;
-    border-top: 1px solid #F0F;
-    border-bottom: 1px solid #F0F;
-*/
+    border-left: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
 }
+
 
 #menu > ul li span {
     padding-left: 5px;
@@ -126,11 +128,16 @@ html, body {
 }
 
 #menu > ul li.underline {
-    border-bottom: 1px solid #D4D4D4;
+    border-top: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
 }
-.menu-separator {
-    background: #EBEBEB;
-}
+
+#menu-separator {
+    border-top: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    background-color: #ebebeb;
+ }
+
 
 #content {
     min-height: 850px;

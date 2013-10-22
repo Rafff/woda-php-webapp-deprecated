@@ -13,6 +13,13 @@
             {% block style %}
             {% endblock %}
         </style>
+        <script type="text/javascript">
+            $(document).ready(function() 
+                { 
+                $height = $('#jsrow').height() - $('#sub-menu').height();
+                $('#menu-separator').css('height', $height);
+                });
+</script>
     </head>
     <body>
         <div id="left"></div>
@@ -101,7 +108,7 @@
                     </ul>
                     {% block leftpannel %}
                     {% endblock %}
-                    <!-- <div id="menu-separator">&nbsp;</div> -->
+                    <div id="menu-separator">&nbsp;</div>
                 </div>
                 <div id="content" class="span9">
                     {% block content %}
