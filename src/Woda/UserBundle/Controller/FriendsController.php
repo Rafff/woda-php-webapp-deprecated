@@ -27,6 +27,9 @@ class FriendsController extends Controller
         $others = $this->getDoctrine()->getRepository('WodaUserBundle:User')->findBy(array('email' => $request->get('email')));
 
         if (count($others) === 0)
+            $others = $this->getDoctrine()->getRepository('WodaUserBundle:User')->findBy(array('login' => $request->get('email')));
+
+        if (count($others) === 0)
             return $this->redirect($this->generateUrl('WodaUserBundle.Friends.list', array('error' => 1)));
 
         $other = $others[0];
