@@ -17,6 +17,13 @@
             {% block style %}
             {% endblock %}
         </style>
+        <script type="text/javascript">
+            $(document).ready(function() 
+                { 
+                $height = $('#jsrow').height() - $('#sub-menu').height();
+                $('#menu-separator').css('height', $height);
+                });
+</script>
     </head>
     <body>
         <div id="left"></div>
@@ -30,15 +37,15 @@
                 </div>
                 <div id="header" class="span9 col">
                     <div class="row-fluid">
-                        <div id="searchbar" class="span5">
+                        <div id="searchbar" class="span6">
                             <form class="form-search" action="{{ path('WodaSearchBundle.Search.result', { 'length' : 20, 'offset' : 0 }) }}" method="post">
-                                <div class="input-append">
-                                    <input type="text" name="query" placeholder="Documents, Musics, Movies, Users, ...">
+                                <div class="input-append" style="width:100%">
+                                    <input style="width:100%" type="text" name="query" placeholder="Documents, Musics, Movies, Users, ...">
                                     <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i></button>
                                 </div>
                             </form>
                         </div>
-                        <div id="user" class="span2 offset3">
+                        <div id="user" class="span2 offset2">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <a href="{{ path('WodaUserBundle.Account.index') }}"><b>{% render 'WodaUIBundle:Helper:getUserName' %}</b></a>
                                 <a href="{{ path('WodaUserBundle.Account.index') }}"><img src="{{ asset('bundles/wodaui/img/icons/setting-32.png') }}" width="16px" height="16px" alt="account settings"/></a>
