@@ -1,3 +1,7 @@
+{% if active is not defined %}
+  {% set active = "" %}
+{% endif %}
+
 <!doctype html>
 <html>
     <head>
@@ -60,38 +64,38 @@
                                 </a>
                             </li>
                         {% endif %}
-                        <li>
+                        <li {% if active == "home" %}class="active"{% endif %}>
                             <a href="{{ path('WodaFSBundle.Default.list') }}">
                                 <img src="{{ asset('bundles/wodaui/img/icons/home-32.png') }}" alt="home" width="16px" height="16px" />
                                 <span>Home</span>
                             </a>
                         </li>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <li>
+                            <li {% if active == "starred" %}class="active"{% endif %}>
                                 <a href="{{ path('WodaFSBundle.Default.starred') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/starred-32.png') }}" alt="starred" width="16px" height="16px" />
                                     <span>Starred</span>
                                 </a>
                             </li>
-                            <li>
+                            <li {% if active == "recent" %}class="active"{% endif %}>
                                 <a href="{{ path('WodaFSBundle.Default.recent') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/recent-32.png') }}" alt="recent" width="16px" height="16px" />
                                     <span>Recent</span>
                                 </a>
                             </li>
-                            <li>
+                            <li {% if active == "links" %}class="active"{% endif %}>
                                 <a href="{{ path('WodaFSBundle.Default.links') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/link-32.png') }}" alt="recent" width="16px" height="16px" />
                                     <span>Links</span>
                                 </a>
                             </li>
-                            <li>
+                            <li {% if active == "sharing" %}class="active"{% endif %}>
                                 <a href="{{ path('WodaFSBundle.Default.sharing') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="public" width="16px" height="16px" />
                                     <span>Public</span>
                                 </a>
                             </li>
-                            <li>
+                            <li {% if active == "friends" %}class="active"{% endif %}>
                                 <a href="{{ path('WodaUserBundle.Friends.list') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/friends-32.png') }}" alt="sharing" width="16px" height="16px" />
                                     <span>Friends</span>

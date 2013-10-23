@@ -41,7 +41,7 @@ class DefaultController extends Controller
         if ($folder === null)
             return ($this->redirect($this->generateUrl('WodaFSBundle.Default.list', array('path' => ''))));
 
-        return (array('folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path, 'paths'=>$this->getAllPaths()));
+        return (array('active' => 'home', 'folders' => $folder->getFolders(), 'files' => $folder->getFiles(), 'path' => $path, 'paths'=>$this->getAllPaths()));
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -546,7 +546,7 @@ class DefaultController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array('user' => $user), array('lastModificationTime' => 'DESC'));
 
-        return (array('folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
+        return (array('active' => 'recent', 'folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**
@@ -598,7 +598,7 @@ class DefaultController extends Controller
     public function starredAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        return (array('folders' => array(), 'files' => $user->getFavorites(), 'path' => null, 'paths'=>$this->getAllPaths()));
+        return (array('active' => 'starred', 'folders' => array(), 'files' => $user->getFavorites(), 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**
@@ -613,7 +613,7 @@ class DefaultController extends Controller
             'public' => true
         ));
 
-        return (array('folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
+        return (array('active' => 'links', 'folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**
@@ -626,7 +626,7 @@ class DefaultController extends Controller
         $query = 'SELECT user, friend, file FROM WodaUserBundle:User user JOIN user.friends friend JOIN friend.files file WHERE user.id = ' . $id . ' AND file.public = true';
         $files = $this->getDoctrine()->getEntityManager()->createQuery($query)->getResult();
 
-        return (array('folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
+        return (array('active' => 'sharing', 'folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     private function getAllPaths()

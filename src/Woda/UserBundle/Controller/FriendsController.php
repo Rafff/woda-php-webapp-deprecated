@@ -72,6 +72,6 @@ class FriendsController extends Controller
         $errors = array('' => null, 1 => 'User not found');
         $error = $errors[$this->getRequest()->query->get('error')];
         $user = $this->get('security.context')->getToken()->getUser();
-        return (array('friends' => $user->getFriends(), 'error' => $error));
+        return (array('active' => 'friends', 'friends' => $user->getFriends(), 'error' => $error));
     }
 }
