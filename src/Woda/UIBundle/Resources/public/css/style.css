@@ -196,6 +196,11 @@ table.flist th {
     font-weight: normal;
 }
 
+.nohover {
+    text-align:right !important;
+    padding-right: 20% !important;
+}
+
 .filehover {
     text-align:right !important;
     display:none;
@@ -257,6 +262,22 @@ table.flist th {
     background-image: url(../img/icons/starred-20.png);
 }
 
+.w-icon-starred-empty {
+    background-image: url(../img/icons/starred-empty-20.png);
+}
+
 .w-icon-download {
     background-image: url(../img/icons/download-20.png);
+}
+
+.w-icon-trash {
+    background-image: url(../img/icons/trash-20.png);
+}
+
+.w-icon-left {
+    background-image: url(../img/icons/left-20.png);
+}
+
+.w-icon-friends {
+    background-image: url(../img/icons/friends-20.png);
 }

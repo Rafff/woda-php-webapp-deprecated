@@ -12,7 +12,7 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
-<h2 style="text-align:right">Search Result : "<span id="query">{{ query }}</span>"</h2>
+<h2 style="text-align:left;">Search Result : "<span id="query">{{ query }}</span>"</h2>
 
 <div class="tabbable tabs-left">
     <div id="results" class="tab-content">
@@ -133,7 +133,7 @@
             $.getJSON(url, function(data) {
                 $('#dlink-loading').hide();
                 var link = '{{ url('WodaFSBundle.Default.publicdl', {"id": ''}) }}/' + data.id;
-                $('#dlink').html('<input type="text" value="'+link+'" style="width:80%;"/>').show();
+                $('#dlink').html('<input type="text" disabled="disabled" value="'+link+'" style="width:80%;"/>').show();
             });
         });
 
