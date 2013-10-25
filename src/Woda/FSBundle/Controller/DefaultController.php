@@ -247,7 +247,7 @@ class DefaultController extends Controller
     /**
      * Dowload actions that download file by id
      *
-     * @Route("download/{id}/", requirements={"_method" = "GET"}, name="WodaFSBundle.Default.download")
+     * @Route("-download/{id}/", requirements={"_method" = "GET"}, name="WodaFSBundle.Default.download")
      */
     public function downloadAction($id)
     {
@@ -412,7 +412,18 @@ class DefaultController extends Controller
      */
     public function publicDownloadAction($id)
     {
-      return array('id' => $id);
+      $em = $this->getDoctrine()
+                 ->getManager();
+
+      $user = $this->get('security.context')->getToken()->getUser();
+
+      // var_dump($user);
+
+      $file = $em->getRepository('WodaFSBundle:XFile')->findOneBy(array('uuid' => $id));
+      $user = $file->getUser();
+      $content = $em->getRepository('WodaFSBundle:Content')->findOneBy(array('content_hash' => $file->getContentHash()));
+
+      return array('id' => $id, 'file' => $file, 'user' => $user, 'content' => $content);
     }
 
     /**
