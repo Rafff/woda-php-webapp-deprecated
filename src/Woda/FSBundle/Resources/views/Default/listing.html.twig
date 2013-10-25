@@ -122,7 +122,7 @@
 
       $('.flist').on('click', '.dellink', function(){
 
-        if ($(this).parent().parent().hasClass('filetr'))
+        if ($(this).parent().parent().parent().hasClass('filetr'))
           $('.delete-type').html('file');
         else
           $('.delete-type').html('folder');
