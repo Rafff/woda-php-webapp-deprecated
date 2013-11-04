@@ -215,10 +215,19 @@
     </thead>
     <tbody id="fscontainer">
 
-      <tr style="display:none;" class="foldertr ">
-          <td colspan="2"><i class="w-icon w-icon-folder"></i> <a class="folderlink" href=""></a></td>
-          <td></td>
-      </tr>
+        <tr style="display:none;" class="foldertr">
+          <td><i class="w-icon w-icon-folder"></i> <a class="folderlink" href=""></a></td>
+          <td class="file-icons filehover" >
+            <a href="#"><i class="w-icon w-icon-hover w-icon-download download"></i></a>
+            <a href="{{ path('WodaFSBundle.Default.publicFolder', {"id": 0 }) }}"><i class="w-icon w-icon-hover w-icon-sharing"></i></a>
+            <a href="#modal-dlink"><i class="w-icon w-icon-hover w-icon-shared share-dlink"></i></a>
+            <a href="#"><i class="w-icon w-icon-hover w-icon-friends"></i></a>
+            <a href="#"><i class="w-icon w-icon-hover w-icon-starred-empty"></i></a>
+            <a href="#"><i class="w-icon w-icon-hover w-icon-left"></i></a>
+            <a href="#"><i class="w-icon w-icon-hover w-icon-trash"></i></a>
+          </td>
+          <td class="nohover">{{ folder.lastModificationTime|date('d/m/Y H:i') }}</td>
+        </tr>
 
       {% for folder in folders %}
         <tr class="foldertr folder-{{folder.id}}">
@@ -237,15 +246,20 @@
       {% endfor %}
 
       <tr style="display:none;" class="filetr">
-          <td colspan="2">
-              <i class="w-icon w-icon-folder"></i> <span class="filename"></span>
-          </td>
-          <td colspan="5" class="file-icons filehover" >
-              <i class="icon-star-empty"></i> <a class="dllink" href="{{ path('WodaFSBundle.Default.download', {"id": 0}) }}"><i class="icon-download" > </i></a>
-              <i class="icon-share"></i> <i class="icon-trash dellink" data-name="" data-id=""></i>
-          </td>
-          <td class="filedate nohover"></td>
-      </tr>
+        <td>
+            <i class="w-icon w-icon-file"></i> <span class="filename"></span>
+        </td>
+        <td class="file-icons filehover" >
+          <a href="{{ path('WodaFSBundle.Default.download', {"id": 0 }) }}" class="dllink"><i class="w-icon w-icon-hover w-icon-download download"></i></a>
+          <a href="{{ path('WodaFSBundle.Default.public', {"id": 0 }) }}"><i class="w-icon w-icon-hover w-icon-sharing"></i></a>
+          <a href="#modal-dlink"><i class="w-icon w-icon-hover w-icon-shared share-dlink"></i></a>
+          <a href="#"><i class="w-icon w-icon-hover w-icon-friends"></i></a>
+          <a href="{{ path('WodaFSBundle.Default.star', {"id": 0 }) }}"><i class="w-icon w-icon-hover w-icon-starred-empty"></i></a>
+          <a href="#"><i class="w-icon w-icon-hover w-icon-left movelink" data-id=""></i></a>
+          <a href="#"><i class="w-icon w-icon-hover w-icon-trash dellink" data-name="" data-id=""></i></a>
+        </td>
+        <td class="filedate nohover"></td>
+    </tr>
 
       {% for file in files %}
         <tr class="filetr" id="file-{{file.id}}">
