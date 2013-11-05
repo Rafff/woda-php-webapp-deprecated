@@ -39,5 +39,7 @@ security:
         # application
         - { path: ^/login,   access: 'isAnonymous()' }
         - { path: ^/account, access: 'isAuthenticated()' }
+        - { path: ^/fs-file, access: 'isAnonymous() || isAuthenticated()' }
+        - { path: ^/fs-download, access: 'isAnonymous() || isAuthenticated()' }
         - { path: ^/fs, access: 'isAuthenticated()' }
         - { path: ^/admin,   role: ROLE_ADMIN }

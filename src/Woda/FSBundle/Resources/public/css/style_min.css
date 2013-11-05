@@ -1,0 +1,175 @@
+html, body {
+    height: 100%;
+}
+
+.navbar {
+	border-style:solid !important; 
+	border-width:0px 0px 0px 0px !important;
+	border-bottom-color:#CCCCCC !important;	
+	height: 80px;
+	position: relative;
+}
+
+#logo {
+	top: 10px;
+	left: 10px;
+	position: absolute;	
+}
+
+.brand {
+	
+}
+
+.btn {
+	border-radius: 0;
+}
+
+.owner {
+    font-family: "Helvetica Neue";
+    font-size: 14px;
+    color: #808080;
+	border-bottom-width:0px!important;
+	font-weight:lighter;
+}
+
+label {
+    font-family: "Helvetica Neue";
+    font-size: 18px;
+    color: #808080 !important;
+	font-weight:lighter;
+
+}
+
+#action {
+	padding:10px 0px 10px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+	height: 120px;
+	text-align: center;
+}
+
+
+#file-info {
+    margin-top: 20px;
+	padding:20px 10px 10px 10px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+	text-align: center;
+}
+
+.navbar-inner {
+	background : #F5F5F5 !important;
+	border-width:0px 0px 1px 0px !important;
+	border-bottom-color:#CCCCCC !important;		
+}
+
+.nav {
+	top : 10px;	
+}
+
+.center {
+     float: none;
+     margin-left: auto;
+     margin-right: auto;
+}
+
+.col {
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+.col-wrap{
+    overflow: hidden; 
+}
+
+#left, #right {
+    position: fixed;
+    width: 50%;
+    height: 100%;
+    top: 0;
+}
+
+#left {
+    background: #F5F5F5;
+    left: 0;
+}
+
+#right {
+    background: #FFF;
+    right: 0;
+}
+
+#page {
+    position: absolute;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -60px;
+}
+
+#search {
+    float: left;
+    margin: 5px 0px;
+}
+
+#searchbar {
+    margin-top: 50px;
+}
+
+#user {
+    margin-top: 50px;
+    font-family: "Helvetica Neue";
+    font-size: 14px;
+    color: #0088CC;
+    text-decoration: underline;
+}
+
+#header {
+    background: #FFF;
+    padding-left: 20px;
+    margin-left: 0px;
+}
+
+#menu {
+    background: #FFF;
+}
+
+#menu > ul {
+    padding: 2px;
+    margin-bottom: 0px;
+}
+
+#content {
+    min-height: 850px;
+    background: #FFF;
+    margin-left: 0px;
+    padding: 10px;
+}
+
+#footer {
+    position: relative;
+}
+
+#footer_content {
+    height: 60px;
+    background-color: #FFF;
+    padding-left: 20px;
+    margin-left: 0px;
+}
+
+#password {
+	width: 285px;	
+}
+
+#username {
+	width: 285px;	
+}
+
+input {
+	width: 285px;	
+}
+
+#form {
+}

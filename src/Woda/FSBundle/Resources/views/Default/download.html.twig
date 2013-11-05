@@ -1,5 +1,48 @@
-{% extends "WodaUIBundle::layout.html.twig" %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Woda</title>
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="{{ asset('bundles/wodafs/css/style_min.css') }}" />
+    </head>
+    <body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+    	<div class="navbar-inner">
+        	<div class="container">
+		   		<a class="brand" href="{{ path('WodaFSBundle.Default.list') }}">
+           			<img src="{{ asset('bundles/wodafs/img/logo.png') }}" alt="logo" width="80px" height="0px">
+           		</a> 
+          		<div class="nav pull-right">
+                    {% if app.user %}
+                        <a class="btn btn-info" href="{{ path('WodaFSBundle.Default.list') }}">Back to Woda</a>
+                    {% endif %}
+                    {% if not app.user %}
+                        <a class="btn btn-primary" href="{{ path('WodaUserBundle.Security.login') }}">Sign in</a>
+                    {% endif %}
+                </div>
+		  
+	     	</div>
+      	</div>	
 
-{% block content %}
-hello, u want to download zis fayle ? <a href="{{ path('WodaFSBundle.Default.download', {"id": id}) }}" id="startdownload">click hir</a>.
-{% endblock %}
+    </div>	
+	<div id="file-info">
+        <img src="{{ asset('bundles/wodafs/img/audio-file.png') }}" width="128px" style="padding:20px">
+        <p style="color: #646464">{{ file.name }} ( {{ content.size }} )</p>
+        <p class="owner"><i>Shared by {{ user.login }}</i></p>
+    </div>
+	<div id="action">
+		<div style="float:left;">
+            <a class="btn btn-large btn-primary" href="{{ path('WodaFSBundle.Default.download', {"id": id}) }}" id="startdownload">Download</a>
+		</div>
+		<div>
+            <a class="btn btn-large btn-info" href="#">Import to woda</a>
+		</div>
+	</div>
+
+</body></html>
