@@ -573,6 +573,23 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("-links/", name="WodaFSBundle.Default.links")
+     * @Template("WodaFSBundle:Default:links.html.twig")
+     */
+    public function linksAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->createQueryBuilder('f')
+            ->where('f.user = :user')
+            ->andWhere('f.public = true')
+            ->andWhere('f.uuid is not null')
+            ->setParameter('user', $user)
+        ->getQuery()->getResult();
+
+        return (array('active' => 'links', 'folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
+    }
+
+    /**
      * @Route("-public/{id}", name="WodaFSBundle.Default.public")
      */
     public function publicAction($id)
@@ -602,8 +619,8 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("-shared/", name="WodaFSBundle.Default.links")
-     * @Template("WodaFSBundle:Default:links.html.twig")
+     * @Route("-shared/", name="WodaFSBundle.Default.shared")
+     * @Template("WodaFSBundle:Default:shared.html.twig")
      */
     public function sharedAction()
     {
@@ -611,9 +628,9 @@ class DefaultController extends Controller
         $files = $this->getDoctrine()->getRepository('WodaFSBundle:XFile')->findBy(array(
             'user' => $user,
             'public' => true
-        ));
+        ), array('name'=>'ASC'));
 
-        return (array('active' => 'links', 'folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
+        return (array('active' => 'shared', 'folders' => array(), 'files' => $files, 'path' => null, 'paths'=>$this->getAllPaths()));
     }
 
     /**

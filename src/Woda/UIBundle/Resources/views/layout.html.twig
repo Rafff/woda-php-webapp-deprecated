@@ -18,8 +18,8 @@
             {% endblock %}
         </style>
         <script type="text/javascript">
-            $(document).ready(function() 
-                { 
+            $(document).ready(function()
+                {
                 $height = $('#jsrow').height() - $('#sub-menu').height();
                 $('#menu-separator').css('height', $height);
                 });
@@ -96,8 +96,8 @@
                                     <span>Links</span>
                                 </a>
                             </li>
-                            <li {% if active == "sharing" %}class="active"{% endif %}>
-                                <a href="{{ path('WodaFSBundle.Default.sharing') }}">
+                            <li {% if active == "shared" %}class="active"{% endif %}>
+                                <a href="{{ path('WodaFSBundle.Default.shared') }}">
                                     <img src="{{ asset('bundles/wodaui/img/icons/sharing-32.png') }}" alt="public" width="16px" height="16px" />
                                     <span>Public</span>
                                 </a>
