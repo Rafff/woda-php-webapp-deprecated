@@ -7,6 +7,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Woda\FSBundle\Entity\XFile;
 use Woda\FSBundle\Entity\Folder;
 
+/**
+ * 
+ */
 class FSRepository extends EntityRepository
 {
     public function searchAll($user, $term)
