@@ -61,6 +61,29 @@ class FSRepository extends EntityRepository
         );
     }
 
+    public function getQueryNoMedia($user, $term)
+    {
+        return ($this->getEntityManager()
+            ->createQuery('SELECT p FROM WodaFSBundle:XFile p where (p.public = true OR p.user=:owner) AND 
+                (
+                    NOT(LOWER(p.name) LIKE :name_mp4) AND 
+                    NOT(LOWER(p.name) LIKE :name_mp3) AND 
+                    NOT(LOWER(p.name) LIKE :name_jpg) AND 
+                    NOT(LOWER(p.name) LIKE :name_png)
+                )
+            ')
+            ->setParameter('owner', $user)
+            ->setParameters(
+                    array(
+                        'name_mp4' => '%'.strtolower($term).'%.mp4',
+                        'name_mp3' => '%'.strtolower($term).'%.mp3',
+                        'name_jpg' => '%'.strtolower($term).'%.jpg%',
+                        'name_png' => '%'.strtolower($term).'%.png%'
+                        )
+                    )
+        );
+    }
+    /*
     public function getQueryFile($user, $term)
     {
         return ($this->getEntityManager()
@@ -69,6 +92,7 @@ class FSRepository extends EntityRepository
             ->setParameter('name', '%'.strtolower($term).'%')
         );
     }
+    */
 
     public function getQueryMovie($user, $term)
     {

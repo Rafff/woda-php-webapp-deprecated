@@ -19,7 +19,7 @@ use Woda\Bundle\FSBundle\Entity\FolderRepository as FolderRepository;
 class SearchController extends Controller
 {
     /**
-     * @Route("/result/{type}/{length}/{offset}", name="WodaSearchBundle.Search.result", defaults={ "length" : 50, "offset" : 0, "type" : "file" }, requirements={ "type" : "private_file|shared|file|folder|movie|music|picture|user"})
+     * @Route("/result/{type}/{length}/{offset}", name="WodaSearchBundle.Search.result", defaults={ "length" : 50, "offset" : 0, "type" : "no_media" }, requirements={ "type" : "private_file|shared|no_media|folder|movie|music|picture|user"})
      * @Template("WodaSearchBundle:Search:result.html.twig")
      */
     public function resultAction($type, $length, $offset)
@@ -50,7 +50,7 @@ class SearchController extends Controller
                     'type' => $type,
                     'types' => array(
                         'private_file',
-                        'file',
+                        'no_media',
                         'folder',
                         'movie',
                         'music',

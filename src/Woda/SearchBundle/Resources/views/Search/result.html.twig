@@ -117,7 +117,7 @@
             };
 
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_private_file_', 'private_file', {{ length }}, {{ offset }}, 'ul#typeofquery li.private_files span.counter', getTemplateFile('w-icon-file'), text, eventsParam));
-        aScrollbar.push(initScrollbar('div#results div.tab-pane#_file_', 'file', {{ length }}, {{ offset }}, 'ul#typeofquery li.files span.counter', getTemplateFile('w-icon-file'), text, eventsParam));
+        aScrollbar.push(initScrollbar('div#results div.tab-pane#_no_media_', 'no_media', {{ length }}, {{ offset }}, 'ul#typeofquery li.no_medias span.counter', getTemplateFile('w-icon-file'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_folder_', 'folder', {{ length }}, {{ offset }}, 'ul#typeofquery li.folders span.counter', getTemplateFile('w-icon-folder'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_movie_', 'movie', {{ length }}, {{ offset }}, 'ul#typeofquery li.movies span.counter', getTemplateFile('w-icon-movie'), text, eventsParam));
         aScrollbar.push(initScrollbar('div#results div.tab-pane#_music_', 'music', {{ length }}, {{ offset }}, 'ul#typeofquery li.musics span.counter', getTemplateFile('w-icon-music'), text, eventsParam));
@@ -178,11 +178,11 @@
                 <span class="counter">{% if (type == 'private_file') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
-        <li class="files{% if (type == 'file') %} active {% endif %}">
-            <a href="#_file_" data-toggle="tab">
+        <li class="no_medias{% if (type == 'no_media') %} active {% endif %}">
+            <a href="#_no_media_" data-toggle="tab">
                 <img src="{{ asset('bundles/wodaui/img/icons/file-32.png') }}" alt="document" width="16px" height="16px" />
-                <span>Files</span>
-                <span class="counter">{% if (type == 'file') %} {{ count }} {% else %} 0 {% endif %}</span>
+                <span>Other Files</span>
+                <span class="counter">{% if (type == 'no_media') %} {{ count }} {% else %} 0 {% endif %}</span>
             </a>
         </li>
         <li class="folders{% if (type == 'folder') %} active {% endif %}">
