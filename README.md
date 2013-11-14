@@ -14,7 +14,7 @@ Les conventions de codage doivent être calqués sur les documents suivants :
 - [PHP](http://symfony.com/doc/current/contributing/code/standards.html)
 - [HTML/CSS](google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml)
 
-### Généralité sur les commits
+### Généralité sur les commits 
 
 - Les messages de commits doivent être en français, et dire ce que fait le commit en question. Ceci signifie que le verbe est conjugé à la troisième personne (`Retire le README.md` plutôt que `Retrait du README.md`).
 
